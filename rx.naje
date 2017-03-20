@@ -1,0 +1,943 @@
+:Dictionary
+  .ref 9999
+:Heap
+  .data 1536
+:Version
+  .data 201702
+:_nop
+  .data 0
+  ret
+:_lit
+  .data 1
+  ret
+:_dup
+  .data 2
+  ret
+:_drop
+  .data 3
+  ret
+:_swap
+  .data 4
+  ret
+:_push
+  .data 5
+  ret
+:_pop
+  .data 6
+  ret
+:_jump
+  .data 7
+  ret
+:_call
+  .data 8
+  ret
+:_ccall
+  .data 9
+  ret
+:_ret
+  .data 10
+  ret
+:_eq
+  .data 11
+  ret
+:_neq
+  .data 12
+  ret
+:_lt
+  .data 13
+  ret
+:_gt
+  .data 14
+  ret
+:_fetch
+  .data 15
+  ret
+:_store
+  .data 16
+  ret
+:_add
+  .data 17
+  ret
+:_sub
+  .data 18
+  ret
+:_mul
+  .data 19
+  ret
+:_divmod
+  .data 20
+  ret
+:_and
+  .data 21
+  ret
+:_or
+  .data 22
+  ret
+:_xor
+  .data 23
+  ret
+:_shift
+  .data 24
+  ret
+:_zret
+  .data 25
+  ret
+:_end
+  .data 26
+  ret
+:_packedcall
+  .data 2049
+  ret
+:over
+  push
+    dup
+  pop
+  swap
+  ret
+:dup-pair
+  lit &over
+  call
+  lit &over
+  call
+  ret
+:fetch-next
+  dup
+  lit 1
+  add
+  swap
+  fetch
+  ret
+:store-next
+  dup
+  lit 1
+  add
+  push
+    store
+  pop
+  ret
+:count
+  lit &fetch-next
+  call
+  zret
+  drop
+  lit &count
+  jump
+:s:length
+  dup
+  lit &count
+  call
+  lit 1
+  sub
+  swap
+  sub
+  ret
+:get-set
+  fetch
+  swap
+  fetch
+  ret
+:next-set
+  lit 1
+  add
+  swap
+  lit 1
+  add
+  ret
+:compare
+  push
+    push
+      lit &dup-pair
+      call
+      lit &get-set
+      call
+      eq?
+    pop
+    and
+    push
+      lit &next-set
+      call
+    pop
+  pop
+  lit 1
+  sub
+  zret
+  lit &compare
+  jump
+:s:compare:mismatched
+  drop
+  drop
+  lit 0
+  dup
+  ret
+:s:eq
+  lit &dup-pair
+  call
+  lit &s:length
+  call
+  swap
+  lit &s:length
+  call
+  neq?
+  lit &s:compare:mismatched
+  ccall
+  zret
+  dup
+  lit &s:length
+  call
+  lit -1
+  swap
+  lit &compare
+  call
+  push
+    drop
+    drop
+  pop
+  ret
+:choice:true
+  .data 0
+:choice:false
+  .data 0
+:choose
+  lit &choice:false
+  store
+  lit &choice:true
+  store
+  lit &choice:false
+  add
+  fetch
+  call
+  ret
+:if
+  ccall
+  ret
+:-if
+  push
+    lit 0
+    eq?
+  pop
+  ccall
+  ret
+:comma
+  lit &Heap
+  fetch
+  lit &store-next
+  call
+  lit &Heap
+  store
+  ret
+:comma:opcode
+  fetch
+  lit &comma
+  call
+  ret
+:($)
+  lit &fetch-next
+  call
+  zret
+  lit &comma
+  call
+  lit &($)
+  jump
+:comma:string
+  lit &($)
+  call
+  drop
+  lit 0
+  lit &comma
+  call
+  ret
+:Compiler
+  .data 0
+:compiling?
+  lit &Compiler
+  fetch
+  ret
+:t-;
+  lit &_ret
+  lit &comma:opcode
+  call
+  lit 0
+  lit &Compiler
+  store
+  ret
+:class:data
+  nop
+  nop
+  lit &compiling?
+  call
+  zret
+  drop
+  lit &_lit
+  lit &comma:opcode
+  call
+  lit &comma
+  call
+  ret
+:class:word:interpret
+  call
+  ret
+:class:word:compile
+  lit &_packedcall
+  lit &comma:opcode
+  call
+  lit &comma
+  call
+  ret
+:class:word
+  nop
+  nop
+  lit &compiling?
+  call
+  lit &class:word:compile
+  lit &class:word:interpret
+  lit &choose
+  call
+  ret
+:class:primitive
+  nop
+  nop
+  lit &compiling?
+  call
+  lit &comma:opcode
+  lit &class:word:interpret
+  lit &choose
+  call
+  ret
+:class:macro
+  nop
+  nop
+  call
+  ret
+:d:link
+  lit 0
+  add
+  ret
+:d:xt
+  lit 1
+  add
+  ret
+:d:class
+  lit 2
+  add
+  ret
+:d:name
+  lit 3
+  add
+  ret
+:newentry
+  lit &Heap
+  fetch
+  push
+    lit &Dictionary
+    fetch
+    lit &comma
+    call
+    lit &comma
+    call
+    lit &comma
+    call
+    lit &comma:string
+    call
+  pop
+  lit &Dictionary
+  store
+  ret
+:Which
+  .data 0
+:Needle
+  .data 0
+:found
+  lit &Which
+  store
+  lit &_nop
+  ret
+:find
+  lit 0
+  lit &Which
+  store
+  lit &Dictionary
+  fetch
+:find_next
+  zret
+  dup
+  lit &d:name
+  call
+  lit &Needle
+  fetch
+  lit &s:eq
+  call
+  lit &found
+  ccall
+  fetch
+  lit &find_next
+  jump
+:d:lookup
+  lit &Needle
+  store
+  lit &find
+  call
+  lit &Which
+  fetch
+  ret
+:to-number:Mod
+  .data 0
+:to-number:Acc
+  .data 0
+:to-number:char>digit
+  lit 48
+  sub
+  ret
+:to-number:scale
+  lit &to-number:Acc
+  fetch
+  lit 10
+  mul
+  ret
+:to-number:convert
+  lit &fetch-next
+  call
+  zret
+  lit &to-number:char>digit
+  call
+  lit &to-number:scale
+  call
+  add
+  lit &to-number:Acc
+  store
+  lit &to-number:convert
+  jump
+:to-number:prepare
+  lit 1
+  lit &to-number:Mod
+  store
+  lit 0
+  lit &to-number:Acc
+  store
+  dup
+  fetch
+  lit 45
+  eq?
+  zret
+  drop
+  lit -1
+  lit &to-number:Mod
+  store
+  lit 1
+  add
+  ret
+:s:to-number
+  nop
+  nop
+  lit &to-number:prepare
+  call
+  lit &to-number:convert
+  call
+  drop
+  lit &to-number:Acc
+  fetch
+  lit &to-number:Mod
+  fetch
+  mul
+  ret
+:prefix:no
+  .data 32
+  .data 0
+:prefix:handler
+  .data 0
+:prefixed
+  .string prefix:_
+:prefix:prepare
+  fetch
+  lit &prefixed
+  lit 7
+  add
+  store
+  ret
+:prefix:has-token?
+  dup
+  lit &s:length
+  call
+  lit 1
+  eq?
+  zret
+  drop
+  drop
+  lit &prefix:no
+  ret
+:prefix?
+  lit &prefix:has-token?
+  call
+  lit &prefix:prepare
+  call
+  lit &prefixed
+  lit &d:lookup
+  call
+  dup
+  lit &prefix:handler
+  store
+  lit 0
+  neq?
+  ret
+:prefix:#
+  lit &s:to-number
+  call
+  lit &class:data
+  call
+  ret
+:prefix:$
+  fetch
+  lit &class:data
+  call
+  ret
+:prefix::
+  lit &class:word
+  lit &Heap
+  fetch
+  lit &newentry
+  call
+  lit &Heap
+  fetch
+  lit &Dictionary
+  fetch
+  lit &d:xt
+  call
+  store
+  lit -1
+  lit &Compiler
+  store
+  ret
+:prefix:&
+  lit &d:lookup
+  call
+  lit &d:xt
+  call
+  fetch
+  lit &class:data
+  call
+  ret
+:t-[
+  lit &Heap
+  fetch
+  lit 3
+  add
+  lit &Compiler
+  fetch
+  lit -1
+  lit &Compiler
+  store
+  lit &_lit
+  lit &comma:opcode
+  call
+  lit &Heap
+  fetch
+  lit 0
+  lit &comma
+  call
+  lit &_jump
+  lit &comma:opcode
+  call
+  lit &Heap
+  fetch
+  ret
+:t-]
+  lit &_ret
+  lit &comma:opcode
+  call
+  lit &Heap
+  fetch
+  swap
+  lit &_lit
+  lit &comma:opcode
+  call
+  lit &comma
+  call
+  swap
+  store
+  lit &Compiler
+  store
+  lit &compiling?
+  call
+  zret
+  drop
+  drop
+  ret
+:repeat
+  lit &Heap
+  fetch
+  ret
+:again
+  lit &_lit
+  lit &comma:opcode
+  call
+  lit &comma
+  call
+  lit &_jump
+  lit &comma:opcode
+  call
+  ret
+:t-0;
+  lit &compiling?
+  call
+  zret
+  drop
+  lit &_zret
+  lit &comma:opcode
+  call
+  ret
+:t-push
+  lit &compiling?
+  call
+  zret
+  drop
+  lit &_push
+  lit &comma:opcode
+  call
+  ret
+:t-pop
+  lit &compiling?
+  call
+  zret
+  drop
+  lit &_pop
+  lit &comma:opcode
+  call
+  ret
+:err:notfound
+  lit &_nop
+  jump
+  ret
+:call:dt
+  dup
+  lit &d:xt
+  call
+  fetch
+  swap
+  lit &d:class
+  call
+  fetch
+  call
+  ret
+:input:source
+  .data 0
+:interpret:prefix
+  lit &prefix:handler
+  fetch
+  zret
+  lit &input:source
+  fetch
+  lit 1
+  add
+  swap
+  lit &call:dt
+  call
+  ret
+:interpret:word
+  lit &Which
+  fetch
+  lit &call:dt
+  call
+  ret
+:interpret:noprefix
+  lit &input:source
+  fetch
+  lit &d:lookup
+  call
+  lit 0
+  neq?
+  lit &interpret:word
+  lit &err:notfound
+  lit &choose
+  call
+  ret
+:interpret
+  dup
+  lit &input:source
+  store
+  lit &prefix?
+  call
+  lit &interpret:prefix
+  lit &interpret:noprefix
+  lit &choose
+  call
+  ret
+:0000
+  .data 0
+  .ref _dup
+  .ref class:primitive
+  .string dup
+:0001
+  .ref 0000
+  .ref _drop
+  .ref class:primitive
+  .string drop
+:0002
+  .ref 0001
+  .ref _swap
+  .ref class:primitive
+  .string swap
+:0003
+  .ref 0002
+  .ref _call
+  .ref class:primitive
+  .string call
+:0004
+  .ref 0003
+  .ref _eq
+  .ref class:primitive
+  .string eq?
+:0005
+  .ref 0004
+  .ref _neq
+  .ref class:primitive
+  .string -eq?
+:0006
+  .ref 0005
+  .ref _lt
+  .ref class:primitive
+  .string lt?
+:0007
+  .ref 0006
+  .ref _gt
+  .ref class:primitive
+  .string gt?
+:0008
+  .ref 0007
+  .ref _fetch
+  .ref class:primitive
+  .string fetch
+:0009
+  .ref 0008
+  .ref _store
+  .ref class:primitive
+  .string store
+:0010
+  .ref 0009
+  .ref _add
+  .ref class:primitive
+  .string +
+:0011
+  .ref 0010
+  .ref _sub
+  .ref class:primitive
+  .string -
+:0012
+  .ref 0011
+  .ref _mul
+  .ref class:primitive
+  .string *
+:0013
+  .ref 0012
+  .ref _divmod
+  .ref class:primitive
+  .string /mod
+:0014
+  .ref 0013
+  .ref _and
+  .ref class:primitive
+  .string and
+:0015
+  .ref 0014
+  .ref _or
+  .ref class:primitive
+  .string or
+:0016
+  .ref 0015
+  .ref _xor
+  .ref class:primitive
+  .string xor
+:0017
+  .ref 0016
+  .ref _shift
+  .ref class:primitive
+  .string shift
+:0018
+  .ref 0017
+  .ref t-push
+  .ref class:macro
+  .string push
+:0019
+  .ref 0018
+  .ref t-pop
+  .ref class:macro
+  .string pop
+:0020
+  .ref 0019
+  .ref t-0;
+  .ref class:macro
+  .string 0;
+:0021
+:0022
+  .ref 0020
+  .ref fetch-next
+  .ref class:word
+  .string fetch-next
+:0023
+  .ref 0022
+  .ref store-next
+  .ref class:word
+  .string store-next
+:0024
+  .ref 0023
+  .ref s:to-number
+  .ref class:word
+  .string s:to-number
+:0025
+  .ref 0024
+  .ref s:eq
+  .ref class:word
+  .string s:eq?
+:0026
+  .ref 0025
+  .ref s:length
+  .ref class:word
+  .string s:length
+:0027
+  .ref 0026
+  .ref choose
+  .ref class:word
+  .string choose
+:0028
+  .ref 0027
+  .ref if
+  .ref class:word
+  .string if
+:0029
+  .ref 0028
+  .ref -if
+  .ref class:word
+  .string -if
+:0030
+  .ref 0029
+  .ref Compiler
+  .ref class:data
+  .string Compiler
+:0031
+  .ref 0030
+  .ref Heap
+  .ref class:data
+  .string Heap
+:0032
+  .ref 0031
+  .ref comma
+  .ref class:word
+  .string ,
+:0033
+  .ref 0032
+  .ref comma:string
+  .ref class:word
+  .string s,
+:0034
+  .ref 0033
+  .ref t-;
+  .ref class:macro
+  .string ;
+:0035
+  .ref 0034
+  .ref t-[
+  .ref class:macro
+  .string [
+:0036
+  .ref 0035
+  .ref t-]
+  .ref class:macro
+  .string ]
+:0037
+  .ref 0036
+  .ref Dictionary
+  .ref class:data
+  .string Dictionary
+:0038
+  .ref 0037
+  .ref d:link
+  .ref class:word
+  .string d:link
+:0039
+  .ref 0038
+  .ref d:xt
+  .ref class:word
+  .string d:xt
+:0040
+  .ref 0039
+  .ref d:class
+  .ref class:word
+  .string d:class
+:0041
+  .ref 0040
+  .ref d:name
+  .ref class:word
+  .string d:name
+:0042
+  .ref 0041
+  .ref class:word
+  .ref class:word
+  .string class:word
+:0043
+  .ref 0042
+  .ref class:macro
+  .ref class:word
+  .string class:macro
+:0044
+  .ref 0043
+  .ref class:data
+  .ref class:word
+  .string class:data
+:0045
+  .ref 0044
+  .ref newentry
+  .ref class:word
+  .string d:add-header
+:0046
+  .ref 0045
+  .ref prefix:#
+  .ref class:macro
+  .string prefix:#
+:0047
+  .ref 0046
+  .ref prefix::
+  .ref class:macro
+  .string prefix::
+:0048
+  .ref 0047
+  .ref prefix:&
+  .ref class:macro
+  .string prefix:&
+:0049
+  .ref 0048
+  .ref prefix:$
+  .ref class:macro
+  .string prefix:$
+:0050
+  .ref 0049
+  .ref repeat
+  .ref class:macro
+  .string repeat
+:0051
+  .ref 0050
+  .ref again
+  .ref class:macro
+  .string again
+:0052
+  .ref 0051
+  .ref interpret
+  .ref class:word
+  .string interpret
+:0053
+  .ref 0052
+  .ref d:lookup
+  .ref class:word
+  .string d:lookup
+:0054
+  .ref 0053
+  .ref class:primitive
+  .ref class:word
+  .string class:primitive
+:0055
+  .ref 0054
+  .ref Version
+  .ref class:data
+  .string Version
+:9999
+  .ref 0055
+  .ref err:notfound
+  .ref class:word
+  .string err:notfound

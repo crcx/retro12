@@ -500,13 +500,13 @@ Trimming removes leading (**s:trim-left**) or trailing (**s:trim-right**) spaces
 
 Return a new string, consisting of the characters from another string that are filtered by a quotation.
 
-    'This_is_a_test [ chr:-vowel? ] s:filter
+    'This_is_a_test [ c:vowel? ] s:filter
 
 ## s:map
 
 Return a new string resulting from applying a quotation to each character in a source string.
 
-    'This_is_a_test [ $_ [ chr:SPACE ] case ] s:map
+    'This_is_a_test [ $_ [ ASCII:SPACE ] case ] s:map
 
 ````
 {{

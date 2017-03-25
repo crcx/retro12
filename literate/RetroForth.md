@@ -2,13 +2,23 @@
 
 ## Background
 
-Retro is a dialect of Forth. It builds on the barebones Rx core, providing a much more flexible and useful language.
+Retro is a dialect of Forth. It builds on the barebones Rx core,
+providing a much more flexible and useful language.
 
-Retro has a history going back many years. It began as a 16-bit assembly implementation for x86 hardware, evolved into a 32-bit system with cmForth and ColorForth influences, and eventually started supporting mainstream OSes. Later it was rewritten for a small, portable virtual machine. Over the years the language implementation has varied substantially. This is the twelfth generation of Retro. It now targets a new virtual machine (called Nga), and is built over a barebones Forth kernel (called Rx).
+Retro has a history going back many years. It began as a 16-bit
+assembly implementation for x86 hardware, evolved into a 32-bit
+system with cmForth and ColorForth influences, and eventually started
+supporting mainstream OSes. Later it was rewritten for a small,
+portable virtual machine. Over the years the language implementation
+has varied substantially. This is the twelfth generation of Retro. It
+now targets a new virtual machine (called Nga), and is built over a
+barebones Forth kernel (called Rx).
 
 ### Namespaces
 
-Various past releases have had different methods of dealing with the dictionary. Retro 12 has a single global dictionary, with a convention of using a namespace prefix for grouping related words.
+Various past releases have had different methods of dealing with the
+dictionary. Retro 12 has a single global dictionary, with a convention
+of using a namespace prefix for grouping related words.
 
 | namespace  | words related to   |
 | ---------- | ------------------ |
@@ -23,7 +33,10 @@ Various past releases have had different methods of dealing with the dictionary.
 
 ### Prefixes
 
-Prefixes are an integral part of Retro. These are single characters added to the start of a word which indicate to Retro how it should execute the word. These are processed at the start of interpreting a token.
+Prefixes are an integral part of Retro. These are single characters
+added to the start of a word which indicate to Retro how it should
+execute the word. These are processed at the start of interpreting a
+token.
 
 | prefix | used for               |
 | ------ | ---------------------- |
@@ -33,10 +46,9 @@ Prefixes are an integral part of Retro. These are single characters added to the
 | `      | inlining bytecodes     |
 | '      | strings                |
 | #      | numbers                |
-| &amp;  | pointers               |
 | $      | characters             |
 
-### Naming &amp; Style Conventions
+### Naming and Style Conventions
 
 * Names should start with their namespace (if appropriate)
 * Word names should be lowercase
@@ -64,7 +76,8 @@ Memory Map
 
 ## Stack Comments
 
-Retro provides a **(** prefix for stack comments. This will be used by all subsequent words so it comes first.
+Retro provides a `(` prefix for stack comments. This will be used by
+all subsequent words so it comes first.
 
 Example:
 
@@ -87,11 +100,13 @@ Example:
 
 ## Changing Word Classes
 
-In implementing **prefix:(** a messy sequence follows the definition:
+In implementing `prefix:` a messy sequence follows the definition:
 
     &class:macro &Dictionary fetch d:class store
 
-This is used to change the class from **class:word** to **class:macro**. Doing this is ugly and not very readable. The next few words provide easier means of changing the class of the most recently defined word.
+This is used to change the class from `class:word` to `class:macro`.
+Doing this is ugly and not very readable. The next few words provide
+easier means of changing the class of the most recently defined word.
 
 ````
 :reclass    (a-) d:last d:class store ;
@@ -118,7 +133,9 @@ This is used to change the class from **class:word** to **class:macro**. Doing t
 
 ## Stack Shufflers
 
-The core Rx language provides a few basic stack shuffling words: **push**, **pop**, **drop**, **swap**, and **dup**. There are quite a few more that are useful. These are provided here.
+The core Rx language provides a few basic stack shuffling words: `push`,
+`pop`, `drop`, `swap`, and `dup`. There are quite a few more that are
+useful. These are provided here.
 
 ````
 :tuck      (xy-yxy)   dup push swap pop ;
@@ -137,7 +154,8 @@ The core Rx language provides a few basic stack shuffling words: **push**, **pop
 
 ## Support for Variables, Constants
 
-These aren't really useful until the **s:** namespace is compiled later on. With strings and the **'** prefix:
+These aren't really useful until the `s:` namespace is compiled later
+on. With strings and the `'` prefix:
 
 | To create a                  | Use a form like    |
 | ---------------------------- | ------------------ |
@@ -175,9 +193,12 @@ These aren't really useful until the **s:** namespace is compiled later on. With
 
 ## Combinators
 
-Retro makes use of anonymous functions called *quotations* for much of the execution flow and stack control. The words that operate on these quotations are called *combinators*.
+Retro makes use of anonymous functions called *quotations* for much of
+the execution flow and stack control. The words that operate on these
+quotations are called *combinators*.
 
-**dip** executes a quotation after moving a value off the stack. The value is restored after execution completes. These are equivilent:
+`dip` executes a quotation after moving a value off the stack. The
+value is restored after execution completes. These are equivilent:
 
     #10 #12 [ #3 - ] dip
     #10 #12 push #3 - pop
@@ -186,7 +207,8 @@ Retro makes use of anonymous functions called *quotations* for much of the execu
 :dip  (nq-n)  swap push call pop ;
 ````
 
-**sip** is similar to dip, but leaves a copy of the value on the stack while the quotation is executed. These are equivilent:
+`sip` is similar to dip, but leaves a copy of the value on the stack
+while the quotation is executed. These are equivilent:
 
     #10 [ #3 * ] sip
     #10 dup push #3 * pop
@@ -245,13 +267,13 @@ Execute quote until quote returns a flag of -1.
 :until  (q-)  [ repeat dup dip swap #-1 xor 0; drop again ] call drop ;
 ````
 
-The **times** combinator runs a quote (n) times.
+The `times` combinator runs a quote (n) times.
 
 ````
 :times  (q-)  swap [ repeat 0; #1 - push &call sip pop again ] call drop ;
 ````
 
-**case** is a conditional combinator.
+`case` is a conditional combinator.
 
 Example:
 
@@ -279,7 +301,9 @@ Example:
 :rot       (abc-bca)   [ swap ] dip swap ;
 ````
 
-Short for *top of return stack*, this returns the top item on the address stack. As an analog to traditional Forth, this is equivilent to **R@**.
+Short for *top of return stack*, this returns the top item on the
+address stack. As an analog to traditional Forth, this is equivilent
+to `R@`.
 
 ````
 :tors (-n)  pop pop dup push swap push ;
@@ -287,7 +311,8 @@ Short for *top of return stack*, this returns the top item on the address stack.
 
 ## Math
 
-The core Rx language provides addition, subtraction, multiplication, and a combined division/remainder. Retro expands on this.
+The core Rx language provides addition, subtraction, multiplication,
+and a combined division/remainder. Retro expands on this.
 
 ````
 :/         (nq-d)  /mod swap drop ;
@@ -330,12 +355,13 @@ Or:
     #1 'Next var<n>
     &Next [ fetch #10 * ] sip store
 
-The **v:update-using** replaces this with:
+The `v:update-using` replaces this with:
 
     #1 'Next var<n>
     &Next [ #10 * ] v:update-using
 
-It takes care of preserving the variable address, fetching the stored value, and updating with the resulting value.
+It takes care of preserving the variable address, fetching the stored
+value, and updating with the resulting value.
 
 ````
 :v:update-using (aq-) swap [ fetch swap call ] sip store ;
@@ -343,7 +369,8 @@ It takes care of preserving the variable address, fetching the stored value, and
 
 ## Lexical Scope
 
-The dictionary is a simple linked list. Retro allows for some control over what is visible using the **{{**, **---reveal---**, and **}}** words.
+The dictionary is a simple linked list. Retro allows for some control
+over what is visible using the `{{`, `---reveal---`, and `}}` words.
 
 As an example:
 
@@ -354,7 +381,7 @@ As an example:
       :next-number &Value fetch &Value increment ;
     }}
 
-Only the **next-number** function will remain visible once **}}** is executed.
+Only the `next-number` function will remain visible once `}}` is executed. 
 
 ````
 :ScopeList `0 `0 ;
@@ -383,16 +410,20 @@ Only the **next-number** function will remain visible once **}}** is executed.
 
 ## Incoming
 
-**later** is a small tool for interleaving code execution paths. This is somewhat difficult to explain.
+`later` is a small tool for interleaving code execution paths. This is
+somewhat difficult to explain.
 
 Let's look at an example:
 
     :a #1 later #3 ;
     :b a #2 ;
 
-When *b* executes it begins by calling *a* which pushes #1 to the stack. **later** then returns control to *b*, which pushes #2 to the stack. When execution of *b* ends at the *;*, control returns to *a* which finishes executing by pushing the #3 to the stack.
+When `b` executes it begins by calling `a` which pushes #1 to the stack.
+`later` then returns control to `b`, which pushes #2 to the stack. When
+execution of `b` ends at the `;`, control returns to *a* which finishes
+executing by pushing the #3 to the stack.
 
-You can use **later** to pass control back and forth:
+You can use `later` to pass control back and forth:
 
     :a #1 later #2 ;
     :b a #33 * later + ;
@@ -428,7 +459,8 @@ Temporary strings are allocated in a circular pool (at STRINGS).
 }}
 ````
 
-Permanent strings are compiled into memory. To skip over them a helper function is used. When compiled into a definition this will look like:
+Permanent strings are compiled into memory. To skip over them a helper
+function is used. When compiled into a definition this will look like:
 
     lit &s:skip
     call
@@ -439,7 +471,8 @@ Permanent strings are compiled into memory. To skip over them a helper function 
     .data 0
     lit &stringbegins
 
-The **s:skip** adjusts the Nga instruction pointer to skip to the code following the stored string.
+The `s:skip` adjusts the Nga instruction pointer to skip to the code
+following the stored string.
 
 ````
 :s:skip (-) pop [ fetch-next n:-zero? ] while n:dec push ;
@@ -450,13 +483,13 @@ The **s:skip** adjusts the Nga instruction pointer to skip to the code following
 :prefix:' compiling? [ s:keep ] [ s:temp ] choose ; immediate
 ````
 
-**s:chop** removes the last character from a string.
+`s:chop` removes the last character from a string.
 
 ````
 :s:chop (s-s) s:temp dup s:length over + n:dec #0 swap store ;
 ````
 
-**s:reverse** reverses the order of a string. E.g.,
+`s:reverse` reverses the order of a string. E.g.,
 
     'hello'  ->  'olleh'
 
@@ -466,7 +499,8 @@ The **s:skip** adjusts the Nga instruction pointer to skip to the code following
   [ dup fetch buffer:add n:dec ] times drop buffer:start s:temp ;
 ````
 
-Trimming removes leading (**s:trim-left**) or trailing (**s:trim-right**) spaces from a string. **s:trim** removes both leading and trailing spaces.
+Trimming removes leading (`s:trim-left`) or trailing (`s:trim-right`)
+spaces from a string. `s:trim` removes both leading and trailing spaces.
 
 ````
 :s:trim-left (s-s) s:temp [ fetch-next [ #32 eq? ] [ n:zero? ] bi and ] while n:dec ;
@@ -474,7 +508,7 @@ Trimming removes leading (**s:trim-left**) or trailing (**s:trim-right**) spaces
 :s:trim (s-s) s:trim-right s:trim-left ;
 ````
 
-**s:prepend** and **s:append** for concatenating strings together.
+`s:prepend` and `s:append` for concatenating strings together.
 
 ````
 :s:prepend (ss-s)
@@ -498,13 +532,15 @@ Trimming removes leading (**s:trim-left**) or trailing (**s:trim-right**) spaces
 
 ## s:filter
 
-Return a new string, consisting of the characters from another string that are filtered by a quotation.
+Return a new string, consisting of the characters from another string
+that are filtered by a quotation.
 
     'This_is_a_test [ c:vowel? ] s:filter
 
 ## s:map
 
-Return a new string resulting from applying a quotation to each character in a source string.
+Return a new string resulting from applying a quotation to each
+character in a source string.
 
     'This_is_a_test [ $_ [ ASCII:SPACE ] case ] s:map
 
@@ -648,7 +684,8 @@ Convert a decimal (base 10) number to a string.
 
 ## Unsorted
 
-Replace the old prefix:' with this one that can optionally turn underscores into spaces.
+Replace the old prefix:' with this one that can optionally turn
+underscores into spaces.
 
 ````
 TRUE 's:RewriteUnderscores var<n>
@@ -714,7 +751,7 @@ And you want to reorder them into something new:
 
     #1 #3 #5 #5 #2 #1
 
-Rather than using a lot of shufflers, **reorder** simplfies this into:
+Rather than using a lot of shufflers, `reorder` simplfies this into:
 
     #3 #1 #2 #5
     'abcd  'baddcb reorder
@@ -731,7 +768,8 @@ Rather than using a lot of shufflers, **reorder** simplfies this into:
 
 ## I/O
 
-Retro really only provides one I/O function in the standard interface: pushing a character to the output log.
+Retro really only provides one I/O function in the standard interface:
+pushing a character to the output log.
 
 ````
 :putc (c-) `1000 ;
@@ -744,6 +782,9 @@ This can be used to implement words that push other item to the log.
 :puts (s-) [ putc ] s:for-each ;
 :putn (n-) n:to-string puts ASCII:SPACE putc ;
 ````
+
+Different inteface layers may provide additional I/O words.
+
 
 ## The End
 

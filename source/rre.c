@@ -43,6 +43,7 @@ int main(int argc, char **argv) {
     memory[i] = ngaImage[i];
   update_rx();
   include_file(argv[1]);
-  dump_stack();
+  if (sp >=1 )
+    dump_stack();
   exit(0);
 }

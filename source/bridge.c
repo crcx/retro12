@@ -106,10 +106,10 @@ CELL nguraOpenFile() {
   char *request = string_extract(name);
   if (slot > 0)
   {
-    if (mode == 0)  nguraFileHandles[slot] = fopen(request, "r");
+    if (mode == 0)  nguraFileHandles[slot] = fopen(request, "rb");
     if (mode == 1)  nguraFileHandles[slot] = fopen(request, "w");
     if (mode == 2)  nguraFileHandles[slot] = fopen(request, "a");
-    if (mode == 3)  nguraFileHandles[slot] = fopen(request, "r+");
+    if (mode == 3)  nguraFileHandles[slot] = fopen(request, "rb+");
   }
   if (nguraFileHandles[slot] == NULL)
   {
@@ -120,8 +120,9 @@ CELL nguraOpenFile() {
   return slot;
 }
 CELL nguraReadFile() {
-  CELL c = fgetc(nguraFileHandles[data[sp]]); sp--;
-  return (c == EOF) ? 0 : c;
+  CELL slot = stack_pop();
+  CELL c = fgetc(nguraFileHandles[slot]);
+  return feof(nguraFileHandles[slot]) ? 0 : c;
 }
 CELL nguraWriteFile() {
   CELL slot, c, r;
@@ -191,13 +192,13 @@ void execute(int cell) {
       nguraWriteFile();
       break;
     case NGURA_FS_TELL:
-      nguraGetFilePosition();
+      stack_push(nguraGetFilePosition());
       break;
     case NGURA_FS_SEEK:
       nguraSetFilePosition();
       break;
     case NGURA_FS_SIZE:
-      nguraGetFileSize();
+      stack_push(nguraGetFileSize());
       break;
     case NGURA_FS_DELETE:
       nguraDeleteFile();

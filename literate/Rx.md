@@ -1,7 +1,7 @@
     ____  _   _
     || \\ \\ //
     ||_//  )x(
-    || \\ // \\ 2017.02
+    || \\ // \\ 2017.03
     a minimalist forth for nga
 
 *Rx* (*retro experimental*) is a minimal Forth implementation for the Nga virtual machine. Like Nga this is intended to be used within a larger supporting framework adding I/O and other desired functionality. Various example interface layers are included.
@@ -33,7 +33,7 @@ Naje, the Nga assembler, compiles the initial instructions automatically. The tw
 :Heap
   .data 1536
 :Version
-  .data 201702
+  .data 201703
 ````
 
 Both of these are pointers. **Dictionary** points to the most recent dictionary entry. (See the *Dictionary* section at the end of this file.) **Heap** points to the next free memory address. This is hard coded to an address beyond the end of the Rx kernel. It'll be fine tuned as development progresses. See the *Interpreter &amp; Compiler* section for more on this.
@@ -527,8 +527,6 @@ Rx provides accessor functions for each field. Since the number of fields (or th
 
 ````
 :d:link
-  lit 0
-  add
   ret
 :d:xt
   lit 1
@@ -950,8 +948,7 @@ As an example, in Rx code, assuming an I/O interface with some support for strin
   lit &d:class
   call
   fetch
-  call
-  ret
+  jump
 ````
 
 ````

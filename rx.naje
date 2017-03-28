@@ -3,7 +3,7 @@
 :Heap
   .data 1536
 :Version
-  .data 201702
+  .data 201703
 :_nop
   .data 0
   ret
@@ -309,8 +309,6 @@
   call
   ret
 :d:link
-  lit 0
-  add
   ret
 :d:xt
   lit 1
@@ -615,8 +613,7 @@
   lit &d:class
   call
   fetch
-  call
-  ret
+  jump
 :input:source
   .data 0
 :interpret:prefix

@@ -634,17 +634,22 @@ Hash (using DJB2)
 ````
 :c:letter?      (c-f) $A $z n:between? ;
 :c:lowercase?   (c-f) $a $z n:between? ;
+:c:-lowercase?  (c-f) c:lowercase? not ;
 :c:uppercase?   (c-f) $A $Z n:between? ;
+:c:-uppercase?  (c-f) c:uppercase? not ;
 :c:digit?       (c-f) $0 $9 n:between? ;
+:c:-digit?      (c-f) c:digit? not ;
 :c:whitespace?  (c-f)
   [ ASCII:SPACE eq? ]
   [ ASCII:HT    eq? ]
   [ [ ASCII:LF eq? ] [ ASCII:CR eq? ] bi or ] tri or or ;
+:c:-whitespace? (c-f) c:whitespace? not ;
 :c:to-upper     (c-c) dup c:lowercase? 0; drop ASCII:SPACE - ;
 :c:to-lower     (c-c) dup c:uppercase? 0; drop ASCII:SPACE + ;
 :c:toggle-case  (c-c) dup c:lowercase? [ c:to-upper ] [ c:to-lower ] choose ;
 :c:to-string    (c-s) '. s:temp [ store ] sip ;
 :c:visible?     (c-f) #31 #126 n:between? ;
+:c:-visible?    (c-f) c:visible? not ;
 :c:vowel?       (c-f)
   c:to-lower
   $a [ TRUE ] case
@@ -653,8 +658,10 @@ Hash (using DJB2)
   $o [ TRUE ] case
   $u [ TRUE ] case
   drop FALSE ;
+:c:-vowel?      (c-f)  c:vowel? not ;
 :c:consonant?   (c-f)
   dup c:letter? [ c:vowel? not ] [ drop FALSE ] choose ;
+:c:-consonant?  (c-f)  c:consonant? not ;
 ````
 
 

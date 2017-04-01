@@ -11,9 +11,9 @@
 #include <unistd.h>
 #include <string.h>
 #define CELL         int32_t
-#define IMAGE_SIZE   524288
-#define ADDRESSES    128
-#define STACK_DEPTH  32
+#define IMAGE_SIZE   524288 * 4
+#define ADDRESSES    2048
+#define STACK_DEPTH  512
 enum vm_opcode {
   VM_NOP,  VM_LIT,    VM_DUP,   VM_DROP,    VM_SWAP,   VM_PUSH,  VM_POP,
   VM_JUMP, VM_CALL,   VM_CCALL, VM_RETURN,  VM_EQ,     VM_NEQ,   VM_LT,

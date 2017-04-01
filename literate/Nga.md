@@ -75,9 +75,9 @@ a much larger memory and stack space.
 
 ````
 #define CELL         int32_t
-#define IMAGE_SIZE   524288
-#define ADDRESSES    128
-#define STACK_DEPTH  32
+#define IMAGE_SIZE   524288 * 4
+#define ADDRESSES    2048
+#define STACK_DEPTH  512
 ````
 
 ## Numbering The Instructions

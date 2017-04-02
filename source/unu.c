@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#define KiB * 1024
 void read_line(FILE *file, char *line_buffer) {
   if (file == NULL || line_buffer == NULL)
   {
@@ -17,7 +18,7 @@ void read_line(FILE *file, char *line_buffer) {
   }
   line_buffer[count] = '\0';
 }
-char source[16*1024];
+char source[16 KiB];
 void extract(char *fname) {
   char *buffer = (char *)source;
   FILE *fp;
@@ -48,6 +49,6 @@ int main(int argc, char **argv) {
     }
   }
   else
-    printf("unu\n(c) 2013, 2016 charles childers\n\nTry:\n  %s filename\n", argv[0]);
+    printf("unu\n(c) 2013-2017 charles childers\n\nTry:\n  %s filename\n", argv[0]);
   return 0;
 }

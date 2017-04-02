@@ -1,12 +1,12 @@
 CC = clang
 CFLAGS = -Wall
 
-all: clean bootstrap tools compile link image rre listener finish
+all: clean sources tools compile link image rre listener finish
 
 clean:
 	rm -f bin/*
 
-bootstrap:
+sources:
 	cd source && $(CC) $(CFLAGS) unu.c -o ../bin/unu
 	./bin/unu literate/Unu.md >source/unu.c
 	./bin/unu literate/Nga.md >source/nga.c

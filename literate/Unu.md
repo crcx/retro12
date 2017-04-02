@@ -18,6 +18,13 @@ I always found documenting my projects to be annoying. Eventually I decided to s
 #include <ctype.h>
 ````
 
+I use this for readability purposes.
+
+````
+#define KiB * 1024
+````
+
+
 ### read_line(FILE *file, char *line_buffer)
 
 ````
@@ -46,7 +53,7 @@ void read_line(FILE *file, char *line_buffer) {
 The line buffer needs to be big enough for the longest lines in your source files. Here it's capped at 16KiB, which is sufficient for everything I've used Unu with so far.
 
 ````
-char source[16*1024];
+char source[16 KiB];
 ````
 
 ````
@@ -85,7 +92,7 @@ int main(int argc, char **argv) {
     }
   }
   else
-    printf("unu\n(c) 2013, 2016 charles childers\n\nTry:\n  %s filename\n", argv[0]);
+    printf("unu\n(c) 2013-2017 charles childers\n\nTry:\n  %s filename\n", argv[0]);
   return 0;
 }
 ````

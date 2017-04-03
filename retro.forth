@@ -7,8 +7,8 @@
 :immediate  (-)  &class:macro reclass ;
 :data       (-)  &class:data reclass ;
 :compile:lit  (a-) #1 , , ;
-:compile:jump (a-) compile:lit #7 , ;
-:compile:call (a-) compile:lit #8 , ;
+:compile:jump (a-) #1793 , , ;
+:compile:call (a-) #2049 , , ;
 :compile:ret  (-)  #10 , ;
 :compiling?  (-f)  &Compiler fetch ;
 :prefix:`  (s-)

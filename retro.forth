@@ -12,10 +12,10 @@
 :compile:jump (a-) #1793 , , ;
 :compile:call (a-) #2049 , , ;
 :compile:ret  (-)  #10 , ;
-:compiling?  (-f)  &Compiler fetch ;
+:compiling?  (-f)  @Compiler ;
 :prefix:`  (s-)
   compiling? [ s:to-number , ] [ drop ] choose ; immediate
-:here  (-a) &Heap fetch ;
+:here  (-a) @Heap ;
 :d:create (s-)
   (s-) &class:data #0 d:add-header
   here d:last d:xt store ;
@@ -89,33 +89,33 @@
    d:last &ScopeList n:inc store ;
 :}}            (-)
   &ScopeList fetch-next swap fetch eq?
-  [ &ScopeList fetch &Dictionary store ]
-  [ &ScopeList fetch [ &Dictionary repeat fetch dup fetch &ScopeList n:inc fetch -eq? 0; drop again ] call store ] choose ;
+  [ @ScopeList !Dictionary ]
+  [ @ScopeList [ &Dictionary repeat fetch dup fetch &ScopeList n:inc fetch -eq? 0; drop again ] call store ] choose ;
 {{
   :Buffer `0 ; data
   :Ptr    `0 ; data
-  :terminate (-) #0 &Ptr fetch store ;
+  :terminate (-) #0 @Ptr store ;
 ---reveal---
-  :buffer:start  (-a) &Buffer fetch ;
-  :buffer:end    (-a) &Ptr fetch ;
+  :buffer:start  (-a) @Buffer ;
+  :buffer:end    (-a) @Ptr ;
   :buffer:add    (c-) buffer:end store &Ptr v:inc terminate ;
   :buffer:get    (-c) &Ptr v:dec buffer:end fetch terminate ;
-  :buffer:empty  (-)  buffer:start &Ptr store terminate ;
+  :buffer:empty  (-)  buffer:start !Ptr terminate ;
   :buffer:size   (-n) buffer:end buffer:start - ;
-  :buffer:set    (a-) &Buffer store buffer:empty ;
+  :buffer:set    (a-) !Buffer buffer:empty ;
   :buffer:preserve (q-)
-    &Buffer fetch &Ptr fetch [ [ call ] dip &Ptr store ] dip &Buffer store ;
+    @Buffer @Ptr [ [ call ] dip !Ptr ] dip !Buffer ;
 }}
-:TempStrings ;   &class:data reclass  #12 &TempStrings store
-:TempStringMax ; &class:data reclass #128 &TempStringMax store
-:STRINGS   EOM &TempStrings fetch &TempStringMax fetch * - ;
+:TempStrings ;   &class:data reclass  #12 !TempStrings
+:TempStringMax ; &class:data reclass #128 !TempStringMax
+:STRINGS   EOM @TempStrings @TempStringMax * - ;
 {{
   :MAX-LENGTH #128 ;
   :s:Current `0 ; data
-  :s:pointer (-p)  &s:Current fetch MAX-LENGTH * STRINGS + ;
+  :s:pointer (-p)  @s:Current MAX-LENGTH * STRINGS + ;
   :s:next    (-)
     &s:Current v:inc
-    &s:Current fetch &TempStrings fetch eq? [ #0 &s:Current store ] if ;
+    @s:Current @TempStrings eq? [ #0 !s:Current ] if ;
 ---reveal---
   :s:temp (s-s) dup s:length n:inc s:pointer swap copy s:pointer s:next ;
   :s:empty (-s) s:pointer s:next ;
@@ -138,24 +138,23 @@
   :Needle `0 ; data
 ---reveal---
   :s:has-char?  (sc-f)
-   &Needle store
+   !Needle
    repeat
      fetch-next
      dup n:zero? [ drop drop #0 #0 ] [ #-1 ] choose 0; drop
-     &Needle fetch eq? [ #-1 #0 ] [ #-1 ] choose 0; drop
+     @Needle eq? [ #-1 #0 ] [ #-1 ] choose 0; drop
   again ;
 }}
 {{
   'Source var
   'Q var
-  :*Source &Source fetch ;
-  :<Source> *Source fetch ;
-  :run-filter &Q fetch call ;
-  :init  (sq-)  &Q store  &Source store ;
+  :<Source> @Source fetch ;
+  :run-filter @Q call ;
+  :init  (sq-)  !Q  !Source ;
 ---reveal---
   :s:filter (sq-s)
     [ init s:empty buffer:set
-      *Source s:length
+      @Source s:length
       [ <Source> run-filter [ <Source> buffer:add ] if
         &Source v:inc
       ] times
@@ -166,14 +165,13 @@
 {{
   'Source var
   'Q var
-  :*Source &Source fetch ;
-  :<Source> *Source fetch ;
+  :<Source> @Source fetch ;
   :run-filter &Q fetch call ;
 ---reveal---
   :s:map (sq-s)
-    [ &Q store  &Source store
+    [ !Q  !Source
       s:empty buffer:set
-      *Source s:length
+      @Source s:length
       [ <Source> run-filter buffer:add
         &Source v:inc
       ] times
@@ -248,15 +246,15 @@
   :Value `0 ;
 ---reveal---
   :n:to-string  (n-s)
-    [ here buffer:set dup &Value store n:abs
+    [ here buffer:set dup !Value n:abs
       [ #10 /mod swap $0 + buffer:add dup n:-zero? ] while drop
-      &Value fetch n:negative? [ $- buffer:add ] if
+      @Value n:negative? [ $- buffer:add ] if
       buffer:start s:reverse s:temp ] buffer:preserve ;
 }}
 TRUE 'RewriteUnderscores var<n>
 {{
   :rewrite
-    &RewriteUnderscores fetch
+    @RewriteUnderscores
     [ [ dup s:length
         [ dup fetch
           dup $_ eq? [ drop #32 ] if
@@ -279,14 +277,14 @@ TRUE 'RewriteUnderscores var<n>
 {{
   'I var
   'O var
-  :-found? (-f)  &I fetch n:zero? ;
-  :update  (-)   &O fetch &I store ;
+  :-found? (-f)  @I n:zero? ;
+  :update  (-)   @O !I ;
 ---reveal---
   :s:index-of (sc-n)
-    #0 &I store
-    #0 &O store
+    #0 !I
+    #0 !O
     swap [ over eq? [ -found? [ update ] if ] if &O v:inc ] s:for-each
-    drop &I fetch
+    drop @I
   ;
 }}
 {{

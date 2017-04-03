@@ -143,7 +143,7 @@ The compiler state is stored in a value named `Compiler`. I have an
 accessor word that aids in readability.
 
 ````
-:compiling?  (-f)  &Compiler fetch ;
+:compiling?  (-f)  @Compiler ;
 ````
 
 It's sometimes useful to inline values directly. I use a backtick
@@ -158,7 +158,7 @@ It's traditional to have a word named `here` which returns the next
 free address in memory.
 
 ````
-:here  (-a) &Heap fetch ;
+:here  (-a) @Heap ;
 ````
 
 The next few words aren't useful until the `s:` namespace is defined.
@@ -382,7 +382,7 @@ and a combined division/remainder. Retro expands on this.
 Some of the above, like `n:inc`, are useful with variables. But it's
 messy to execute sequences like:
 
-  &foo fetch n:inc &foo store
+  @foo n:inc !foo
 
 The `v:` namespace provides words which simplify the overall handling
 of variables. With this, the above can become simply:
@@ -403,7 +403,7 @@ of variables. With this, the above can become simply:
 If you need to update a stored variable there are two typical forms:
 
     #1 'Next var<n>
-    &Next fetch #10 * &Next store
+    @Next #10 * !Next
 
 Or:
 
@@ -439,7 +439,7 @@ As an example:
       :increment dup fetch n:inc swap store ;
       :Value `0 ;
     ---reveal---
-      :next-number &Value fetch &Value increment ;
+      :next-number @Value &Value increment ;
     }}
 
 Only the `next-number` function will remain visible once `}}` is
@@ -453,8 +453,8 @@ executed.
    d:last &ScopeList n:inc store ;
 :}}            (-)
   &ScopeList fetch-next swap fetch eq?
-  [ &ScopeList fetch &Dictionary store ]
-  [ &ScopeList fetch [ &Dictionary repeat fetch dup fetch &ScopeList n:inc fetch -eq? 0; drop again ] call store ] choose ;
+  [ @ScopeList !Dictionary ]
+  [ @ScopeList [ &Dictionary repeat fetch dup fetch &ScopeList n:inc fetch -eq? 0; drop again ] call store ] choose ;
 ````
 
 --> The scoping code is a bit messy. I'd like to simplify it.
@@ -467,17 +467,17 @@ namespace for working with them.
 {{
   :Buffer `0 ; data
   :Ptr    `0 ; data
-  :terminate (-) #0 &Ptr fetch store ;
+  :terminate (-) #0 @Ptr store ;
 ---reveal---
-  :buffer:start  (-a) &Buffer fetch ;
-  :buffer:end    (-a) &Ptr fetch ;
+  :buffer:start  (-a) @Buffer ;
+  :buffer:end    (-a) @Ptr ;
   :buffer:add    (c-) buffer:end store &Ptr v:inc terminate ;
   :buffer:get    (-c) &Ptr v:dec buffer:end fetch terminate ;
-  :buffer:empty  (-)  buffer:start &Ptr store terminate ;
+  :buffer:empty  (-)  buffer:start !Ptr terminate ;
   :buffer:size   (-n) buffer:end buffer:start - ;
-  :buffer:set    (a-) &Buffer store buffer:empty ;
+  :buffer:set    (a-) !Buffer buffer:empty ;
   :buffer:preserve (q-)
-    &Buffer fetch &Ptr fetch [ [ call ] dip &Ptr store ] dip &Buffer store ;
+    @Buffer @Ptr [ [ call ] dip !Ptr ] dip !Buffer ;
 }}
 ````
 
@@ -492,18 +492,18 @@ workable approach.
 Temporary strings are allocated in a circular pool (at STRINGS).
 
 ````
-:TempStrings ;   &class:data reclass  #12 &TempStrings store
-:TempStringMax ; &class:data reclass #128 &TempStringMax store
-:STRINGS   EOM &TempStrings fetch &TempStringMax fetch * - ;
+:TempStrings ;   &class:data reclass  #12 !TempStrings
+:TempStringMax ; &class:data reclass #128 !TempStringMax
+:STRINGS   EOM @TempStrings @TempStringMax * - ;
 
 {{
   :MAX-LENGTH #128 ;
   :s:Current `0 ; data
 
-  :s:pointer (-p)  &s:Current fetch MAX-LENGTH * STRINGS + ;
+  :s:pointer (-p)  @s:Current MAX-LENGTH * STRINGS + ;
   :s:next    (-)
     &s:Current v:inc
-    &s:Current fetch &TempStrings fetch eq? [ #0 &s:Current store ] if ;
+    @s:Current @TempStrings eq? [ #0 !s:Current ] if ;
 ---reveal---
   :s:temp (s-s) dup s:length n:inc s:pointer swap copy s:pointer s:next ;
   :s:empty (-s) s:pointer s:next ;
@@ -587,11 +587,11 @@ character is in a string.
   :Needle `0 ; data
 ---reveal---
   :s:has-char?  (sc-f)
-   &Needle store
+   !Needle
    repeat
      fetch-next
      dup n:zero? [ drop drop #0 #0 ] [ #-1 ] choose 0; drop
-     &Needle fetch eq? [ #-1 #0 ] [ #-1 ] choose 0; drop
+     @Needle eq? [ #-1 #0 ] [ #-1 ] choose 0; drop
   again ;
 }}
 ````
@@ -605,14 +605,13 @@ another string that are filtered by a quotation.
 {{
   'Source var
   'Q var
-  :*Source &Source fetch ;
-  :<Source> *Source fetch ;
-  :run-filter &Q fetch call ;
-  :init  (sq-)  &Q store  &Source store ;
+  :<Source> @Source fetch ;
+  :run-filter @Q call ;
+  :init  (sq-)  !Q  !Source ;
 ---reveal---
   :s:filter (sq-s)
     [ init s:empty buffer:set
-      *Source s:length
+      @Source s:length
       [ <Source> run-filter [ <Source> buffer:add ] if
         &Source v:inc
       ] times
@@ -631,14 +630,13 @@ character in a source string.
 {{
   'Source var
   'Q var
-  :*Source &Source fetch ;
-  :<Source> *Source fetch ;
+  :<Source> @Source fetch ;
   :run-filter &Q fetch call ;
 ---reveal---
   :s:map (sq-s)
-    [ &Q store  &Source store
+    [ !Q  !Source
       s:empty buffer:set
-      *Source s:length
+      @Source s:length
       [ <Source> run-filter buffer:add
         &Source v:inc
       ] times
@@ -764,9 +762,9 @@ Convert a decimal (base 10) number to a string.
   :Value `0 ;
 ---reveal---
   :n:to-string  (n-s)
-    [ here buffer:set dup &Value store n:abs
+    [ here buffer:set dup !Value n:abs
       [ #10 /mod swap $0 + buffer:add dup n:-zero? ] while drop
-      &Value fetch n:negative? [ $- buffer:add ] if
+      @Value n:negative? [ $- buffer:add ] if
       buffer:start s:reverse s:temp ] buffer:preserve ;
 }}
 ````
@@ -779,7 +777,7 @@ TRUE 'RewriteUnderscores var<n>
 
 {{
   :rewrite
-    &RewriteUnderscores fetch
+    @RewriteUnderscores
     [ [ dup s:length
         [ dup fetch
           dup $_ eq? [ drop #32 ] if
@@ -813,14 +811,14 @@ finds the first instance of a character in a string.
 {{
   'I var
   'O var
-  :-found? (-f)  &I fetch n:zero? ;
-  :update  (-)   &O fetch &I store ;
+  :-found? (-f)  @I n:zero? ;
+  :update  (-)   @O !I ;
 ---reveal---
   :s:index-of (sc-n)
-    #0 &I store
-    #0 &O store
+    #0 !I
+    #0 !O
     swap [ over eq? [ -found? [ update ] if ] if &O v:inc ] s:for-each
-    drop &I fetch
+    drop @I
   ;
 }}
 ````

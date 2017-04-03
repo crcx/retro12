@@ -123,6 +123,12 @@ With this I can then define `immediate` (for state-smart words) and
 :data       (-)  &class:data reclass ;
 ````
 
+
+````
+:prefix:@  (s-n) d:lookup d:xt fetch class:data &fetch class:word ; immediate
+:prefix:!  (s-n) d:lookup d:xt fetch class:data &store class:word ; immediate
+````
+
 I have a `compile` namespace for some low level words that compile
 Nga bytecode.
 

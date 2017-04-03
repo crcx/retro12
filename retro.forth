@@ -6,6 +6,8 @@
 :reclass    (a-) d:last d:class store ;
 :immediate  (-)  &class:macro reclass ;
 :data       (-)  &class:data reclass ;
+:prefix:@  (s-n) d:lookup d:xt fetch class:data &fetch class:word ; immediate
+:prefix:!  (s-n) d:lookup d:xt fetch class:data &store class:word ; immediate
 :compile:lit  (a-) #1 , , ;
 :compile:jump (a-) #1793 , , ;
 :compile:call (a-) #2049 , , ;

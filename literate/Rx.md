@@ -849,8 +849,12 @@ starting new functions (using the `:` prefix).
 | $      | ASCII characters  | $e      |
 | &      | pointers          | &swap   |
 | :      | definitions       | :foo    |
+| (      | Comments          | (n-)    |
 
 ````
+:prefix:(
+  drop
+  ret
 :prefix:#
   lit &s:to-number
   call
@@ -1215,47 +1219,50 @@ Rx kernel.
   .ref class:macro
   .string 0;
 :0021
-
-:0022
   .ref 0020
   .ref fetch-next
   .ref class:word
   .string fetch-next
-:0023
-  .ref 0022
+:0022
+  .ref 0021
   .ref store-next
   .ref class:word
   .string store-next
-:0024
-  .ref 0023
+:0023
+  .ref 0022
   .ref s:to-number
   .ref class:word
   .string s:to-number
-:0025
-  .ref 0024
+:0024
+  .ref 0023
   .ref s:eq
   .ref class:word
   .string s:eq?
-:0026
-  .ref 0025
+:0025
+  .ref 0023
   .ref s:length
   .ref class:word
   .string s:length
-:0027
-  .ref 0026
+:0026
+  .ref 0025
   .ref choose
   .ref class:word
   .string choose
-:0028
-  .ref 0027
+:0027
+  .ref 0026
   .ref if
   .ref class:word
   .string if
-:0029
-  .ref 0028
+:0028
+  .ref 0027
   .ref -if
   .ref class:word
   .string -if
+:0029
+  .ref 0028
+  .ref prefix:(
+  .ref class:macro
+  .string prefix:(
 :0030
   .ref 0029
   .ref Compiler

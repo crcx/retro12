@@ -77,23 +77,10 @@ This will be used by the words in the `s:` namespace to allocate the
 temporary string buffers at the end of memory.
 
 ````
-:EOM       #-3 fetch ;
+:EOM  (-n)  #-3 fetch ;
 ````
 
-Now for a helpful bit. The Rx kernel doesn't provide for stack
-comments. I define an `(` prefix for this.
-
-Example:
-
-    (n-nmq)
-
-````
-:prefix:( drop ;
-  &class:macro &Dictionary fetch d:class store
-````
-
-Now tht stack comments are available, I'll use them to help indicate
-what each word expects. The comments are like this:
+... stack comments ...
 
   (takes-returns)
 
@@ -118,9 +105,7 @@ pointers to specific fields in the header.
 :d:last<name>  (-s) d:last d:name ;
 ````
 
-In implementing `prefix:` a messy sequence follows the definition:
-
-    &class:macro &Dictionary fetch d:class store
+... reclass ...
 
 This is used to change the class from `class:word` to `class:macro`.
 Doing this is ugly and not very readable. I implement `reclass` to

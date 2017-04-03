@@ -1,6 +1,4 @@
-:EOM       #-3 fetch ;
-:prefix:( drop ;
-  &class:macro &Dictionary fetch d:class store
+:EOM  (-n)  #-3 fetch ;
 :d:last        (-d) &Dictionary fetch ;
 :d:last<xt>    (-a) d:last d:xt fetch ;
 :d:last<class> (-a) d:last d:class fetch ;

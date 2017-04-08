@@ -66,8 +66,8 @@ This assumes that the VM defines an image as being 524287 cells.
 
 | range           | contains                     |
 | --------------- | ---------------------------- |
-| 0 - 1470        | rx kernel                    |
-| 1471 - 1535     | token input buffer           |
+| 0 - 1024        | rx kernel                    |
+| 1025 - 1535     | token input buffer           |
 | 1536 +          | start of heap space          |
 | 522751          | temporary strings (12 * 128) |
 | 524287          | end of memory                |

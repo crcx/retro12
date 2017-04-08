@@ -1,12 +1,11 @@
-/* listener, copyright (c) 2016 charles childers */
+/* listener, copyright (c) 2016-2017 charles childers */
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdint.h>
 #include "bridge.c"
-#define ED_BUFFER 327680
-#define ED_BLOCKS 384
+
 #ifdef _WIN32
 #include "termios.h"
 int	tcgetattr(int _fildes, struct termios *_termios_p) {return 0;};
@@ -16,6 +15,7 @@ int	tcsetattr(int _fildes, int _optional_actions, const struct termios *_termios
 #include <termios.h>
 #include <sys/ioctl.h>
 #endif
+
 struct termios new_termios, old_termios;
 void term_setup() {
   tcgetattr(0, &old_termios);
@@ -30,12 +30,6 @@ void term_setup() {
 void term_cleanup() {
   tcsetattr(0, TCSANOW, &old_termios);
 }
-void term_clear() {
-  printf("\033[2J\033[1;1H");
-}
-void term_move_cursor(int x, int y) {
-  printf("\033[%d;%dH", y, x);
-}
 void include_file(char *fname) {
   char source[64000];
   FILE *fp;
@@ -49,17 +43,6 @@ void include_file(char *fname) {
     evaluate(source);
   }
   fclose(fp);
-}
-void read_blocks() {
-  FILE *fp;
-  if ((fp = fopen("retro.blocks", "rb")) != NULL) {
-    CELL slot;
-    for (int i = ED_BUFFER; i < IMAGE_SIZE; i++) {
-      fread(&slot, sizeof(CELL), 1, fp);
-      memory[i] = slot;
-    }
-    fclose(fp);
-  }
 }
 void dump_stack() {
   printf("Stack: ");
@@ -81,8 +64,6 @@ int main(int argc, char **argv) {
   update_rx();
   printf("RETRO 12 (rx-%d.%d)\n", memory[4] / 100, memory[4] % 100);
   char input[1024];
-//  include_file("retro.forth");
-  read_blocks();
   term_setup();
   printf("%d MAX, TIB @ %d, Heap @ %d\n\n", IMAGE_SIZE, TIB, Heap);
   while(1) {

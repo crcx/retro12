@@ -6,7 +6,7 @@
 #include "nga.h"
 CELL Dictionary, Heap, Compiler;
 CELL notfound;
-#define TIB 1471
+#define TIB 1025
 CELL stack_pop() {
   sp--;
   return data[sp + 1];

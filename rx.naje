@@ -253,8 +253,6 @@
   store
   ret
 :class:data
-  nop
-  nop
   lit &Compiler
   fetch
   zret
@@ -263,43 +261,31 @@
   lit &comma:opcode
   call
   lit &comma
-  call
-  ret
+  jump
 :class:word:interpret
-  call
-  ret
+  jump
 :class:word:compile
   lit &_packedcall
   lit &comma:opcode
   call
   lit &comma
-  call
-  ret
+  jump
 :class:word
-  nop
-  nop
   lit &Compiler
   fetch
   lit &class:word:compile
   lit &class:word:interpret
   lit &choose
-  call
-  ret
+  jump
 :class:primitive
-  nop
-  nop
   lit &Compiler
   fetch
   lit &comma:opcode
   lit &class:word:interpret
   lit &choose
-  call
-  ret
+  jump
 :class:macro
-  nop
-  nop
-  call
-  ret
+  jump
 :d:link
   ret
 :d:xt
@@ -416,8 +402,6 @@
   add
   ret
 :s:to-number
-  nop
-  nop
   lit &to-number:prepare
   call
   lit &to-number:convert
@@ -563,8 +547,7 @@
   call
   lit &_jump
   lit &comma:opcode
-  call
-  ret
+  jump
 :t-0;
   lit &Compiler
   fetch
@@ -572,8 +555,7 @@
   drop
   lit &_zret
   lit &comma:opcode
-  call
-  ret
+  jump
 :t-push
   lit &Compiler
   fetch
@@ -581,8 +563,7 @@
   drop
   lit &_push
   lit &comma:opcode
-  call
-  ret
+  jump
 :t-pop
   lit &Compiler
   fetch
@@ -590,8 +571,7 @@
   drop
   lit &_pop
   lit &comma:opcode
-  call
-  ret
+  jump
 :err:notfound
   lit &_nop
   jump
@@ -633,8 +613,7 @@
   lit &interpret:word
   lit &err:notfound
   lit &choose
-  call
-  ret
+  jump
 :interpret
   dup
   lit &input:source
@@ -644,8 +623,7 @@
   lit &interpret:prefix
   lit &interpret:noprefix
   lit &choose
-  call
-  ret
+  jump
 :0000
   .data 0
   .ref _dup

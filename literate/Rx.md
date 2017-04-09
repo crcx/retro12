@@ -467,8 +467,6 @@ with differing behaviors:
 
 ````
 :class:data
-  nop
-  nop
   lit &Compiler
   fetch
   zret
@@ -477,8 +475,7 @@ with differing behaviors:
   lit &comma:opcode
   call
   lit &comma
-  call
-  ret
+  jump
 ````
 
 `class:word` handles most functions.
@@ -489,25 +486,20 @@ with differing behaviors:
 
 ````
 :class:word:interpret
-  call
-  ret
+  jump
 :class:word:compile
   lit &_packedcall
   lit &comma:opcode
   call
   lit &comma
-  call
-  ret
+  jump
 :class:word
-  nop
-  nop
   lit &Compiler
   fetch
   lit &class:word:compile
   lit &class:word:interpret
   lit &choose
-  call
-  ret
+  jump
 ````
 
 `class:primitive` is a special class handler for functions that
@@ -519,15 +511,12 @@ correspond to Nga instructions.
 
 ````
 :class:primitive
-  nop
-  nop
   lit &Compiler
   fetch
   lit &comma:opcode
   lit &class:word:interpret
   lit &choose
-  call
-  ret
+  jump
 ````
 
 `class:macro` is the class handler for *compiler macros*. These are
@@ -540,10 +529,7 @@ language in interesting ways.
 
 ````
 :class:macro
-  nop
-  nop
-  call
-  ret
+  jump
 ````
 
 The class mechanism is not limited to these classes. You can write
@@ -755,8 +741,6 @@ At this time Rx only supports decimal numbers.
   add
   ret
 :s:to-number
-  nop
-  nop
   lit &to-number:prepare
   call
   lit &to-number:convert
@@ -974,8 +958,7 @@ to use them interactively, wrap them in a quote and `call` it.
   call
   lit &_jump
   lit &comma:opcode
-  call
-  ret
+  jump
 :t-0;
   lit &Compiler
   fetch
@@ -983,8 +966,7 @@ to use them interactively, wrap them in a quote and `call` it.
   drop
   lit &_zret
   lit &comma:opcode
-  call
-  ret
+  jump
 ````
 
 ````
@@ -995,8 +977,8 @@ to use them interactively, wrap them in a quote and `call` it.
   drop
   lit &_push
   lit &comma:opcode
-  call
-  ret
+  jump
+
 :t-pop
   lit &Compiler
   fetch
@@ -1004,8 +986,7 @@ to use them interactively, wrap them in a quote and `call` it.
   drop
   lit &_pop
   lit &comma:opcode
-  call
-  ret
+  jump
 ````
 
 ## Interpreter
@@ -1085,8 +1066,7 @@ field to the stack. It then calls the class handler stored in `d:class`.
   lit &interpret:word
   lit &err:notfound
   lit &choose
-  call
-  ret
+  jump
 
 :interpret
   dup
@@ -1097,8 +1077,7 @@ field to the stack. It then calls the class handler stored in `d:class`.
   lit &interpret:prefix
   lit &interpret:noprefix
   lit &choose
-  call
-  ret
+  jump
 ````
 
 ## The Initial Dictionary

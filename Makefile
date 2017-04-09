@@ -40,7 +40,7 @@ rre:
 	cd bin && $(CC) $(CFLAGS) rre.o nga.o image.o -o rre
 
 listener:
-	cd source && $(CC) $(CFLAGS) -c listener.c -o ../bin/listener.o
+	cd source/deprecated && $(CC) $(CFLAGS) -c listener.c -o ../../bin/listener.o
 	cd bin && $(CC) $(CFLAGS) listener.o nga.o -o listener
 
 finish:

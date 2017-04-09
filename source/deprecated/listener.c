@@ -20,7 +20,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdint.h>
-#include "bridge.c"
+#include "../bridge.c"
 
 #ifdef _WIN32
 #include "termios.h"

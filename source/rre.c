@@ -1,10 +1,29 @@
-/* listener, copyright (c) 2016 charles childers */
+/*  ____   ____ ______ ____    ___
+    || \\ ||    | || | || \\  // \\
+    ||_// ||==    ||   ||_// ((   ))
+    || \\ ||___   ||   || \\  \\_//
+    a personal, minimalistic forth
+
+    This is `rre`, short for `run retro and exit`. It's the
+    basic interface layer for Retro on Linux and macOS.
+
+    Copyright (c) 2016, 2017 Charles Childers
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdint.h>
+
+/* Eventually bridge.c should be compiled separate
+   and have a corresponding bridge.h */
 #include "bridge.c"
+
+/* Compile image.c and link against the image.o */
+extern CELL ngaImageCells;
+extern CELL ngaImage[];
+
 void dump_stack() {
   if (sp == 0)
     return;
@@ -17,33 +36,33 @@ void dump_stack() {
   }
   printf("\n");
 }
-int include_file(char *fname) {
+
+
+void include_file(char *fname) {
   char source[64000];
   FILE *fp;
   fp = fopen(fname, "r");
   if (fp == NULL)
-    return -1;
+    return;
   while (!feof(fp))
   {
     read_token(fp, source, 0);
     evaluate(source);
   }
   fclose(fp);
-  return 0;
 }
-void prompt() {
-  if (memory[Compiler] == 0)
-    printf("\nok  ");
-}
-extern CELL ngaImageCells;
-extern CELL ngaImage[];
+
+
 int main(int argc, char **argv) {
   ngaPrepare();
   for (int i = 0; i < ngaImageCells; i++)
     memory[i] = ngaImage[i];
   update_rx();
+
   include_file(argv[1]);
-  if (sp >=1 )
+
+  if (sp >= 1)
     dump_stack();
+
   exit(0);
 }

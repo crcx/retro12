@@ -19,7 +19,7 @@ approach the code in a more structured manner.
 
 The source is written in Naje, the standard assembler for Nga.
 
-## In the Beginning..
+## In the Beginning...
 
 All code built with the Nga toolchain starts with a jump to the main
 entry point. With cell packing, this takes two cells. We can take
@@ -356,17 +356,16 @@ since a *true* flag is -1.
   ret
 ````
 
-Next the two *if* forms:
+Next the two *if* forms. Note that I allow *-if* to fall through
+into *if*. This saves two cells of memory.
 
 ````
-:if
-  ccall
-  ret
 :-if
   push
     lit 0
     eq?
   pop
+:if
   ccall
   ret
 ````
@@ -396,15 +395,19 @@ where those functions starting with an underscore come into play. Each
 wraps a single instruction. Using this we can avoid hard coding the
 opcodes.
 
+This performs a jump to the `comma` word instead of using a `call/ret`
+to save a cell and slightly improve performance.
+
 ````
 :comma:opcode
   fetch
   lit &comma
-  call
-  ret
+  jump
 ````
 
 `comma:string` is used to compile a string into the current definition.
+As with `comma:opcode`, this uses a `jump` to eliminate the final tail
+call.
 
 ````
 :($)
@@ -421,24 +424,18 @@ opcodes.
   drop
   lit 0
   lit &comma
-  call
-  ret
+  jump
 ````
 
 With the core functions above it's now possible to setup a few more
 things that make compilation at runtime more practical.
 
 First, a variable indicating whether we should compile or run a function.
-This will be used by the *word classes*. I also define an accessor
-function named `compiling?` to aid in readability later on.
+This will be used by the *word classes*.
 
 ````
 :Compiler
   .data 0
-:compiling?
-  lit &Compiler
-  fetch
-  ret
 ````
 
 ````
@@ -472,8 +469,8 @@ with differing behaviors:
 :class:data
   nop
   nop
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   zret
   drop
   lit &_lit
@@ -504,8 +501,8 @@ with differing behaviors:
 :class:word
   nop
   nop
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   lit &class:word:compile
   lit &class:word:interpret
   lit &choose
@@ -524,8 +521,8 @@ correspond to Nga instructions.
 :class:primitive
   nop
   nop
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   lit &comma:opcode
   lit &class:word:interpret
   lit &choose
@@ -946,8 +943,8 @@ Begin a quotation with `[` and end it with `]`.
   store
   lit &Compiler
   store
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   zret
   drop
   drop
@@ -981,8 +978,8 @@ to use them interactively, wrap them in a quote and `call` it.
   call
   ret
 :t-0;
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   zret
   drop
   lit &_zret
@@ -993,8 +990,8 @@ to use them interactively, wrap them in a quote and `call` it.
 
 ````
 :t-push
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   zret
   drop
   lit &_push
@@ -1002,8 +999,8 @@ to use them interactively, wrap them in a quote and `call` it.
   call
   ret
 :t-pop
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   zret
   drop
   lit &_pop

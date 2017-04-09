@@ -5,6 +5,7 @@ all: clean sources tools compile link image rre listener finish
 
 clean:
 	rm -f bin/*
+	touch bin/_
 
 sources:
 	cd source && $(CC) $(CFLAGS) unu.c -o ../bin/unu

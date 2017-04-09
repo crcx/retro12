@@ -840,6 +840,8 @@ Rx uses prefixes for important bits of functionality including parsing
 numbers (prefix with `#`), obtaining pointers (prefix with `&`), and
 starting new functions (using the `:` prefix).
 
+I use `jump` for tail call eliminations here.
+
 | prefix | used for          | example |
 | ------ | ----------------- | ------- |
 | #      | numbers           | #100    |
@@ -856,13 +858,11 @@ starting new functions (using the `:` prefix).
   lit &s:to-number
   call
   lit &class:data
-  call
-  ret
+  jump
 :prefix:$
   fetch
   lit &class:data
-  call
-  ret
+  jump
 :prefix::
   lit &class:word
   lit &Heap
@@ -887,8 +887,7 @@ starting new functions (using the `:` prefix).
   call
   fetch
   lit &class:data
-  call
-  ret
+  jump
 ````
 
 ### Quotations
@@ -1037,7 +1036,6 @@ for strings and output:
 :err:notfound
   lit &_nop
   jump
-  ret
 ````
 
 `call:dt` takes a dictionary token and pushes the contents of the `d:xt`
@@ -1069,14 +1067,14 @@ field to the stack. It then calls the class handler stored in `d:class`.
   add
   swap
   lit &call:dt
-  call
-  ret
+  jump
+
 :interpret:word
   lit &Which
   fetch
   lit &call:dt
-  call
-  ret
+  jump
+
 :interpret:noprefix
   lit &input:source
   fetch
@@ -1089,6 +1087,7 @@ field to the stack. It then calls the class handler stored in `d:class`.
   lit &choose
   call
   ret
+
 :interpret
   dup
   lit &input:source

@@ -207,14 +207,12 @@
   fetch
   call
   ret
-:if
-  ccall
-  ret
 :-if
   push
     lit 0
     eq?
   pop
+:if
   ccall
   ret
 :comma
@@ -228,8 +226,7 @@
 :comma:opcode
   fetch
   lit &comma
-  call
-  ret
+  jump
 :($)
   lit &fetch-next
   call
@@ -244,14 +241,9 @@
   drop
   lit 0
   lit &comma
-  call
-  ret
+  jump
 :Compiler
   .data 0
-:compiling?
-  lit &Compiler
-  fetch
-  ret
 :t-;
   lit &_ret
   lit &comma:opcode
@@ -263,8 +255,8 @@
 :class:data
   nop
   nop
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   zret
   drop
   lit &_lit
@@ -286,8 +278,8 @@
 :class:word
   nop
   nop
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   lit &class:word:compile
   lit &class:word:interpret
   lit &choose
@@ -296,8 +288,8 @@
 :class:primitive
   nop
   nop
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   lit &comma:opcode
   lit &class:word:interpret
   lit &choose
@@ -483,13 +475,11 @@
   lit &s:to-number
   call
   lit &class:data
-  call
-  ret
+  jump
 :prefix:$
   fetch
   lit &class:data
-  call
-  ret
+  jump
 :prefix::
   lit &class:word
   lit &Heap
@@ -514,8 +504,7 @@
   call
   fetch
   lit &class:data
-  call
-  ret
+  jump
 :t-[
   lit &Heap
   fetch
@@ -556,8 +545,8 @@
   store
   lit &Compiler
   store
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   zret
   drop
   drop
@@ -577,8 +566,8 @@
   call
   ret
 :t-0;
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   zret
   drop
   lit &_zret
@@ -586,8 +575,8 @@
   call
   ret
 :t-push
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   zret
   drop
   lit &_push
@@ -595,8 +584,8 @@
   call
   ret
 :t-pop
-  lit &compiling?
-  call
+  lit &Compiler
+  fetch
   zret
   drop
   lit &_pop
@@ -606,7 +595,6 @@
 :err:notfound
   lit &_nop
   jump
-  ret
 :call:dt
   dup
   lit &d:xt
@@ -629,14 +617,12 @@
   add
   swap
   lit &call:dt
-  call
-  ret
+  jump
 :interpret:word
   lit &Which
   fetch
   lit &call:dt
-  call
-  ret
+  jump
 :interpret:noprefix
   lit &input:source
   fetch

@@ -1,10 +1,24 @@
-/* RETRO, copyright (c) 2016 charles childers */
+/*  ____   ____ ______ ____    ___
+    || \\ ||    | || | || \\  // \\
+    ||_// ||==    ||   ||_// ((   ))
+    || \\ ||___   ||   || \\  \\_//
+    a personal, minimalistic forth
+
+    This is a quick interface layer that loads and runs a
+    source file, then saves a new image file. It's used to
+    merge the `retro.forth` into the base `rx` image.
+
+    Copyright (c) 2016, 2017 Charles Childers
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdint.h>
+
 #include "bridge.c"
+
 int include_file(char *fname) {
   int tokens = 0;
   char source[64000];
@@ -24,10 +38,12 @@ int include_file(char *fname) {
   fclose(fp);
   return tokens;
 }
+
 void stats() {
   update_rx();
   printf("  Heap @ %d\n", Heap);
 }
+
 int main(int argc, char **argv) {
   printf("RETRO12\n");
   printf("+ initialize\n");

@@ -7,6 +7,10 @@
     This is `rre`, short for `run retro and exit`. It's the
     basic interface layer for Retro on Linux and macOS.
 
+    `rre` embeds the image file into the binary, so the
+    compiled version of this is all you need to have a
+    functional system.
+
     Copyright (c) 2016, 2017 Charles Childers
 */
 

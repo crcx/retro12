@@ -1,4 +1,20 @@
-/* listener, copyright (c) 2016-2017 charles childers */
+/*  ____   ____ ______ ____    ___
+    || \\ ||    | || | || \\  // \\
+    ||_// ||==    ||   ||_// ((   ))
+    || \\ ||___   ||   || \\  \\_//
+    a personal, minimalistic forth
+
+    Going back to Retro 10, the `listener` has been the most
+    common interface for Retro. This is a version of it for
+    Retro 12.
+
+    I'm no longer using this myself. Instead I use `rre`,
+    which is a simpler and less messy approach. This will
+    probably be removed in the future, at least as part of
+    the core distribution.
+
+    Copyright (c) 2016, 2017 Charles Childers
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -73,15 +89,6 @@ int main(int argc, char **argv) {
     if (strcmp(input, "bye") == 0) {
       term_cleanup();
       exit(0);
-    }
-    else if (strcmp(input, "words") == 0) {
-      CELL i = Dictionary;
-      while (i != 0) {
-        string_extract(d_name(i));
-        printf("%s  ", string_data);
-        i = memory[i];
-      }
-      printf("(%d entries)\n", d_count_entries(Dictionary));
     }
     else if (strcmp(input, ".p") == 0) {
       printf("__%s__", string_extract(data[sp]));

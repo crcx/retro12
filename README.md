@@ -21,7 +21,7 @@ previous generation.
 For Linux and macOS:
 
     make
-    ./bin/listener
+    ./bin/rre /dev/stdin
 
 ## Legalities
 

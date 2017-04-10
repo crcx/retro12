@@ -493,11 +493,11 @@ Temporary strings are allocated in a circular pool (at STRINGS).
 
 ````
 :TempStrings ;   &class:data reclass  #12 !TempStrings
-:TempStringMax ; &class:data reclass #128 !TempStringMax
+:TempStringMax ; &class:data reclass #512 !TempStringMax
 :STRINGS   EOM @TempStrings @TempStringMax * - ;
 
 {{
-  :MAX-LENGTH #128 ;
+  :MAX-LENGTH #512 ;
   :s:Current `0 ; data
 
   :s:pointer (-p)  @s:Current MAX-LENGTH * STRINGS + ;

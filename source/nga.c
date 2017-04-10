@@ -209,7 +209,8 @@ int ngaValidatePackedOpcodes(CELL opcode) {
   CELL raw = opcode;
   CELL current;
   int valid = -1;
-  for (int i = 0; i < 4; i++) {
+  int i;
+  for (i = 0; i < 4; i++) {
     current = raw & 0xFF;
     if (!(current >= 0 && current <= 26))
       valid = 0;
@@ -219,7 +220,8 @@ int ngaValidatePackedOpcodes(CELL opcode) {
 }
 void ngaProcessPackedOpcodes(int opcode) {
   CELL raw = opcode;
-  for (int i = 0; i < 4; i++) {
+  int i;
+  for (i = 0; i < 4; i++) {
     ngaProcessOpcode(raw & 0xFF);
     raw = raw >> 8;
   }

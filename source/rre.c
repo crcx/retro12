@@ -29,10 +29,11 @@ extern CELL ngaImageCells;
 extern CELL ngaImage[];
 
 void dump_stack() {
+  CELL i;
   if (sp == 0)
     return;
   printf("\nStack: ");
-  for (CELL i = 1; i <= sp; i++) {
+  for (i = 1; i <= sp; i++) {
     if (i == sp)
       printf("[ TOS: %d ]", data[i]);
     else
@@ -58,8 +59,9 @@ void include_file(char *fname) {
 
 
 int main(int argc, char **argv) {
+  int i;
   ngaPrepare();
-  for (int i = 0; i < ngaImageCells; i++)
+  for (i = 0; i < ngaImageCells; i++)
     memory[i] = ngaImage[i];
   update_rx();
 

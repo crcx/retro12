@@ -61,8 +61,9 @@ void include_file(char *fname) {
   fclose(fp);
 }
 void dump_stack() {
+  CELL i;
   printf("Stack: ");
-  for (CELL i = 1; i <= sp; i++) {
+  for (i = 1; i <= sp; i++) {
     if (i == sp)
       printf("< %d >", data[i]);
     else

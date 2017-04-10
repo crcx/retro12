@@ -82,11 +82,12 @@ void najeAddReference(char *name) {
 void najeResolveReferences() {
 #ifdef ALLOW_FORWARD_REFS
   CELL offset, matched;
-  for (CELL i = 0; i < refp; i++) {
+  CELL i, j;
+  for (i = 0; i < refp; i++) {
     offset = najeLookup(ref_names[i]);
     matched = 0;
     if (offset != -1) {
-        for (CELL j = 0; j < latest; j++) {
+        for (j = 0; j < latest; j++) {
           if (references[j] == 1 && matched == 0) {
             memory[j] = offset;
             references[j] = -1;
@@ -103,17 +104,18 @@ void najeResolveReferences() {
 void najeWriteMap() {
 #ifdef ENABLE_MAP
   FILE *fp;
+  CELL i;
   if ((fp = fopen(strcat(outputName, ".map"), "w")) == NULL) {
     printf("Unable to save the ngaImage.map!\n");
     exit(2);
   }
-  for (CELL i = 0; i < np; i++)
+  for (i = 0; i < np; i++)
     fprintf(fp, "LABEL\t%s\t%d\n", najeLabels[i], najePointers[i]);
-  for (CELL i = 0; i < latest; i++) {
+  for (i = 0; i < latest; i++) {
     if (references[i] == 0)
       fprintf(fp, "LITERAL\t%d\t%d\n", memory[i], i);
   }
-  for (CELL i = 0; i < latest; i++) {
+  for (i = 0; i < latest; i++) {
     if (references[i] == -1)
       fprintf(fp, "POINTER\t%d\t%d\n", memory[i], i);
   }
@@ -128,6 +130,7 @@ void najeStore(CELL type, CELL value) {
   latest = latest + 1;
 }
 void najeSync() {
+  CELL i;
   if (packMode == 0)
     return;
   if (pindex == 0 && dindex == 0)
@@ -144,7 +147,7 @@ void najeSync() {
     najeStore(2, opcode);
   }
   if (dindex != 0) {
-    for (CELL i = 0; i < dindex; i++)
+    for (i = 0; i < dindex; i++)
       najeStore(dataType[i], dataList[i]);
   }
   pindex = 0;
@@ -380,6 +383,7 @@ void save() {
   fclose(fp);
 }
 CELL main(int argc, char **argv) {
+  CELL i;
   prepare();
     process_file(argv[1]);
     najeSync();
@@ -390,10 +394,10 @@ CELL main(int argc, char **argv) {
   najeWriteMap();
 #ifdef DEBUG
   printf("\nBytecode\n[");
-  for (CELL i = 0; i < latest; i++)
+  for (i = 0; i < latest; i++)
     printf("%d, ", memory[i]);
   printf("]\nLabels\n");
-  for (CELL i = 0; i < np; i++)
+  for (i = 0; i < np; i++)
     printf("%s^%d.%d ", najeLabels[i], najePointers[i], najeRefCount[i]);
   printf("\n");
   printf("%d cells written to %s\n", latest, outputName);

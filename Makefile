@@ -7,10 +7,10 @@
 CC = clang
 CFLAGS = -Wall
 
-all: clean sources tools compile link image rre listener finish
+all: clean sources tools compile link image rre finish
 
 clean:
-	rm -f bin/*
+	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/naje
 	touch bin/_
 
 sources:

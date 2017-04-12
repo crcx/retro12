@@ -301,7 +301,7 @@ TRUE 'RewriteUnderscores var<n>
 :sp   (-)  ASCII:SPACE putc ;
 :tab  (-)  ASCII:HT putc ;
 :puts (s-) [ putc ] s:for-each ;
-:putn (n-) n:to-string puts ASCII:SPACE putc ;
+:putn (n-) n:to-string puts ;
 :words  (-)  &Dictionary repeat fetch 0; dup d:name puts sp again ;
 :depth  (-n) #-1 fetch ;
 :reset  (...-) depth repeat 0; push drop pop #1 - again ;

@@ -872,7 +872,7 @@ This can be used to implement words that push other item to the log.
 :sp   (-)  ASCII:SPACE putc ;
 :tab  (-)  ASCII:HT putc ;
 :puts (s-) [ putc ] s:for-each ;
-:putn (n-) n:to-string puts ASCII:SPACE putc ;
+:putn (n-) n:to-string puts ;
 ````
 
 Different inteface layers may provide additional I/O words.

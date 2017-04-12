@@ -247,16 +247,16 @@ void execute(int cell) {
       ngaProcessOpcode(opcode);
     } else {
       switch (opcode) {
-        case NGURA_TTY_PUTC:  printf("%c", data[sp]); sp--;       break;
-        case NGURA_TTY_GETC:  stack_push(getc(stdin));            break;
-        case NGURA_FS_OPEN:   nguraOpenFile();                    break;
-        case NGURA_FS_CLOSE:  nguraCloseFile();                   break;
-        case NGURA_FS_READ:   stack_push(nguraReadFile());        break;
-        case NGURA_FS_WRITE:  nguraWriteFile();                   break;
-        case NGURA_FS_TELL:   stack_push(nguraGetFilePosition()); break;
-        case NGURA_FS_SEEK:   nguraSetFilePosition();             break;
-        case NGURA_FS_SIZE:   stack_push(nguraGetFileSize());     break;
-        case NGURA_FS_DELETE: nguraDeleteFile();                  break;
+        case NGURA_TTY_PUTC:  printf("%c", stack_pop()); fflush(stdout); break;
+        case NGURA_TTY_GETC:  stack_push(getc(stdin));                   break;
+        case NGURA_FS_OPEN:   nguraOpenFile();                           break;
+        case NGURA_FS_CLOSE:  nguraCloseFile();                          break;
+        case NGURA_FS_READ:   stack_push(nguraReadFile());               break;
+        case NGURA_FS_WRITE:  nguraWriteFile();                          break;
+        case NGURA_FS_TELL:   stack_push(nguraGetFilePosition());        break;
+        case NGURA_FS_SEEK:   nguraSetFilePosition();                    break;
+        case NGURA_FS_SIZE:   stack_push(nguraGetFileSize());            break;
+        case NGURA_FS_DELETE: nguraDeleteFile();                         break;
         default:   printf("Invalid instruction!\n");
                    printf("At %d, opcode %d\n", ip, opcode);
                    exit(1);

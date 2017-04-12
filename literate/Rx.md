@@ -1214,7 +1214,7 @@ Rx kernel.
   .ref class:word
   .string s:eq?
 :0025
-  .ref 0023
+  .ref 0024
   .ref s:length
   .ref class:word
   .string s:length

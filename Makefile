@@ -11,7 +11,6 @@ all: clean sources tools compile link image rre finish
 
 clean:
 	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/naje
-	touch bin/_
 
 sources:
 	cd source && $(CC) $(CFLAGS) unu.c -o ../bin/unu
@@ -45,10 +44,6 @@ rre:
 	./bin/embedimage >source/image.c
 	cd source && $(CC) $(CFLAGS) -c image.c -o ../bin/image.o
 	cd bin && $(CC) $(CFLAGS) rre.o nga.o image.o -o rre
-
-listener:
-	cd source/deprecated && $(CC) $(CFLAGS) -c listener.c -o ../../bin/listener.o
-	cd bin && $(CC) $(CFLAGS) listener.o nga.o -o listener
 
 finish:
 	rm -f bin/*.o

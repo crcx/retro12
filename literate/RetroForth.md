@@ -768,16 +768,9 @@ underscores into spaces.
 TRUE 'RewriteUnderscores var<n>
 
 {{
-  :rewrite
-    @RewriteUnderscores
-    [ [ dup s:length
-        [ dup fetch
-          dup $_ eq? [ drop #32 ] if
-          over store n:inc
-        ] times drop
-      ] sip
-    ] if
-    &prefix:' call ;
+  :sub (c-c) $_ [ ASCII:SPACE ] case ;
+  :rewrite (s-s)
+    @RewriteUnderscores [ [ sub ] s:map ] if &prefix:' call ;
 ---reveal---
   :prefix:' rewrite ; immediate
 }}

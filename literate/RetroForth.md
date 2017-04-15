@@ -650,11 +650,7 @@ a starting offset, and a length.
 Hash (using DJB2)
 
 ````
-{{
-  :<s:hash> repeat push #33 * pop fetch-next 0; swap push + pop again ;
----reveal---
-  :s:hash  (s-n)  #5381 swap <s:hash> drop ;
-}}
+:s:hash (s-n) #5381 swap [ swap #33 * + ] s:for-each ;
 ````
 
 Not all characters can be obtained via the $ prefix. ASCII has many

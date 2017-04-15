@@ -616,23 +616,13 @@ another string that are filtered by a quotation.
     'This_is_a_test [ c:-vowel? ] s:filter
 
 ````
-{{
-  'Source var
-  'Q var
-  :<Source> @Source fetch ;
-  :run-filter @Q call ;
-  :init  (sq-)  !Q  !Source ;
----reveal---
-  :s:filter (sq-s)
-    [ init s:empty buffer:set
-      @Source s:length
-      [ <Source> run-filter [ <Source> buffer:add ] if
-        &Source v:inc
-      ] times
-      buffer:start
-    ] buffer:preserve
-  ;
-}}
+:s:filter (sq-s)
+  [ s:empty buffer:set swap
+    [ dup-pair swap call
+        [ buffer:add ]
+        [ drop       ] choose
+    ] s:for-each drop buffer:start
+  ] buffer:preserve ;
 ````
 
 `s:map` Return a new string resulting from applying a quotation to each

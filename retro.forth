@@ -168,11 +168,7 @@
 :s:substr (sfl-s)
   [ + s:empty ] dip [ over [ copy ] dip ] sip
   over [ + #0 swap store ] dip ;
-{{
-  :<s:hash> repeat push #33 * pop fetch-next 0; swap push + pop again ;
----reveal---
-  :s:hash  (s-n)  #5381 swap <s:hash> drop ;
-}}
+:s:hash (s-n) #5381 swap [ swap #33 * + ] s:for-each ;
 :ASCII:NUL     (-c)  #0 ;    :ASCII:SOH     (-c)  #1 ;
 :ASCII:STX     (-c)  #2 ;    :ASCII:ETX     (-c)  #3 ;
 :ASCII:EOT     (-c)  #4 ;    :ASCII:ENQ     (-c)  #5 ;
@@ -239,16 +235,9 @@
 }}
 TRUE 'RewriteUnderscores var<n>
 {{
-  :rewrite
-    @RewriteUnderscores
-    [ [ dup s:length
-        [ dup fetch
-          dup $_ eq? [ drop #32 ] if
-          over store n:inc
-        ] times drop
-      ] sip
-    ] if
-    &prefix:' call ;
+  :sub (c-c) $_ [ ASCII:SPACE ] case ;
+  :rewrite (s-s)
+    @RewriteUnderscores [ [ sub ] s:map ] if &prefix:' call ;
 ---reveal---
   :prefix:' rewrite ; immediate
 }}

@@ -134,6 +134,14 @@
 :s:prepend (ss-s)
   s:temp [ dup s:length + [ dup s:length n:inc ] dip swap copy ] sip ;
 :s:append (ss-s) swap s:prepend ;
+:s:for-each (sq-)
+  [ repeat
+      over fetch 0; drop
+      dup-pair
+      [ [ [ fetch ] dip call ] dip ] dip
+      [ n:inc ] dip
+    again
+  ] call drop-pair ;
 {{
   :Needle `0 ; data
 ---reveal---
@@ -145,40 +153,18 @@
      @Needle eq? [ #-1 #0 ] [ #-1 ] choose 0; drop
   again ;
 }}
-{{
-  'Source var
-  'Q var
-  :<Source> @Source fetch ;
-  :run-filter @Q call ;
-  :init  (sq-)  !Q  !Source ;
----reveal---
-  :s:filter (sq-s)
-    [ init s:empty buffer:set
-      @Source s:length
-      [ <Source> run-filter [ <Source> buffer:add ] if
-        &Source v:inc
-      ] times
-      buffer:start
-    ] buffer:preserve
-  ;
-}}
-{{
-  'Source var
-  'Q var
-  :<Source> @Source fetch ;
-  :run-filter &Q fetch call ;
----reveal---
-  :s:map (sq-s)
-    [ !Q  !Source
-      s:empty buffer:set
-      @Source s:length
-      [ <Source> run-filter buffer:add
-        &Source v:inc
-      ] times
-      buffer:start
-    ] buffer:preserve
-  ;
-}}
+:s:filter (sq-s)
+  [ s:empty buffer:set swap
+    [ dup-pair swap call
+        [ buffer:add ]
+        [ drop       ] choose
+    ] s:for-each drop buffer:start
+  ] buffer:preserve ;
+:s:map (sq-s)
+  [ s:empty buffer:set swap
+    [ over call buffer:add ]
+    s:for-each drop buffer:start
+  ] buffer:preserve ;
 :s:substr (sfl-s)
   [ + s:empty ] dip [ over [ copy ] dip ] sip
   over [ + #0 swap store ] dip ;
@@ -266,14 +252,6 @@ TRUE 'RewriteUnderscores var<n>
 ---reveal---
   :prefix:' rewrite ; immediate
 }}
-:s:for-each (sq-)
-  [ repeat
-      over fetch 0; drop
-      dup-pair
-      [ [ [ fetch ] dip call ] dip ] dip
-      [ n:inc ] dip
-    again
-  ] call drop-pair ;
 {{
   'I var
   'O var

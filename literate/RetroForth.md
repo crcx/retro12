@@ -579,6 +579,20 @@ spaces from a string. `s:trim` removes both leading and trailing spaces.
 :s:append (ss-s) swap s:prepend ;
 ````
 
+`s:for-each` executes a quote once for each cell in string. It is
+a key part of building the other high-level string operations.
+
+````
+:s:for-each (sq-)
+  [ repeat
+      over fetch 0; drop
+      dup-pair
+      [ [ [ fetch ] dip call ] dip ] dip
+      [ n:inc ] dip
+    again
+  ] call drop-pair ;
+````
+
 `s:has-char?` returns a flag indicating whether or not a given
 character is in a string.
 
@@ -627,23 +641,11 @@ character in a source string.
     'This_is_a_test [ $_ [ ASCII:SPACE ] case ] s:map
 
 ````
-{{
-  'Source var
-  'Q var
-  :<Source> @Source fetch ;
-  :run-filter &Q fetch call ;
----reveal---
-  :s:map (sq-s)
-    [ !Q  !Source
-      s:empty buffer:set
-      @Source s:length
-      [ <Source> run-filter buffer:add
-        &Source v:inc
-      ] times
-      buffer:start
-    ] buffer:preserve
-  ;
-}}
+:s:map (sq-s)
+  [ s:empty buffer:set swap
+    [ over call buffer:add ]
+    s:for-each drop buffer:start
+  ] buffer:preserve ;
 ````
 
 `s:substr` returns a subset of a string. Provide it with a string,
@@ -791,18 +793,6 @@ TRUE 'RewriteUnderscores var<n>
 }}
 ````
 
-`s:for-each` executes a quote once for each cell in string.
-
-````
-:s:for-each (sq-)
-  [ repeat
-      over fetch 0; drop
-      dup-pair
-      [ [ [ fetch ] dip call ] dip ] dip
-      [ n:inc ] dip
-    again
-  ] call drop-pair ;
-````
 
 Building on `s:for-each`, I am able to implement `s:index-of`, which
 finds the first instance of a character in a string.

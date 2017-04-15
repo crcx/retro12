@@ -142,17 +142,6 @@
       [ n:inc ] dip
     again
   ] call drop-pair ;
-{{
-  :Needle `0 ; data
----reveal---
-  :s:has-char?  (sc-f)
-   !Needle
-   repeat
-     fetch-next
-     dup n:zero? [ drop drop #0 #0 ] [ #-1 ] choose 0; drop
-     @Needle eq? [ #-1 #0 ] [ #-1 ] choose 0; drop
-  again ;
-}}
 :s:filter (sq-s)
   [ s:empty buffer:set swap
     [ dup-pair swap call
@@ -241,19 +230,16 @@ TRUE 'RewriteUnderscores var<n>
 ---reveal---
   :prefix:' rewrite ; immediate
 }}
-{{
-  'I var
-  'O var
-  :-found? (-f)  @I n:zero? ;
-  :update  (-)   @O !I ;
----reveal---
-  :s:index-of (sc-n)
-    #0 !I
-    #0 !O
-    swap [ over eq? [ -found? [ update ] if ] if &O v:inc ] s:for-each
-    drop @I
-  ;
-}}
+:s:index-of (sc-n)
+  swap [ repeat
+           fetch-next 0; swap
+           [ over -eq? ] dip
+           swap 0; drop
+         again
+       ] sip
+  [ - n:dec nip ] sip
+  s:length over eq? [ drop #-1 ] if ;
+:s:has-char? (sc-f) s:index-of #-1 -eq? ;
 {{
   'Values var #27 allot
   :from s:length dup [ [ &Values + store ] sip n:dec ] times drop ;

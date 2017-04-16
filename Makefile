@@ -7,7 +7,7 @@
 CC = clang
 CFLAGS = -Wall
 
-all: clean sources tools compile link image rre finish
+all: clean sources tools compile link image rre finish opt
 
 clean:
 	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/naje
@@ -47,3 +47,7 @@ rre:
 
 finish:
 	rm -f bin/*.o
+
+opt:
+	cd optional && ../bin/unu literate/Array.md >array.forth
+	cd optional && ../bin/unu literate/NS.md >ns.forth

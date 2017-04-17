@@ -477,7 +477,7 @@ namespace for working with them.
   :buffer:size   (-n) buffer:end buffer:start - ;
   :buffer:set    (a-) !Buffer buffer:empty ;
   :buffer:preserve (q-)
-    @Buffer @Ptr [ [ call ] dip !Ptr ] dip !Buffer ;
+    @Buffer @Ptr [ [ call ] dip !Buffer ] dip !Ptr ;
 }}
 ````
 

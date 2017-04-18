@@ -249,6 +249,28 @@ TRUE 'RewriteUnderscores var<n>
 }}
 :curry (vp-p) here [ swap compile:lit compile:call compile:ret ] dip ;
 :does  (q-)   d:last<xt> swap curry d:last d:xt store &class:word reclass ;
+{{
+  :char (c-)
+    $n [ ASCII:LF buffer:add ] case
+    $t [ ASCII:HT buffer:add ] case
+    buffer:add ;
+  :string (a-a)
+    repeat fetch-next 0; buffer:add again ;
+  :type (aac-)
+    $c [ swap buffer:add              ] case
+    $s [ swap string drop             ] case
+    $n [ swap n:to-string string drop ] case
+    drop ;
+  :handle (ac-a)
+    $\ [ fetch-next char ] case
+    $% [ fetch-next type ] case
+    buffer:add ;
+---reveal---
+  :s:with-format (...s-s)
+    [ s:empty [ buffer:set
+      [ repeat fetch-next 0; handle again ]
+      call drop ] sip ] buffer:preserve ;
+}}
 :putc (c-) `1000 ;
 :nl   (-)  ASCII:LF putc ;
 :sp   (-)  ASCII:SPACE putc ;

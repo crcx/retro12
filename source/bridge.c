@@ -247,7 +247,7 @@ void execute(int cell) {
       ngaProcessOpcode(opcode);
     } else {
       switch (opcode) {
-        case NGURA_TTY_PUTC:  printf("%c", stack_pop()); fflush(stdout); break;
+        case NGURA_TTY_PUTC:  putc(stack_pop(), stdout); fflush(stdout); break;
         case NGURA_TTY_GETC:  stack_push(getc(stdin));                   break;
         case NGURA_FS_OPEN:   nguraOpenFile();                           break;
         case NGURA_FS_CLOSE:  nguraCloseFile();                          break;

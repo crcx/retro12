@@ -79,7 +79,7 @@ d:
 	d:add-header	d:class		d:create
 	d:last		d:last<class>	d:last<name>
 	d:last<xt>	d:link		d:lookup
-	d:name		d:xt
+	d:name		d:xt		d:for-each
 
 err:
 
@@ -110,7 +110,7 @@ s:
 	s:prepend	s:reverse	s:skip
 	s:substr	s:temp		s:to-lower
 	s:to-number	s:to-upper	s:trim
-	s:trim-left	s:trim-right
+	s:trim-left	s:trim-right	s:with-format
 
 v:
 

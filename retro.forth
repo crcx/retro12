@@ -249,6 +249,9 @@ TRUE 'RewriteUnderscores var<n>
 }}
 :curry (vp-p) here [ swap compile:lit compile:call compile:ret ] dip ;
 :does  (q-)   d:last<xt> swap curry d:last d:xt store &class:word reclass ;
+:d:for-each (q-)
+  &Dictionary [ repeat fetch 0;
+ dup-pair [ [ swap call ] dip ] dip again ] call drop ;
 {{
   :char (c-)
     $n [ ASCII:LF buffer:add ] case
@@ -277,6 +280,6 @@ TRUE 'RewriteUnderscores var<n>
 :tab  (-)  ASCII:HT putc ;
 :puts (s-) [ putc ] s:for-each ;
 :putn (n-) n:to-string puts ;
-:words  (-)  &Dictionary repeat fetch 0; dup d:name puts sp again ;
+:words  (-)  [ d:name puts sp ] d:for-each ;
 :depth  (-n) #-1 fetch ;
 :reset  (...-) depth repeat 0; push drop pop #1 - again ;

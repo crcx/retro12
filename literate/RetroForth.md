@@ -811,6 +811,30 @@ useful.
 :does  (q-)   d:last<xt> swap curry d:last d:xt store &class:word reclass ;
 ````
 
+`d:for-each` is a combinator which runs a quote once for each header in
+the dictionary. A pointer to each header will be passed to the quote as
+it is run.
+
+````
+:d:for-each (q-)
+  &Dictionary [ repeat fetch 0;
+ dup-pair [ [ swap call ] dip ] dip again ] call drop ;
+````
+
+Use `s:with-format` to construct a string from multiple items. This
+can be illustrated with:
+
+    #4 #6 #10  '%n-%n=%n\n  s:with-format
+
+The format language is simple:
+
+| \n | Replace with a LF                         |
+| \t | Replace with a TAB                        |
+[ \\ | Replace with a single \                   |
+| %c | Replace with a character on the stack     |
+| %s | Replace with a string on the stack        |
+| %n | Replace with the next number on the stack |
+
 ````
 {{
   :char (c-)
@@ -865,7 +889,7 @@ Different inteface layers may provide additional I/O words.
 I provide just a few debugging aids.
 
 ````
-:words  (-)  &Dictionary repeat fetch 0; dup d:name puts sp again ;
+:words  (-)  [ d:name puts sp ] d:for-each ;
 :depth  (-n) #-1 fetch ;
 :reset  (...-) depth repeat 0; push drop pop #1 - again ;
 ````

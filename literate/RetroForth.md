@@ -341,6 +341,9 @@ Example:
 :case
   [ over eq? ] dip swap
   [ nip call TRUE ] [ drop FALSE ] choose 0; pop drop drop ;
+:s:case
+  [ over s:eq? ] dip swap
+  [ nip call TRUE ] [ drop FALSE ] choose 0; pop drop drop ;
 ````
 
 Two more stack shufflers.

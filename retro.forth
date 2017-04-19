@@ -56,6 +56,9 @@
 :case
   [ over eq? ] dip swap
   [ nip call TRUE ] [ drop FALSE ] choose 0; pop drop drop ;
+:s:case
+  [ over s:eq? ] dip swap
+  [ nip call TRUE ] [ drop FALSE ] choose 0; pop drop drop ;
 :rot  (abc-bca)   [ swap ] dip swap ;
 :tors (-n)  pop pop dup push swap push ;
 :/         (nq-d)  /mod swap drop ;

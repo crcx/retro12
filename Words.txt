@@ -111,6 +111,7 @@ s:
 	s:substr	s:temp		s:to-lower
 	s:to-number	s:to-upper	s:trim
 	s:trim-left	s:trim-right	s:with-format
+        s:case
 
 v:
 

@@ -160,6 +160,8 @@
 :s:substr (sfl-s)
   [ + s:empty ] dip [ over [ copy ] dip ] sip
   over [ + #0 swap store ] dip ;
+:s:right (sn-s) over s:length over - swap s:substr ;
+:s:left  (sn-s) #0 swap s:substr ;
 :s:hash (s-n) #5381 swap [ swap #33 * + ] s:for-each ;
 :ASCII:NUL     (-c)  #0 ;    :ASCII:SOH     (-c)  #1 ;
 :ASCII:STX     (-c)  #2 ;    :ASCII:ETX     (-c)  #3 ;

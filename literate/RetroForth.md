@@ -633,6 +633,14 @@ a starting offset, and a length.
   over [ + #0 swap store ] dip ;
 ````
 
+`s:right` and `s:left` are similar to `s:substr`, but operate
+from fixed ends of the string.
+
+````
+:s:right (sn-s) over s:length over - swap s:substr ;
+:s:left  (sn-s) #0 swap s:substr ;
+````
+
 Hash (using DJB2)
 
 ````

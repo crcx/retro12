@@ -46,6 +46,7 @@ CELL notfound;
 #define NGURA_FS_SEEK    123
 #define NGURA_FS_SIZE    124
 #define NGURA_FS_DELETE  125
+#define NGURA_FS_FLUSH   126
 
 
 /* First, a couple of functions to simplify interacting with
@@ -216,6 +217,12 @@ CELL nguraDeleteFile() {
   return (unlink(request) == 0) ? -1 : 0;
 }
 
+void nguraFlushFile() {
+  CELL slot;
+  slot = data[sp]; sp--;
+  fflush(nguraFileHandles[slot]);
+}
+
 
 /* Retro needs to track a few variables. This function is
    called as necessary to ensure that the interface stays
@@ -257,6 +264,7 @@ void execute(int cell) {
         case NGURA_FS_SEEK:   nguraSetFilePosition();                    break;
         case NGURA_FS_SIZE:   stack_push(nguraGetFileSize());            break;
         case NGURA_FS_DELETE: nguraDeleteFile();                         break;
+        case NGURA_FS_FLUSH:  nguraFlushFile();                          break;
         default:   printf("Invalid instruction!\n");
                    printf("At %d, opcode %d\n", ip, opcode);
                    exit(1);

@@ -112,6 +112,7 @@ s:
 	s:to-number	s:to-upper	s:trim
 	s:trim-left	s:trim-right	s:with-format
         s:case		s:left		s:right
+	s:split
 
 v:
 

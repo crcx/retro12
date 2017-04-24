@@ -245,6 +245,8 @@ TRUE 'RewriteUnderscores var<n>
   [ - n:dec nip ] sip
   s:length over eq? [ drop #-1 ] if ;
 :s:has-char? (sc-f) s:index-of #-1 -eq? ;
+:s:split (sc-ss)
+  dup-pair s:index-of nip dup-pair s:left [ + ] dip ;
 {{
   'Values var #27 allot
   :from s:length dup [ [ &Values + store ] sip n:dec ] times drop ;

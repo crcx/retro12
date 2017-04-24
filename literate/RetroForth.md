@@ -789,6 +789,15 @@ character is in a string.
 :s:has-char? (sc-f) s:index-of #-1 -eq? ;
 ````
 
+The `s:split` splits a string on the first instance of a given
+character. Results are undefined if the character can not be
+located.
+
+````
+:s:split (sc-ss)
+  dup-pair s:index-of nip dup-pair s:left [ + ] dip ;
+````
+
 Ok, This is a bit of a hack, but very useful at times.
 
 Assume you have a bunch of values:

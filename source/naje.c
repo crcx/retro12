@@ -36,6 +36,7 @@ CELL najePointers[MAX_NAMES];
 CELL najeRefCount[MAX_NAMES];
 CELL np;
 CELL references[IMAGE_SIZE];
+CELL pass;
 char outputName[STRING_LEN];
 CELL najeLookup(char *name) {
   CELL slice = -1;
@@ -58,6 +59,8 @@ CELL najeLookupPtr(char *name) {
   return slice;
 }
 void najeAddLabel(char *name, CELL slice) {
+  if (pass == 1)  // labels recorded only in 1st pass
+    return;
   if (najeLookup(name) == -1) {
     strcpy(najeLabels[np], name);
     najePointers[np] = slice;
@@ -67,39 +70,6 @@ void najeAddLabel(char *name, CELL slice) {
     printf("Fatal error: %s already defined\n", name);
     exit(0);
   }
-}
-#ifdef ALLOW_FORWARD_REFS
-#define MAX_REFS 64*1024
-char ref_names[MAX_NAMES][STRING_LEN];
-CELL refp;
-#endif
-void najeAddReference(char *name) {
-#ifdef ALLOW_FORWARD_REFS
-  strcpy(ref_names[refp], name);
-  refp++;
-#endif
-}
-void najeResolveReferences() {
-#ifdef ALLOW_FORWARD_REFS
-  CELL offset, matched;
-  CELL i, j;
-  for (i = 0; i < refp; i++) {
-    offset = najeLookup(ref_names[i]);
-    matched = 0;
-    if (offset != -1) {
-        for (j = 0; j < latest; j++) {
-          if (references[j] == 1 && matched == 0) {
-            memory[j] = offset;
-            references[j] = -1;
-            najeRefCount[najeLookupPtr(ref_names[i])]++;
-            matched = -1;
-          }
-        }
-    } else {
-      printf("\nERROR: Failed to resolve a reference: %s", ref_names[i]);
-    }
-  }
-#endif
 }
 void najeWriteMap() {
 #ifdef ENABLE_MAP
@@ -212,12 +182,12 @@ void najeAssemble(char *source) {
     switch (relevant[1]) {
       case 'r': /* .reference */
                 token = strtok_r(ptr, " ,", &rest);
-#ifdef ALLOW_FORWARD_REFS
-                najeAddReference((char *)token);
-                najeData(1, -9999);
-#else
-                najeData(0, najeLookup((char *)token));
-#endif
+                if (pass == 0) {
+                  najeData(1, -9999);
+                } else {
+                  najeData(-1, najeLookup((char *) token));
+		  najeRefCount[najeLookupPtr((char *) token)]++;
+		}
                 break;
       case 'c': /* .comment */
                 break;
@@ -268,12 +238,12 @@ void najeAssemble(char *source) {
     token = strtok_r(ptr, " ,", &rest);
     najeInst(1);
     if (token[0] == '&') {
-#ifdef ALLOW_FORWARD_REFS
-      najeAddReference((char *)token + 1);
-      najeData(1, -9999);
-#else
-      najeData(0, najeLookup((char *)token + 1));
-#endif
+      if (pass == 0) {
+        najeData(1, -9999);
+      } else {
+        najeData(-1, najeLookup((char *) token+1));
+        najeRefCount[najeLookupPtr((char *) token)]++;
+      }
     } else {
       najeData(0, atoi(token));
     }
@@ -330,7 +300,8 @@ void najeAssemble(char *source) {
     najeInst(26);
 }
 void prepare() {
-  np = 0;
+  if (pass == 0)
+    np = 0;
   latest = 0;
   packMode = 1;
   strcpy(outputName, "ngaImage");
@@ -384,10 +355,14 @@ void save() {
 }
 CELL main(int argc, char **argv) {
   CELL i;
+  pass = 0;
   prepare();
     process_file(argv[1]);
     najeSync();
-    najeResolveReferences();
+  finish();
+  pass = 1;
+  prepare();
+    process_file(argv[1]);
     najeSync();
   finish();
   save();

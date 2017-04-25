@@ -244,7 +244,28 @@ TRUE 'RewriteUnderscores var<n>
        ] sip
   [ - n:dec nip ] sip
   s:length over eq? [ drop #-1 ] if ;
-:s:has-char? (sc-f) s:index-of #-1 -eq? ;
+:s:contains-char? (sc-f) s:index-of #-1 -eq? ;
+{{
+  'Src var
+  'Tar var
+  'Pad var
+  'I   var
+  'F   var
+  :terminate (-)
+    #0 @Pad @Tar s:length + store ;
+  :extract (-)
+    @Src @I + @Pad @Tar s:length copy ;
+  :compare (-)
+    @Pad @Tar s:eq? @F or !F ;
+  :next (-)
+    &I v:inc ;
+---reveal---
+  :s:contains-string? (ss-f)
+    !Tar !Src s:empty !Pad #0 !I #0 !F
+    @Src s:length
+    [ extract terminate compare next ] times
+    @F ;
+}}
 :s:split (sc-ss)
   dup-pair s:index-of nip dup-pair s:left [ + ] dip ;
 {{

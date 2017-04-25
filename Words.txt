@@ -105,14 +105,15 @@ s:
 
 	s:append	s:chop		s:empty
 	s:eq?		s:filter	s:for-each
-	s:has-char?	s:hash		s:index-of
+	s:hash		s:index-of	s:split
 	s:keep		s:length	s:map
 	s:prepend	s:reverse	s:skip
 	s:substr	s:temp		s:to-lower
 	s:to-number	s:to-upper	s:trim
 	s:trim-left	s:trim-right	s:with-format
         s:case		s:left		s:right
-	s:split
+	s:contains-char?
+	s:contains-string?
 
 v:
 

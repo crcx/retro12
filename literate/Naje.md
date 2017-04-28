@@ -429,7 +429,7 @@ void najeAssemble(char *source) {
         najeData(1, -9999);
       } else {
         najeData(-1, najeLookup((char *) token+1));
-        najeRefCount[najeLookupPtr((char *) token)]++;
+        najeRefCount[najeLookupPtr((char *) token+1)]++;
       }
     } else {
       najeData(0, atoi(token));

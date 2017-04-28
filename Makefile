@@ -5,7 +5,7 @@
 #  a personal, minimalistic forth
 
 CC = clang
-CFLAGS = -Wall
+CFLAGS = -Wall -O3
 
 all: clean sources tools compile link image rre finish opt
 
@@ -17,13 +17,16 @@ sources:
 	./bin/unu literate/Unu.md >source/unu.c
 	./bin/unu literate/Nga.md >source/nga.c
 	./bin/unu literate/Naje.md >source/naje.c
+	./bin/unu literate/Muri.md >source/muri.c
 	./bin/unu literate/Rx.md >rx.naje
+	./bin/unu literate/Rx_Muri.md >rx.muri
 	./bin/unu literate/RetroForth.md >retro.forth
 
 tools:
 	cd source && $(CC) $(CFLAGS) unu.c -o ../bin/unu
 	cd source && $(CC) $(CFLAGS) nga.c -DSTANDALONE -o ../bin/nga
 	cd source && $(CC) $(CFLAGS) naje.c -DDEBUG -DALLOW_FORWARD_REFS -DENABLE_MAP -o ../bin/naje
+	cd source && $(CC) $(CFLAGS) muri.c -o ../bin/muri
 
 compile:
 	cd source && $(CC) $(CFLAGS) -c nga.c -o nga.o

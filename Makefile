@@ -43,7 +43,10 @@ image:
 	./bin/extend retro.forth
 
 rre:
+	cp ngaImage clean
+	./bin/extend source/rre.forth
 	./bin/embedimage >source/image.c
+	mv clean ngaImage
 	cd source && $(CC) $(CFLAGS) -c image.c -o ../bin/image.o
 	cd bin && $(CC) $(CFLAGS) rre.o nga.o image.o -o rre
 

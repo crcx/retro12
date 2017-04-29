@@ -5,27 +5,26 @@
 #  a personal, minimalistic forth
 
 CC = clang
+LD = clang
+LDFLAGS =
 CFLAGS = -Wall -O3
 
 all: clean sources tools compile link image rre finish opt
 
 clean:
-	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/naje
+	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/muri
 
 sources:
 	cd source && $(CC) $(CFLAGS) unu.c -o ../bin/unu
 	./bin/unu literate/Unu.md >source/unu.c
 	./bin/unu literate/Nga.md >source/nga.c
-	./bin/unu literate/Naje.md >source/naje.c
 	./bin/unu literate/Muri.md >source/muri.c
-	./bin/unu literate/Rx.md >rx.naje
-	./bin/unu literate/Rx_Muri.md >rx.muri
+	./bin/unu literate/Rx.md >rx.muri
 	./bin/unu literate/RetroForth.md >retro.forth
 
 tools:
 	cd source && $(CC) $(CFLAGS) unu.c -o ../bin/unu
 	cd source && $(CC) $(CFLAGS) nga.c -DSTANDALONE -o ../bin/nga
-	cd source && $(CC) $(CFLAGS) naje.c -DDEBUG -DALLOW_FORWARD_REFS -DENABLE_MAP -o ../bin/naje
 	cd source && $(CC) $(CFLAGS) muri.c -o ../bin/muri
 
 compile:
@@ -36,11 +35,11 @@ compile:
 	mv source/*.o bin
 
 link:
-	cd bin && $(CC) nga.o extend.o -o extend
-	cd bin && $(CC) embedimage.o -o embedimage
+	cd bin && $(LD) $(LDFLAGS) nga.o extend.o -o extend
+	cd bin && $(LD) $(LDFLAGS) embedimage.o -o embedimage
 
 image:
-	./bin/naje rx.naje
+	./bin/muri rx.muri
 	./bin/extend retro.forth
 
 rre:

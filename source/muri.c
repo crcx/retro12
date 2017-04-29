@@ -69,73 +69,64 @@ int32_t opcode_for(char *s) {
 }
 void pass1(char *fname) {
   char *buffer = (char *)source;
-  char command;
   unsigned int opcode;
   char inst[3];
-  inst[2] = '\0';
   FILE *fp;
+  inst[2] = '\0';
   here = 0;
   fp = fopen(fname, "r");
-  if (fp == NULL)
-    return;
+  if (fp == NULL) {
+    printf("Unable to load file\n");
+    exit(2);
+  }
   while (!feof(fp)) {
     read_line(fp, buffer);
-    if (buffer[1] != '\t' && buffer[1] != ' ') {
-      printf("ERROR: Invalid line: '%s'\n", buffer);
-      exit(2);
-    }
-    command = buffer[0];
-    opcode = 0;
-    switch (command) {
-      case 'i': memcpy(inst, buffer + 8, 2);
-                opcode = opcode_for(inst);
-                opcode = opcode << 8;
-                memcpy(inst, buffer + 6, 2);
-                opcode += opcode_for(inst);
-                opcode = opcode << 8;
-                memcpy(inst, buffer + 4, 2);
-                opcode += opcode_for(inst);
-                opcode = opcode << 8;
-                memcpy(inst, buffer + 2, 2);
-                opcode += opcode_for(inst);
-                target[here++] = opcode;
-                break;
-      case 'r': target[here++] = 9999;
-                break;
-      case 'd': target[here++] = atoi(buffer+2);
-                break;
-      case 'c': target[here++] = buffer[2];
-                break;
-      case 's': opcode = 2;
-                while (opcode < strlen(buffer)) {
-                  target[here++] = buffer[opcode++];
-                }
-                target[here++] = 0;
-                break;
-      case ':': add_label(buffer+2, here);
-                break;
+    if (buffer[1] == '\t' || buffer[1] == ' ') {
+      switch (buffer[0]) {
+        case 'i': memcpy(inst, buffer + 8, 2);
+                  opcode = opcode_for(inst);
+                  opcode = opcode << 8;
+                  memcpy(inst, buffer + 6, 2);
+                  opcode += opcode_for(inst);
+                  opcode = opcode << 8;
+                  memcpy(inst, buffer + 4, 2);
+                  opcode += opcode_for(inst);
+                  opcode = opcode << 8;
+                  memcpy(inst, buffer + 2, 2);
+                  opcode += opcode_for(inst);
+                  target[here++] = opcode;
+                  break;
+        case 'r': target[here++] = -1;
+                  break;
+        case 'd': target[here++] = atoi(buffer+2);
+                  break;
+        case 'c': target[here++] = buffer[2];
+                  break;
+        case 's': opcode = 2;
+                  while (opcode < strlen(buffer))
+                    target[here++] = buffer[opcode++];
+                  target[here++] = 0;
+                  break;
+        case ':': add_label(buffer+2, here);
+                  break;
+      }
     }
   }
   fclose(fp);
 }
 void pass2(char *fname) {
   char *buffer = (char *)source;
-  char command;
   FILE *fp;
   here = 0;
   fp = fopen(fname, "r");
-  if (fp == NULL)
-    return;
   while (!feof(fp)) {
     read_line(fp, buffer);
-    if (buffer[1] != '\t' && buffer[1] != ' ') {
-      printf("ERROR: Invalid line: '%s'\n", buffer);
-      exit(2);
-    }
-    command = buffer[0];
-    switch (command) {
+    switch (buffer[0]) {
       case 'i': here++;                             break;
-      case 'r': target[here++] = lookup(buffer+2);  break;
+      case 'r': target[here++] = lookup(buffer+2);
+                if (lookup(buffer+2) == -1)
+                  printf("Lookup failed: '%s'\n", buffer+2);
+                                                    break;
       case 'd': here++;                             break;
       case 'c': here++;                             break;
       case 's': here = here + strlen(buffer) - 1;   break;
@@ -150,8 +141,9 @@ int main(int argc, char **argv) {
     pass1(argv[1]);
     pass2(argv[1]);
     save();
+    printf("Wrote %d cells to ngaImage\n", here);
   }
   else
-    printf("muri\n(c) 2017 charles childers\n\nTry:\n  %s filename\n", argv[0]);
+    printf("muri\n(c) 2017 charles childers\n\n%s filename\n", argv[0]);
   return 0;
 }

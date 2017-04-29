@@ -1,7 +1,7 @@
     ____  _   _
     || \\ \\ //
     ||_//  )x(
-    || \\ // \\ 2017.04
+    || \\ // \\ 2017.5
     a minimalist forth for nga
 
 *Rx* (*retro experimental*) is a minimal Forth implementation for the
@@ -50,10 +50,12 @@ The two variables need to be declared next, so:
 ````
 : Dictionary
 r 9999
+
 : Heap
 d 1536
+
 : Version
-d 201704
+d 201705
 ````
 
 Both of these are pointers. `Dictionary` points to the most recent
@@ -639,53 +641,34 @@ is very simple:
 At this time Rx only supports decimal numbers.
 
 ````
-: to-number:Mod
-d 0
-: to-number:Acc
-d 0
-: to-number:char>digit
-i lisure..
-d 48
-: to-number:scale
-i lifelimu
-r to-number:Acc
-d 10
-i re......
-: to-number:convert
+: next
 i lica....
 r fetch-next
 i zr......
-i lica....
-r to-number:char>digit
-i lica....
-r to-number:scale
-i adlistli
-r to-number:Acc
-r to-number:convert
-i ju......
-: to-number:prepare
-i lilistli
-d 1
-r to-number:Mod
-d 0
-i listdufe
-r to-number:Acc
-i lieqzr..
+i lisuswpu
+d 48
+i swlimuad
+d 10
+i poliju..
+r next
+
+: check
+i dufelieq
 d 45
-i drlilist
+i zr......
+i drswdrli
 d -1
-r to-number:Mod
-i liadre..
+i swliadre
 d 1
+
 : s:to-number
-i lica....
-r to-number:prepare
-i lica....
-r to-number:convert
-i drlifeli
-r to-number:Acc
-r to-number:Mod
-i femure..
+i liswlica
+d 1
+r check
+i liswlica
+d 0
+r next
+i drmure..
 ````
 
 ### Token Processing

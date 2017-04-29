@@ -32,11 +32,13 @@ compile:
 	cd source && $(CC) $(CFLAGS) -c extend.c -o extend.o
 	cd source && $(CC) $(CFLAGS) -c embedimage.c -o embedimage.o
 	cd source && $(CC) $(CFLAGS) -c rre.c -o rre.o
+	cd source && $(CC) $(CFLAGS) -c repl.c -o repl.o
 	mv source/*.o bin
 
 link:
 	cd bin && $(LD) $(LDFLAGS) nga.o extend.o -o extend
 	cd bin && $(LD) $(LDFLAGS) embedimage.o -o embedimage
+	cd bin && $(CC) $(CFLAGS) repl.o nga.o -o repl
 
 image:
 	./bin/muri rx.muri

@@ -63,6 +63,7 @@ The code begins with the necessary C headers.
 ````
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 ````
 

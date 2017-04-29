@@ -3,8 +3,8 @@
 #define ADDRESSES    128
 #define STACK_DEPTH  32
 typedef void (*Handler)(void);
-CELL address[ADDRESSES];
-CELL data[STACK_DEPTH];
+extern CELL address[ADDRESSES];
+extern CELL data[STACK_DEPTH];
 void inst_add();
 void inst_and();
 void inst_call();

@@ -1,0 +1,123 @@
+
+2017-04-29  Charles Childers  <crc@forthworks.com>
+
+	* minimal repl
+	* muri: include stdint.h
+	* fix formatting
+	* rre: now include additional i/o words by default
+	* nga.h updated to work with tcc
+	* use muri only instead of naje
+	* remove naje (literate) and Rx.md (literate)
+
+2017-04-28  Charles Childers  <crc@forthworks.com>
+
+	* initial work on muri, an alternative assembler for nga
+
+2017-04-25  Charles Childers  <crc@forthworks.com>
+
+	* glossary document w/word summaries
+	* add s:contains-string?
+
+2017-04-24  Charles Childers  <crc@forthworks.com>
+
+	* in which retro gains s:split
+	* add s:left, s:right
+	* merge in new two-pass assembler code
+	* add flush function
+
+2017-04-19  Charles Childers  <crc@forthworks.com>
+
+	* increase memory space
+	* add s:case
+	* add d:for-each
+
+2017-04-18  Charles Childers  <crc@forthworks.com>
+
+	* add s:with-format
+
+2017-04-17  Charles Childers  <crc@forthworks.com>
+
+	* fix bug in buffer:preserve
+
+2017-04-16  Charles Childers  <crc@forthworks.com>
+
+	* begin a directory of optional source extensions
+
+2017-04-15  Charles Childers  <crc@forthworks.com>
+
+	* rewrite s:index-of and s:has-char?
+	* update image
+	* simplified s:hash code
+	* cleaner underscore rewrite
+	* update image
+	* rewrite s:filter
+	* rewrite s:map
+
+2017-04-12  Charles Childers  <crc@forthworks.com>
+
+	* restore s:eq?
+	* flush stdout in bridge.c
+	* putn no longer adds a trailing space
+	* remove dummy file from bin
+
+2017-04-11  Charles Childers  <crc@forthworks.com>
+
+	* listener now in retro, using rre + stty + shell script wrapper
+
+2017-04-10  Charles Childers  <crc@forthworks.com>
+
+	* no longer require -std=C99 for building
+	* remove unused file
+	* bump string size to match TIB
+
+2017-04-09  Charles Childers  <crc@forthworks.com>
+
+	* wrap up tonights work
+	* more source cleanups
+	* make clean now restores the _ which keeps git remembering bin
+	* clean up bridge, rre
+	* fix building listener
+	* start work to deprecate listner
+	* lots more reductions, tail call elimination. Kernel now 970 cells
+	* more optimizations in rx
+	* some optimizations in Rx
+
+2017-04-08  Charles Childers  <crc@forthworks.com>
+
+	* increase TIB to 510 characters (up from 64)
+
+2017-04-03  Charles Childers  <crc@forthworks.com>
+
+	* begin using @ and ! prefixes in retro.forth
+	* add @ and ! prefixes
+	* retro: now use packed instructions in compile: namespace
+	* move prefix:( into Rx
+
+2017-04-02  Charles Childers  <crc@forthworks.com>
+
+	* minor tweak to Unu
+	* reformat rx sources to limit line lengths, bumb versions to 2017.4
+
+2017-04-01  Charles Childers  <crc@forthworks.com>
+
+	* wordlist document
+	* image updates
+	* bigger default image
+
+2017-03-28  Charles Childers  <crc@forthworks.com>
+
+	* bump to 2017.03, savea few cells in rx kernel
+	* add "not" forms to conditionals in c: namespace
+
+2017-03-25  Charles Childers  <crc@forthworks.com>
+
+	* fix a duplicate documentation note, shorten lines
+	* file i/o improvements
+	* corrections (thanks docl)
+
+2017-03-20  Charles Childers  <crc@forthworks.com>
+
+	* shorten line lengths in Nga.md
+	* initial checkin
+
+

@@ -9,10 +9,10 @@ LD = clang
 LDFLAGS =
 CFLAGS = -Wall -O3
 
-all: clean sources tools compile link image rre finish opt
+all: clean sources tools compile link image rre repl kanga finish opt
 
 clean:
-	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/muri
+	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/muri bin/kanga
 
 sources:
 	cd source && $(CC) $(CFLAGS) unu.c -o ../bin/unu
@@ -41,7 +41,11 @@ compile:
 link:
 	cd bin && $(LD) $(LDFLAGS) nga.o extend.o bridge.o -o extend
 	cd bin && $(LD) $(LDFLAGS) embedimage.o bridge.o -o embedimage
+
+repl:
 	cd bin && $(CC) $(CFLAGS) repl.o nga.o bridge.o -o repl
+
+kanga:
 	cd bin && $(CC) $(CFLAGS) kanga.o nga.o cursed-bridge.o -lcurses -o kanga
 
 image:

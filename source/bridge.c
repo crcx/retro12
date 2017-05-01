@@ -16,21 +16,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+
 #include "nga.h"
+#include "bridge.h"
 
 CELL Dictionary, Heap, Compiler;
 CELL notfound;
-
-
-/* This assumes some knowledge of the ngaImage format for the
-   Retro language. If things change there, these will need to
-   be adjusted to match. */
-
-#define TIB            1025
-#define D_OFFSET_LINK     0
-#define D_OFFSET_XT       1
-#define D_OFFSET_CLASS    2
-#define D_OFFSET_NAME     3
 
 
 /* Some I/O Parameters */

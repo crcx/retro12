@@ -22,7 +22,8 @@
 
 /* Eventually bridge.c should be compiled separate
    and have a corresponding bridge.h */
-#include "bridge.c"
+#include "nga.h"
+#include "bridge.h"
 
 /* Compile image.c and link against the image.o */
 extern CELL ngaImageCells;

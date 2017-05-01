@@ -10,12 +10,14 @@
 
     Copyright (c) 2016, 2017 Charles Childers
 */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdint.h>
-#include "bridge.c"
+#include "nga.h"
+#include "bridge.h"
 
 int main(int argc, char **argv) {
   ngaPrepare();

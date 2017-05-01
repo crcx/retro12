@@ -1,3 +1,5 @@
+#ifndef _NGA_H
+#define _NGA_H
 #define CELL         int32_t
 #define IMAGE_SIZE   524288
 #define ADDRESSES    128
@@ -39,3 +41,4 @@ void ngaProcessPackedOpcodes(int opcode);
 int ngaValidatePackedOpcodes(CELL opcode);
 extern CELL sp, rp, ip;
 extern CELL memory[IMAGE_SIZE];
+#endif

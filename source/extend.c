@@ -17,7 +17,8 @@
 #include <string.h>
 #include <stdint.h>
 
-#include "bridge.c"
+#include "nga.h"
+#include "bridge.h"
 
 int include_file(char *fname) {
   int tokens = 0;

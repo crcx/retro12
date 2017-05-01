@@ -33,12 +33,16 @@ compile:
 	cd source && $(CC) $(CFLAGS) -c embedimage.c -o embedimage.o
 	cd source && $(CC) $(CFLAGS) -c rre.c -o rre.o
 	cd source && $(CC) $(CFLAGS) -c repl.c -o repl.o
+	cd source && $(CC) $(CFLAGS) -c kanga.c -o kanga.o
+	cd source && $(CC) $(CFLAGS) -c cursed-bridge.c -o cursed-bridge.o
+	cd source && $(CC) $(CFLAGS) -c bridge.c -o bridge.o
 	mv source/*.o bin
 
 link:
-	cd bin && $(LD) $(LDFLAGS) nga.o extend.o -o extend
-	cd bin && $(LD) $(LDFLAGS) embedimage.o -o embedimage
-	cd bin && $(CC) $(CFLAGS) repl.o nga.o -o repl
+	cd bin && $(LD) $(LDFLAGS) nga.o extend.o bridge.o -o extend
+	cd bin && $(LD) $(LDFLAGS) embedimage.o bridge.o -o embedimage
+	cd bin && $(CC) $(CFLAGS) repl.o nga.o bridge.o -o repl
+	cd bin && $(CC) $(CFLAGS) kanga.o nga.o cursed-bridge.o -lcurses -o kanga
 
 image:
 	./bin/muri rx.muri
@@ -50,7 +54,7 @@ rre:
 	./bin/embedimage >source/image.c
 	mv clean ngaImage
 	cd source && $(CC) $(CFLAGS) -c image.c -o ../bin/image.o
-	cd bin && $(CC) $(CFLAGS) rre.o nga.o image.o -o rre
+	cd bin && $(CC) $(CFLAGS) rre.o nga.o image.o bridge.o -o rre
 
 finish:
 	rm -f bin/*.o

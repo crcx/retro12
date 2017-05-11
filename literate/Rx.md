@@ -755,6 +755,15 @@ r class:data
 i feliju..
 r class:data
 : prefix::
+i lilica..
+d 1793
+r comma
+i lifelili
+r Heap
+d 0
+r comma
+i ca......
+i sw......
 i lilifeli
 r class:word
 r Heap
@@ -768,6 +777,8 @@ r d:xt
 i stlilist
 d -1
 r Compiler
+i lifeswst
+r Heap
 i re......
 : prefix:&
 i lica....

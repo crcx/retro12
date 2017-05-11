@@ -120,7 +120,7 @@ With this I can then define `immediate` (for state-smart words) and
 
 ````
 :immediate  (-)  &class:macro reclass ;
-:data       (-)  &class:data reclass ;
+:data       (-)  &class:data  reclass ;
 ````
 
 
@@ -183,8 +183,8 @@ to build other data structures without invoking the `:` compiler.
 And then the others are trivial.
 
 ````
-:var    (s-)  d:create #0 , ;
 :var<n> (ns-) d:create , ;
+:var    (s-)  #0 var<n> ;
 :const  (ns-) d:create d:last d:xt store ;
 ````
 
@@ -229,7 +229,7 @@ while the quotation is executed. These are equivilent:
     #10 dup push #3 * pop
 
 ````
-:sip  (nq-n)  push dup pop swap &call dip ;
+:sip  (nq-n)  over &call dip ;
 ````
 
 Apply each quote to a copy of x
@@ -574,12 +574,14 @@ spaces from a string. `s:trim` removes both leading and trailing spaces.
 :s:trim (s-s) s:trim-right s:trim-left ;
 ````
 
-`s:prepend` and `s:append` for concatenating strings together.
+`s:prepend` and `s:append` for concatenating strings together. Note that
+`s:append` falls through into the definition for `s:prepend`.
 
 ````
+:s:append  (ss-s)
+  swap
 :s:prepend (ss-s)
   s:temp [ dup s:length + [ dup s:length n:inc ] dip swap copy ] sip ;
-:s:append (ss-s) swap s:prepend ;
 ````
 
 `s:for-each` executes a quote once for each cell in string. It is

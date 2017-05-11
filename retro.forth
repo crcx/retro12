@@ -5,7 +5,7 @@
 :d:last<name>  (-s) d:last d:name ;
 :reclass    (a-) d:last d:class store ;
 :immediate  (-)  &class:macro reclass ;
-:data       (-)  &class:data reclass ;
+:data       (-)  &class:data  reclass ;
 :prefix:@  (s-n) d:lookup d:xt fetch class:data &fetch class:word ; immediate
 :prefix:!  (s-n) d:lookup d:xt fetch class:data &store class:word ; immediate
 :compile:lit  (a-) #1 , , ;
@@ -19,8 +19,8 @@
 :d:create (s-)
   (s-) &class:data #0 d:add-header
   here d:last d:xt store ;
-:var    (s-)  d:create #0 , ;
 :var<n> (ns-) d:create , ;
+:var    (s-)  #0 var<n> ;
 :const  (ns-) d:create d:last d:xt store ;
 :tuck      (xy-yxy)   dup push swap pop ;
 :over      (xy-xyx)   push dup pop swap ;
@@ -29,7 +29,7 @@
 :drop-pair (nn-)      drop drop ;
 :?dup      (n-nn||n-n) dup 0; ;
 :dip  (nq-n)  swap push call pop ;
-:sip  (nq-n)  push dup pop swap &call dip ;
+:sip  (nq-n)  over &call dip ;
 :bi  (xqq-)  &sip dip call ;
 :bi*  (xyqq-) &dip dip call ;
 :bi@  (xyq-)  dup bi* ;
@@ -134,9 +134,10 @@
 :s:trim-left (s-s) s:temp [ fetch-next [ #32 eq? ] [ n:zero? ] bi and ] while n:dec ;
 :s:trim-right (s-s) s:temp s:reverse s:trim-left s:reverse ;
 :s:trim (s-s) s:trim-right s:trim-left ;
+:s:append  (ss-s)
+  swap
 :s:prepend (ss-s)
   s:temp [ dup s:length + [ dup s:length n:inc ] dip swap copy ] sip ;
-:s:append (ss-s) swap s:prepend ;
 :s:for-each (sq-)
   [ repeat
       over fetch 0; drop

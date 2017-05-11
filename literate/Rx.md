@@ -746,14 +746,23 @@ I use `jump` for tail call eliminations here.
 ````
 : prefix:(
 i drre....
+````
+
+````
 : prefix:#
 i lica....
 r s:to-number
 i liju....
 r class:data
+````
+
+````
 : prefix:$
 i feliju..
 r class:data
+````
+
+````
 : prefix::
 i lilica..
 d 1793
@@ -763,12 +772,11 @@ r Heap
 d 0
 r comma
 i ca......
-i sw......
-i lilifeli
+i swlilife
 r class:word
 r Heap
+i lica....
 r newentry
-i ca......
 i lifelife
 r Heap
 r Dictionary
@@ -780,6 +788,9 @@ r Compiler
 i lifeswst
 r Heap
 i re......
+````
+
+````
 : prefix:&
 i lica....
 r d:lookup

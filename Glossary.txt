@@ -2337,6 +2337,15 @@ Set the contents of the variable to -1.
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
+v:preserve
+
+  aq-
+
+Execute quote, preserving contents of the
+variable.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
 v:update-using
 
   aq-

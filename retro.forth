@@ -82,6 +82,7 @@
 :v:limit   (alu-)  push push dup fetch pop pop n:limit swap store ;
 :v:on      (a-)    TRUE swap store ;
 :v:off     (a-)    FALSE swap store ;
+:v:preserve (aq-)  swap dup fetch [ [ call ] dip ] dip swap store ;
 :allot     (n-)    &Heap v:inc-by ;
 :v:update-using (aq-) swap [ fetch swap call ] sip store ;
 :copy   (aan-) [ &fetch-next dip store-next ] times drop drop ;

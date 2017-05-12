@@ -1,9 +1,9 @@
 #ifndef _NGA_H
 #define _NGA_H
 #define CELL         int32_t
-#define IMAGE_SIZE   524288
-#define ADDRESSES    128
-#define STACK_DEPTH  32
+#define IMAGE_SIZE   524288 * 16
+#define ADDRESSES    2048
+#define STACK_DEPTH  512
 typedef void (*Handler)(void);
 extern CELL address[ADDRESSES];
 extern CELL data[STACK_DEPTH];

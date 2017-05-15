@@ -944,6 +944,7 @@ I provide just a few debugging aids.
 :words  (-)  [ d:name puts sp ] d:for-each ;
 :depth  (-n) #-1 fetch ;
 :reset  (...-) depth repeat 0; push drop pop #1 - again ;
+:.s     (-)  depth 0; drop push .s pop dup putn sp ;
 ````
 
 ## The End

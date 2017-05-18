@@ -303,6 +303,46 @@ TRUE 'RewriteUnderscores var<n>
       [ repeat fetch-next 0; handle again ]
       call drop ] sip ] buffer:preserve ;
 }}
+:set:from-results (q-a)
+  depth [ call ] dip depth swap -
+  here [ dup , [ , ] times ] dip ;
+:set:from-string (s-a)
+  s:reverse [ [ ] s:for-each ] curry
+  set:from-results ;
+{{
+  'Q var
+---reveal---
+  :set:for-each (aq-)
+    @Q [ !Q fetch-next
+         [ fetch-next swap [ @Q call ] dip ] times drop
+       ] dip !Q ;
+}}
+:set:dup (a-a)
+  here [ dup fetch , [ , ] set:for-each ] dip ;
+:set:filter (aq-)
+  [ over [ call ] dip swap [ , ] [ drop ] choose ] curry
+  here [ over fetch , set:for-each ] dip here over - n:dec over store ;
+{{
+  'F var
+---reveal---
+  :set:contains? (na-f)
+    &F v:off
+    [ over eq? @F or !F ] set:for-each
+    drop @F ;
+  :set:contains-string? (na-f)
+    &F v:off
+    [ over s:eq? @F or !F ] set:for-each
+    drop @F ;
+}}
+:set:map (aq-a)
+  [ call , ] curry
+  here [ over fetch , set:for-each ] dip ;
+:set:reverse (a-a)
+  here [ fetch-next [ + n:dec ] sip dup ,
+         [ dup fetch , n:dec ] times drop
+       ] dip ;
+:set:nth (an-a)
+  + n:inc ;
 :putc (c-) `1000 ;
 :nl   (-)  ASCII:LF putc ;
 :sp   (-)  ASCII:SPACE putc ;

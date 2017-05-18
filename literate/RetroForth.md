@@ -767,7 +767,6 @@ TRUE 'RewriteUnderscores var<n>
 }}
 ````
 
-
 Building on `s:for-each`, I am able to implement `s:index-of`, which
 finds the first instance of a character in a string.
 
@@ -913,6 +912,122 @@ The format language is simple:
       [ repeat fetch-next 0; handle again ]
       call drop ] sip ] buffer:preserve ;
 }}
+````
+
+## Sets
+
+Sets are statically sized arrays. They are represented in memory as:
+
+    count
+    data #1 (first)
+    ...
+    data #n (last)
+
+The first couple of words are used to create sets. The first,
+`set:from-results` executes a quote and constructs a set from the
+returned values.
+
+````
+:set:from-results (q-a)
+  depth [ call ] dip depth swap -
+  here [ dup , [ , ] times ] dip ;
+````
+
+The second, `set:from-string`, creates a new string with the characters
+in given a string.
+
+````
+:set:from-string (s-a)
+  s:reverse [ [ ] s:for-each ] curry
+  set:from-results ;
+````
+
+A very crucial piece is `set:for-each`. This runs a quote once against
+each value in a set. This will be leveraged to implement additional
+combinators.
+
+````
+{{
+  'Q var
+---reveal---
+  :set:for-each (aq-)
+    @Q [ !Q fetch-next
+         [ fetch-next swap [ @Q call ] dip ] times drop
+       ] dip !Q ;
+}}
+````
+
+With this I can easily define `set:dup` to make a copy of a set.
+
+````
+:set:dup (a-a)
+  here [ dup fetch , [ , ] set:for-each ] dip ;
+````
+
+Next is `set:filter`, which is extracts matching values from a set. This
+is used like:
+
+    [ #1 #2 #3 #4 #5 #6 #7 #8 ] set
+    [ n:even? ] set:filter
+
+It returns a new set with the values that the quote returned a `TRUE`
+flag for.
+
+````
+:set:filter (aq-)
+  [ over [ call ] dip swap [ , ] [ drop ] choose ] curry
+  here [ over fetch , set:for-each ] dip here over - n:dec over store ;
+````
+
+Next are `set:contains?` and `set:contains-string?` which compare a given
+value to each item in the array and returns a flag.
+
+````
+{{
+  'F var
+---reveal---
+  :set:contains? (na-f)
+    &F v:off
+    [ over eq? @F or !F ] set:for-each
+    drop @F ;
+
+  :set:contains-string? (na-f)
+    &F v:off
+    [ over s:eq? @F or !F ] set:for-each
+    drop @F ;
+}}
+````
+
+I implemented `set:map` to apply a quotation to each item in a set and
+construct a new set from the returned values.
+
+Example:
+
+    [ #1 #2 #3 ] set
+    [ #10 * ] set:map
+
+````
+:set:map (aq-a)
+  [ call , ] curry
+  here [ over fetch , set:for-each ] dip ;
+````
+
+You can use `set:reverse` to make a copy of a set with the values
+reversed. This can be useful after a `set:from-results`.
+
+````
+:set:reverse (a-a)
+  here [ fetch-next [ + n:dec ] sip dup ,
+         [ dup fetch , n:dec ] times drop
+       ] dip ;
+````
+
+`set:nth` provides a quick means of adjusting a set and offset into an
+address for use with `fetch` and `store`.
+
+````
+:set:nth (an-a)
+  + n:inc ;
 ````
 
 ## I/O

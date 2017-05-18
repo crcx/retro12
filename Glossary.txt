@@ -1826,6 +1826,99 @@ Return a new, empty string.
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
+set:contains?
+
+  na-f
+
+Return `TRUE` if the value is in the set or
+`FALSE` otherwise.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+set:contains-string?
+
+  as-f
+
+Return `TRUE` if the string value is in the
+set or`FALSE` otherwise.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+set:dup
+
+  a-b
+
+Make a copy of a set. Return the address of
+the copy.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+set:filter
+
+  aq-b
+
+For each item in the initial set, run the
+specified quote. If the quote returns `TRUE`,
+copy the item into a new set. If `FALSE`,
+discard it. Returns a pointer to the new set.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+set:from-results
+
+  q-a
+
+Execute quote. Return a new set containing
+the values the quote leaves on the stack.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+set:from-string
+
+  s-a
+
+Create a new set with the characters in the
+source string.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+set:for-each
+
+  aq-?
+
+Execute the quote once for each item in the
+set.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+set:map
+
+  aq-a
+
+Execute quote once for each item in the set.
+Constructs a new set from the value returned
+by the quote.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+set:nth
+
+  an-b
+
+Return the actual address of the nth item in
+the set.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+set:reverse
+
+  a-b
+
+Reverse the order of items in a set. This will
+return a new set.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
 s:eq?
 
   ss-f

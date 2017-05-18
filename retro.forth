@@ -6,6 +6,7 @@
 :reclass    (a-) d:last d:class store ;
 :immediate  (-)  &class:macro reclass ;
 :data       (-)  &class:data reclass ;
+:depth  (-n) #-1 fetch ;
 :prefix:@  (s-n) d:lookup d:xt fetch class:data &fetch class:word ; immediate
 :prefix:!  (s-n) d:lookup d:xt fetch class:data &store class:word ; immediate
 :compile:lit  (a-) #1 , , ;
@@ -350,6 +351,5 @@ TRUE 'RewriteUnderscores var<n>
 :puts (s-) [ putc ] s:for-each ;
 :putn (n-) n:to-string puts ;
 :words  (-)  [ d:name puts sp ] d:for-each ;
-:depth  (-n) #-1 fetch ;
 :reset  (...-) depth repeat 0; push drop pop #1 - again ;
 :.s     (-)  depth 0; drop push .s pop dup putn sp ;

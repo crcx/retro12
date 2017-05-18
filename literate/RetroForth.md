@@ -123,6 +123,9 @@ With this I can then define `immediate` (for state-smart words) and
 :data       (-)  &class:data reclass ;
 ````
 
+````
+:depth  (-n) #-1 fetch ;
+````
 
 ````
 :prefix:@  (s-n) d:lookup d:xt fetch class:data &fetch class:word ; immediate
@@ -1057,7 +1060,6 @@ I provide just a few debugging aids.
 
 ````
 :words  (-)  [ d:name puts sp ] d:for-each ;
-:depth  (-n) #-1 fetch ;
 :reset  (...-) depth repeat 0; push drop pop #1 - again ;
 :.s     (-)  depth 0; drop push .s pop dup putn sp ;
 ````

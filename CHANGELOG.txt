@@ -1,4 +1,36 @@
 
+2017-05-18  Charles Childers  <crc@forthworks.com>
+
+	* move depth earlier to fix a bug
+	* add set: to words.txt
+	* add set: vocabulary for simple arrays
+
+2017-05-15  Charles Childers  <crc@forthworks.com>
+
+	* add .s
+
+2017-05-12  Charles Childers  <crc@forthworks.com>
+
+	* add v:preserve
+
+2017-05-11  Charles Childers  <crc@forthworks.com>
+
+	* revert the multiple entry points - proved buggy
+	* start using fall-through; some cleanups
+	* new image w/updated prefix::
+	* prefix:: now allows for multiple entry points
+
+2017-05-01  Charles Childers  <crc@forthworks.com>
+
+	* fix some stuff in the Makefile
+	* add description of the interfaces
+	* add kanga, a full screen curses-based interactive environment
+	* add bridge.h, separate compile of bridge.c
+
+2017-04-30  Charles Childers  <crc@forthworks.com>
+
+	* add a changelog
+
 2017-04-29  Charles Childers  <crc@forthworks.com>
 
 	* minimal repl

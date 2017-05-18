@@ -99,7 +99,7 @@ prefix:
 
     prefix:`             prefix::             prefix:'
     prefix:(             prefix:$             prefix:&
-    prefix:#             prefix:@            prefix:!
+    prefix:#             prefix:@             prefix:!
 
 s:
 
@@ -112,8 +112,14 @@ s:
     s:to-number          s:to-upper           s:trim
     s:trim-left          s:trim-right         s:with-format
     s:case               s:left               s:right
-    s:contains-char?
-    s:contains-string?
+    s:contains-char?     s:contains-string?
+
+set:
+
+    set:contains?        set:contains-string? set:dup
+    set:filter           set:from-results     set:from-string
+    set:for-each         set:map              set:nth
+    set:reverse
 
 v:
 

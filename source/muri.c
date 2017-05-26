@@ -69,6 +69,7 @@ int32_t opcode_for(char *s) {
   return 0;
 }
 void pass1(char *fname) {
+  int inBlock = 0;
   char *buffer = (char *)source;
   unsigned int opcode;
   char inst[3];
@@ -82,34 +83,43 @@ void pass1(char *fname) {
   }
   while (!feof(fp)) {
     read_line(fp, buffer);
-    if (buffer[1] == '\t' || buffer[1] == ' ') {
-      switch (buffer[0]) {
-        case 'i': memcpy(inst, buffer + 8, 2);
-                  opcode = opcode_for(inst);
-                  opcode = opcode << 8;
-                  memcpy(inst, buffer + 6, 2);
-                  opcode += opcode_for(inst);
-                  opcode = opcode << 8;
-                  memcpy(inst, buffer + 4, 2);
-                  opcode += opcode_for(inst);
-                  opcode = opcode << 8;
-                  memcpy(inst, buffer + 2, 2);
-                  opcode += opcode_for(inst);
-                  target[here++] = opcode;
-                  break;
-        case 'r': target[here++] = -1;
-                  break;
-        case 'd': target[here++] = atoi(buffer+2);
-                  break;
-        case 'c': target[here++] = buffer[2];
-                  break;
-        case 's': opcode = 2;
-                  while (opcode < strlen(buffer))
-                    target[here++] = buffer[opcode++];
-                  target[here++] = 0;
-                  break;
-        case ':': add_label(buffer+2, here);
-                  break;
+    if (strcmp(buffer, "````") == 0) {
+      if (inBlock == 0)
+        inBlock = 1;
+      else
+        inBlock = 0;
+    } else {
+      if (inBlock == 1) {
+        if (buffer[1] == '\t' || buffer[1] == ' ') {
+          switch (buffer[0]) {
+            case 'i': memcpy(inst, buffer + 8, 2);
+                      opcode = opcode_for(inst);
+                      opcode = opcode << 8;
+                      memcpy(inst, buffer + 6, 2);
+                      opcode += opcode_for(inst);
+                      opcode = opcode << 8;
+                      memcpy(inst, buffer + 4, 2);
+                      opcode += opcode_for(inst);
+                      opcode = opcode << 8;
+                      memcpy(inst, buffer + 2, 2);
+                      opcode += opcode_for(inst);
+                      target[here++] = opcode;
+                      break;
+            case 'r': target[here++] = -1;
+                      break;
+            case 'd': target[here++] = atoi(buffer+2);
+                      break;
+            case 'c': target[here++] = buffer[2];
+                      break;
+            case 's': opcode = 2;
+                      while (opcode < strlen(buffer))
+                        target[here++] = buffer[opcode++];
+                      target[here++] = 0;
+                      break;
+            case ':': add_label(buffer+2, here);
+                      break;
+          }
+        }
       }
     }
   }
@@ -119,19 +129,29 @@ void pass2(char *fname) {
   char *buffer = (char *)source;
   FILE *fp;
   here = 0;
+  int inBlock = 0;
   fp = fopen(fname, "r");
   while (!feof(fp)) {
     read_line(fp, buffer);
-    switch (buffer[0]) {
-      case 'i': here++;                             break;
-      case 'r': target[here++] = lookup(buffer+2);
-                if (lookup(buffer+2) == -1)
-                  printf("Lookup failed: '%s'\n", buffer+2);
-                                                    break;
-      case 'd': here++;                             break;
-      case 'c': here++;                             break;
-      case 's': here = here + strlen(buffer) - 1;   break;
-      case ':':                                     break;
+    if (strcmp(buffer, "````") == 0) {
+      if (inBlock == 0)
+        inBlock = 1;
+      else
+        inBlock = 0;
+    } else {
+      if (inBlock == 1) {
+        switch (buffer[0]) {
+          case 'i': here++;                             break;
+          case 'r': target[here++] = lookup(buffer+2);
+                    if (lookup(buffer+2) == -1)
+                      printf("Lookup failed: '%s'\n", buffer+2);
+                                                        break;
+          case 'd': here++;                             break;
+          case 'c': here++;                             break;
+          case 's': here = here + strlen(buffer) - 1;   break;
+          case ':':                                     break;
+        }
+      }
     }
   }
   fclose(fp);

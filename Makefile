@@ -49,7 +49,7 @@ kanga:
 	cd bin && $(CC) $(CFLAGS) kanga.o nga.o cursed-bridge.o -lcurses -o kanga
 
 image:
-	./bin/muri rx.muri
+	./bin/muri literate/Rx.md
 	./bin/extend literate/RetroForth.md
 
 rre:

@@ -20,13 +20,17 @@ Usage:
 
     rre sourcefile
 
-The code in *sourcefile* will be run, after which RETRO will exit. You
-can use this in an interactive fashion if you do:
+The code in *sourcefile* will be run, after which RETRO will exit.
 
-    rre /dev/stdin
+Sources are in Markdown format, with Retro code in fenced blocks. E.g.,
 
-Alternately, there is a *listener* script in the *bin* directory that
-makes this a little nicer.
+    # Test
+
+    This adds a `s:dup` word.
+
+    ````
+    :s:dup (s-ss) dup s:temp ;
+    ````
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 

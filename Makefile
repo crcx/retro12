@@ -9,7 +9,7 @@ LD = clang
 LDFLAGS =
 CFLAGS = -Wall -O3
 
-all: clean sources tools compile link image rre repl kanga finish opt
+all: clean sources tools compile link image rre repl kanga finish
 
 clean:
 	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/muri bin/kanga
@@ -19,8 +19,6 @@ sources:
 	./bin/unu literate/Unu.md >source/unu.c
 	./bin/unu literate/Nga.md >source/nga.c
 	./bin/unu literate/Muri.md >source/muri.c
-	./bin/unu literate/Rx.md >rx.muri
-	./bin/unu literate/RetroForth.md >retro.forth
 
 tools:
 	cd source && $(CC) $(CFLAGS) unu.c -o ../bin/unu
@@ -62,7 +60,3 @@ rre:
 
 finish:
 	rm -f bin/*.o
-
-opt:
-	cd optional && ../bin/unu literate/Array.md >array.forth
-	cd optional && ../bin/unu literate/NS.md >ns.forth

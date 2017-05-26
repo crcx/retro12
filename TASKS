@@ -4,10 +4,10 @@ Tasks for 2016.6 Release
      [x]  extend.c
      [x]  rre.c
      [x]  muri.c
-[ ]  Remove old files
-     [ ]  rx.muri
-     [ ]  retro.forth
-     [ ]  source/deprecated
+[x]  Remove old files
+     [x]  rx.muri
+     [x]  retro.forth
+     [x]  source/deprecated
 [ ]  Retro Book
 [ ]  Searchable Glossary
 

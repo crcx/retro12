@@ -125,4 +125,4 @@ v:
 
     v:dec                v:dec-by             v:inc
     v:inc-by             v:limit              v:off
-    v:on                 v:update-using
+    v:on                 v:update-using       v:preserve

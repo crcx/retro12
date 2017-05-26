@@ -21,7 +21,7 @@ previous generation.
 For Linux and macOS:
 
     make
-    ./bin/rre /dev/stdin
+    ./bin/kanga
 
 ## Legalities
 

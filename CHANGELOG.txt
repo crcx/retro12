@@ -1,6 +1,15 @@
 
+2017-05-26  Charles Childers  <crc@forthworks.com>
+
+	* add note on RRE to Interfaces
+	* remove old files
+	* rre now uses literate sources
+	* muri now embeds unu functionality
+	* start work on embedding unu functionality into tools directly
+
 2017-05-18  Charles Childers  <crc@forthworks.com>
 
+	* update changelog
 	* move depth earlier to fix a bug
 	* add set: to words.txt
 	* add set: vocabulary for simple arrays

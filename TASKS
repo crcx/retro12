@@ -1,9 +1,13 @@
 Tasks for 2016.6 Release
 
-[ ]  Embed Unu functionality in tools and interfaces
-     [ ]  extend.c
-     [ ]  rre.c
-     [ ]  muri.c
+[x]  Embed Unu functionality in tools and interfaces
+     [x]  extend.c
+     [x]  rre.c
+     [x]  muri.c
+[ ]  Remove old files
+     [ ]  rx.muri
+     [ ]  retro.forth
+     [ ]  source/deprecated
 [ ]  Retro Book
 [ ]  Searchable Glossary
 

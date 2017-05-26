@@ -21,19 +21,25 @@
 #include "bridge.h"
 
 int include_file(char *fname) {
-  int tokens = 0;
-  char source[64000];
   FILE *fp;
+  char source[64000];
+  int inBlock = 0;
+  int tokens = 0;
   fp = fopen(fname, "r");
   if (fp == NULL)
     return 0;
   while (!feof(fp))
   {
     read_token(fp, source, 0);
-#ifdef VERBOSE
-    printf("compiling ___ %s ___\n", source);
-#endif
-    evaluate(source);
+    if (strcmp(source, "````") == 0) {
+      if (inBlock == 0)
+        inBlock = 1;
+      else
+        inBlock = 0;
+    } else {
+      if (inBlock == 1)
+        evaluate(source);
+    }
     tokens++;
   }
   fclose(fp);

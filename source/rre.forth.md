@@ -1,3 +1,4 @@
+````
 (RRE_Extensions_to_Core_Language)
 :getc (-c) `1001 ;
 #0 'file:R const
@@ -17,3 +18,4 @@
   file:R file:open dup n:-zero?
   [ file:close TRUE ]
   [ drop FALSE ] choose ;
+````

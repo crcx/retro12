@@ -50,11 +50,11 @@ kanga:
 
 image:
 	./bin/muri rx.muri
-	./bin/extend retro.forth
+	./bin/extend literate/RetroForth.md
 
 rre:
 	cp ngaImage clean
-	./bin/extend source/rre.forth
+	./bin/extend source/rre.forth.md
 	./bin/embedimage >source/image.c
 	mv clean ngaImage
 	cd source && $(CC) $(CFLAGS) -c image.c -o ../bin/image.o

@@ -1,0 +1,435 @@
+These words are specific to the iOS version
+of RETRO.
+
+For file I/O examples, assume that `FID` is a
+variable holding a file ID.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:open
+
+  sm-v
+
+Open a file. Modes are characters from the
+table below.
+
+| Symbol | Used For |
+| ------ | -------- |
+| R      | Reading  |
+| W      | Writing  |
+| A      | Append   |
+
+Example:
+
+  'FID var
+  'Hello.txt $W file:write !FID
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:close
+
+  v-
+
+Close a file.
+
+Example:
+
+  @FID file:close
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:read
+
+  v-c
+
+Read a character from the specified file ID.
+
+Example:
+
+  @FID file:read putc
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:write
+
+  cv-
+
+Example:
+
+  $e @FID file:write
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:pos
+
+  v-s
+
+Return the current index into the open file.
+
+Example:
+
+  @FID file:pos
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:seek
+
+  nv-
+
+Move the current index into the open file.
+
+Example:
+
+  #10 @FID file:seek
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:length
+
+  v-n
+
+Return the length of a file. Takes a file ID.
+
+Example:
+
+  @FID file:length
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:count-files
+
+  -n
+
+Return the number of files.
+
+Example:
+
+  file:count-files
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:name-for-index
+
+  n-s
+
+Returns the name of a file by its file index.
+This isn't intended for general use, but can
+be beneficial in limited cases with known
+data sets.
+
+Example:
+
+  #1 file:name-for-index puts nl
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:for-each
+
+  q-
+
+Execute the quote once for each file. Passes
+the name of each file to the quote before it
+runs.
+
+Example:
+
+  [ dup puts sp file:size-of-named putn nl ]
+  file:for-each
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:list-all
+
+  -
+
+Display a list of all files.
+
+Example:
+
+    file:list-all
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:with
+
+  scq-
+
+Takes a file name, mode, and quote. Opens the
+file, then executes the quote. Closes the
+file when execution completes.
+
+Example:
+
+  'Hello.txt $A
+  [ $H swap file:write ] file:with
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:size-of-named
+
+  s-n
+
+Return the size of a file.
+
+Example:
+
+  'doc|Syntax.md file:size-of-named putn
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:spew
+
+  ss-
+
+Write a string to a file.
+
+Example:
+
+  'Hello_World!
+  'Hello.txt file:spew
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:copy
+
+  ss-
+
+Make a copy of a file.
+
+Example:
+
+  'doc|Syntax.md
+  'new|Syntax.md file:copy
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:slurp
+
+  s-a
+
+Read a file into memory at `here`. You should
+move this to a safe buffer as soon as possible
+before manipulating the data.
+
+Example:
+
+  'doc|Syntax.md file:slurp puts
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+clock:hour
+
+Return the current hour.
+
+  -n
+
+Example:
+
+  clock:hour
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+clock:minute
+
+Return the current minute.
+
+  -n
+
+Example:
+
+  clock:minute
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+clock:second
+
+Return the current second.
+
+  -n
+
+Example:
+
+  clock:second
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+clock:year
+
+  -n
+
+Return the current year.
+
+Example:
+
+  clock:year
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+clock:month
+
+  -n
+
+Return the current month of the year.
+
+Example:
+
+  clock:month
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+clock:day
+
+  -n
+
+Return the current day of the month.
+
+Example:
+
+  clock:day
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+pb:set
+
+  s-
+
+Set the pasteboard to the specified string.
+
+Example:
+
+  'Hello pb:set
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+pb:length
+
+  -n
+
+Example:
+
+  pb:length
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+pb:get
+
+Store the pasteboard contents into the
+specified buffer.
+
+  a-
+
+Example:
+
+  here pb:get
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+include
+
+  s-
+
+Load and run the code in the specified file.
+
+Example:
+
+  'example|Chess.md include
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+import
+
+  s-
+
+Load and run the code in the specified file.
+The imported file should define a word with
+the name of the file. This will prevent the
+file from being loaded twice if this is
+called more than once.
+
+Example:
+
+  'example|Chess.md import
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+import:module
+
+  s-
+
+Load and run the code in a module. A module
+has a `module|` prefix and should follow the
+rules from `import`.
+
+This word will add the `module|` prefix for
+you.
+
+Example:
+
+  'RML import:module
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+net:http:get
+
+  as-n
+
+Perform an HTTP GET request to the specified
+URL. The read data will be stored at the
+address specified. The number of characters
+received is returned.
+
+Example:
+
+  here 'http://theverge.com
+  net:http:get
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+net:gopher:get
+
+  as-n
+
+Connect to the specified Gopher server and
+retrieve the data from the selector. Stores
+the received data to the specified address
+and returns the number of bytes received.
+
+Example:
+
+  :download (ss-)
+    [ here swap net:gopher:get drop ] dip
+    here swap file:spew ;
+
+  'forthworks.com/retro/s/Glossary.txt
+  'A-Glossary
+  download
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+clear
+
+  -
+
+Clear the output log.
+
+Example:
+
+  clear
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+ui:get-input
+
+  as-
+
+Pause execution and display a popup to get
+input from the user. Takes a buffer to store
+the data into and a string to display as a
+prompt.
+
+Example:
+
+  here 'What_is_your_name?
+  ui:get-input
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-

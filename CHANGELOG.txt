@@ -1,6 +1,11 @@
 
+2017-06-14  Charles Childers  <crc@forthworks.com>
+
+	* merge in samples, documentation
+
 2017-05-26  Charles Childers  <crc@forthworks.com>
 
+	* documentation updates
 	* add note on RRE to Interfaces
 	* remove old files
 	* rre now uses literate sources

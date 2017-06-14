@@ -32,6 +32,8 @@ Global:
     TRUE                 tuck                 until
     var                  var<n>               Version
     while                words                xor
+    i                    d                    r
+    as{                  }as
 
 ASCII:
 

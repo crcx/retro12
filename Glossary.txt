@@ -149,6 +149,22 @@ two provided values.
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
+as{
+
+  -f
+
+Start an assembly segment of code.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+}as
+
+  f-
+
+End the current assembly segment.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
 ASCII:ACK
 
   -n
@@ -878,6 +894,15 @@ or `FALSE` otherwise.
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
+d
+
+  n-
+
+Inline a numeric value to the current
+assembly segment.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
 d:add-header
 
   saa-
@@ -1192,6 +1217,15 @@ here
   -a
 
 Return the next free address in memory.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+i
+
+  s-
+
+Pack an instruction bundle and inline it into
+the current assembly segment.
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
@@ -1667,6 +1701,15 @@ puts
   s-
 
 Send the string to the output device.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+r
+
+  s-
+
+Lookup a reference by name and inline its
+pointer to the current assembly segment.
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 

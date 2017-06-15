@@ -926,6 +926,14 @@ Sets are statically sized arrays. They are represented in memory as:
     ...
     data #n (last)
 
+Since the count comes first, a simple `fetch` will suffice to get it,
+but for completeness (and to allow for future changes), we wrap this
+as `set:length`:
+
+````
+:set:length (a-n) fetch ;
+````
+
 The first couple of words are used to create sets. The first,
 `set:from-results` executes a quote and constructs a set from the
 returned values.

@@ -120,8 +120,8 @@ set:
 
     set:contains?        set:contains-string? set:dup
     set:filter           set:from-results     set:from-string
-    set:for-each         set:map              set:nth
-    set:reverse
+    set:for-each         set:length           set:map
+    set:nth              set:reverse
 
 v:
 

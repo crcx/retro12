@@ -1177,9 +1177,9 @@ Different inteface layers may provide additional I/O words.
 I provide just a few debugging aids.
 
 ````
-:words  (-)  [ d:name puts sp ] d:for-each ;
-:reset  (...-) depth repeat 0; push drop pop #1 - again ;
-:.s     (-)  depth 0; drop push .s pop dup putn sp ;
+:words      (-)  [ d:name puts sp ] d:for-each ;
+:reset      (...-) depth repeat 0; push drop pop #1 - again ;
+:dump-stack (-)  depth 0; drop push .s pop dup putn sp ;
 ````
 
 ## The End

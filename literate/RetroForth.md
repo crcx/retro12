@@ -1179,7 +1179,7 @@ I provide just a few debugging aids.
 ````
 :words      (-)  [ d:name puts sp ] d:for-each ;
 :reset      (...-) depth repeat 0; push drop pop #1 - again ;
-:dump-stack (-)  depth 0; drop push .s pop dup putn sp ;
+:dump-stack (-)  depth 0; drop push dump-stack pop dup putn sp ;
 ````
 
 ## The End

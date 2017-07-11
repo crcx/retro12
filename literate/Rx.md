@@ -835,7 +835,7 @@ Rx provides a couple of functions for simple flow control apart from
 using quotations. These are `repeat`, `again`, and `0;`. An example of
 using them:
 
-    :s:length dup repeat fetch-next 0; drop again swap - #1 - ;
+    :s:length dup [ repeat fetch-next 0; drop again ] call swap - #1 - ;
 
 These can only be used within a definition or quotation. If you need
 to use them interactively, wrap them in a quote and `call` it.

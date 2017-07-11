@@ -49,6 +49,7 @@ kanga:
 image:
 	./bin/muri literate/Rx.md
 	./bin/extend literate/RetroForth.md
+	./bin/extend literate/FloatingPoint.md
 
 rre:
 	cp ngaImage clean

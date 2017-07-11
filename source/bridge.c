@@ -53,7 +53,6 @@ void stack_push(CELL value) {
   data[sp] = value;
 }
 
-
 /* Next, functions to translate C strings to/from Retro
    strings. */
 
@@ -77,6 +76,11 @@ char *string_extract(int at) {
   return (char *)string_data;
 }
 
+
+/* Optional FPU */
+#ifdef FPU
+#include "fpu.c"
+#endif
 
 /* Then accessor functions for dictionary fields. */
 
@@ -256,6 +260,9 @@ void execute(int cell) {
         case NGURA_FS_SIZE:   stack_push(nguraGetFileSize());            break;
         case NGURA_FS_DELETE: nguraDeleteFile();                         break;
         case NGURA_FS_FLUSH:  nguraFlushFile();                          break;
+#ifdef FPU
+        case -6000: ngaFloatingPointUnit(); break;
+#endif
         default:   printf("Invalid instruction!\n");
                    printf("At %d, opcode %d\n", ip, opcode);
                    exit(1);

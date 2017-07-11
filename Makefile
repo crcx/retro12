@@ -6,8 +6,8 @@
 
 CC = clang
 LD = clang
-LDFLAGS =
-CFLAGS = -Wall -O3
+LDFLAGS = -lm
+CFLAGS = -Wall -O3 -DFPU
 
 all: clean sources tools compile link image rre repl kanga finish
 
@@ -41,10 +41,10 @@ link:
 	cd bin && $(LD) $(LDFLAGS) embedimage.o bridge.o -o embedimage
 
 repl:
-	cd bin && $(CC) $(CFLAGS) repl.o nga.o bridge.o -o repl
+	cd bin && $(CC) $(CFLAGS) $(LDFLAGS) repl.o nga.o bridge.o -o repl
 
 kanga:
-	cd bin && $(CC) $(CFLAGS) kanga.o nga.o cursed-bridge.o -lcurses -o kanga
+	cd bin && $(CC) $(CFLAGS) $(LDFLAGS) kanga.o nga.o cursed-bridge.o -lcurses -o kanga
 
 image:
 	./bin/muri literate/Rx.md
@@ -56,7 +56,7 @@ rre:
 	./bin/embedimage >source/image.c
 	mv clean ngaImage
 	cd source && $(CC) $(CFLAGS) -c image.c -o ../bin/image.o
-	cd bin && $(CC) $(CFLAGS) rre.o nga.o image.o bridge.o -o rre
+	cd bin && $(CC) $(CFLAGS) $(LDFLAGS) rre.o nga.o image.o bridge.o -o rre
 
 finish:
 	rm -f bin/*.o

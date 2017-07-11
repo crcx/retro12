@@ -81,6 +81,12 @@ char *string_extract(int at) {
 }
 
 
+/* Optional: FPU */
+#ifdef FPU
+#include "fpu.c"
+#endif
+
+
 /* Then accessor functions for dictionary fields. */
 
 int d_link(CELL dt) {
@@ -259,6 +265,9 @@ void execute(int cell) {
         case NGURA_FS_SIZE:   stack_push(nguraGetFileSize());            break;
         case NGURA_FS_DELETE: nguraDeleteFile();                         break;
         case NGURA_FS_FLUSH:  nguraFlushFile();                          break;
+#ifdef FPU
+        case -6000: ngaFloatingPointUnit(); break;
+#endif
         default:   wprintw(output, "Invalid instruction!\n");
                    wprintw(output, "At %d, opcode %d\n", ip, opcode);
                    exit(1);

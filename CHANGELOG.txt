@@ -1,6 +1,25 @@
 
+2017-07-11  Charles Childers  <crc@forthworks.com>
+
+	* documentation for FPU
+	* include f: namespace by default
+	* initial checkin supporting FPU (port from WIP on iOS implementation)
+	* fix dump-stack
+
+2017-07-08  Charles Childers  <crc@forthworks.com>
+
+	* rename .s (in prep for using . as prefix for floating point)
+
+2017-06-15  Charles Childers  <crc@forthworks.com>
+
+	* add set:length
+	* example: finding prime numbers
+
 2017-06-14  Charles Childers  <crc@forthworks.com>
 
+	* stdlib now includes a Retro implementation of muri assembler
+	* bump image version
+	* update changelog
 	* merge in samples, documentation
 
 2017-05-26  Charles Childers  <crc@forthworks.com>

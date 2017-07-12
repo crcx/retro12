@@ -1375,11 +1375,27 @@ Return the greater of two values.
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
+n:MAX
+
+  -n
+
+Return the maximum value of a number.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
 n:min
 
   nn-n
 
 Return the lesser of two values.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+n:MIN
+
+  -n
+
+Return the minimum value of a number.
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 

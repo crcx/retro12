@@ -313,6 +313,8 @@ provide here.
 And then some numeric comparators.
 
 ````
+:n:MAX        (-n)    #2147483647 ;
+:n:MIN        (-n)    #−2147483648 ;
 :n:zero?      (n-f)   #0 eq? ;
 :n:-zero?     (n-f)   #0 -eq? ;
 :n:negative?  (n-f)   #0 lt? ;

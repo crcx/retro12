@@ -746,10 +746,12 @@ Convert a decimal (base 10) number to a string.
 ````
 {{
   :Value `0 ;
+  :correct (c-c)
+    dup $0 lt? [ $0 over - #2 * + ] if ; 
 ---reveal---
   :n:to-string  (n-s)
     [ here buffer:set dup !Value n:abs
-      [ #10 /mod swap $0 + buffer:add dup n:-zero? ] while drop
+      [ #10 /mod swap $0 + correct buffer:add dup n:-zero? ] while drop
       @Value n:negative? [ $- buffer:add ] if
       buffer:start s:reverse s:temp ] buffer:preserve ;
 }}

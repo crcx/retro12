@@ -47,6 +47,8 @@ token.
 | '      | strings                |
 | #      | numbers                |
 | $      | characters             |
+| @      | variable get           |
+| !      | variable set           |
 
 ### Naming and Style Conventions
 

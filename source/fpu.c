@@ -129,6 +129,10 @@ void float_pow() {
 
 void float_to_number() {
     double a = float_pop();
+    if (a > 2147483647)
+      a = 2147483647;
+    if (a < -2147483648)
+      a = -2147483648;
     a = round(a);
     stack_push((CELL)a);
 }

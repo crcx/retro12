@@ -12,7 +12,7 @@ CFLAGS = -Wall -O3 -DFPU
 all: clean sources tools compile link image rre repl kanga finish
 
 clean:
-	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/muri bin/kanga
+	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/muri bin/kanga bin/repl
 
 sources:
 	cd source && $(CC) $(CFLAGS) unu.c -o ../bin/unu

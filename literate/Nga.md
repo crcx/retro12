@@ -476,6 +476,17 @@ void inst_xor() {
 
 **SHIFT** performs a bitwise arithmetic SHIFT operation.
 
+This takes two values:
+
+  xy
+
+And returns a single one:
+
+  z
+
+If `y` is positive, this shifts right. If negative, it shifts
+left.
+
 ````
 void inst_shift() {
   CELL y = TOS;

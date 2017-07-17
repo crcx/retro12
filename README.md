@@ -4,6 +4,8 @@
     || \\ ||___   ||   || \\  \\_//
     a personal, minimalistic forth
 
+[![Build Status](https://travis-ci.org/crcx/retro12.svg?branch=master)](https://travis-ci.org/crcx/retro12)
+
 ## Background
 
 RETRO is a Forth dialect drawing influences from many sources. It uses

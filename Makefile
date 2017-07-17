@@ -9,7 +9,7 @@ LD = clang
 LDFLAGS = -lm
 CFLAGS = -Wall -O3 -DFPU -DARGV
 
-all: clean sources tools compile link image rre repl kanga finish
+all: clean sources tools compile link image rre repl kanga finish test
 
 clean:
 	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/muri bin/kanga bin/repl
@@ -61,3 +61,6 @@ rre:
 
 finish:
 	rm -f bin/*.o
+
+test:
+	./bin/rre test-core.forth

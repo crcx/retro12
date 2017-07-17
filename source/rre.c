@@ -20,8 +20,6 @@
 #include <string.h>
 #include <stdint.h>
 
-/* Eventually bridge.c should be compiled separate
-   and have a corresponding bridge.h */
 #include "nga.h"
 #include "bridge.h"
 
@@ -74,6 +72,11 @@ int main(int argc, char **argv) {
   for (i = 0; i < ngaImageCells; i++)
     memory[i] = ngaImage[i];
   update_rx();
+
+#ifdef ARGV
+  sys_argc = argc;
+  sys_argv = argv;
+#endif
 
   include_file(argv[1]);
 

@@ -7,7 +7,7 @@
 CC = clang
 LD = clang
 LDFLAGS = -lm
-CFLAGS = -Wall -O3 -DFPU
+CFLAGS = -Wall -O3 -DFPU -DARGV
 
 all: clean sources tools compile link image rre repl kanga finish
 

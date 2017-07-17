@@ -26,12 +26,17 @@
 #define D_OFFSET_CLASS    2
 #define D_OFFSET_NAME     3
 
+#ifdef ARGV
+extern char **sys_argv;
+extern int sys_argc;
+#endif
+
 extern CELL Dictionary, Heap, Compiler;
 extern CELL notfound;
 
 CELL stack_pop();
 void stack_push(CELL value);
-void string_inject(char *str, int buffer);
+int string_inject(char *str, int buffer);
 char *string_extract(int at);
 int d_link(CELL dt);
 int d_xt(CELL dt);

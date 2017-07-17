@@ -60,7 +60,7 @@ void stack_push(CELL value) {
 /* Next, functions to translate C strings to/from Retro
    strings. */
 
-void string_inject(char *str, int buffer) {
+int string_inject(char *str, int buffer) {
   int m = strlen(str);
   int i = 0;
   while (m > 0) {
@@ -68,6 +68,7 @@ void string_inject(char *str, int buffer) {
     memory[buffer + i + 1] = 0;
     m--; i++;
   }
+  return buffer;
 }
 
 char string_data[8192];

@@ -23,6 +23,10 @@
 CELL Dictionary, Heap, Compiler;
 CELL notfound;
 
+#ifdef ARGV
+char **sys_argv;
+int sys_argc;
+#endif
 
 /* Some I/O Parameters */
 
@@ -56,7 +60,7 @@ void stack_push(CELL value) {
 /* Next, functions to translate C strings to/from Retro
    strings. */
 
-void string_inject(char *str, int buffer) {
+int string_inject(char *str, int buffer) {
   int m = strlen(str);
   int i = 0;
   while (m > 0) {
@@ -64,6 +68,7 @@ void string_inject(char *str, int buffer) {
     memory[buffer + i + 1] = 0;
     m--; i++;
   }
+  return buffer;
 }
 
 char string_data[8192];
@@ -262,6 +267,11 @@ void execute(int cell) {
         case NGURA_FS_FLUSH:  nguraFlushFile();                          break;
 #ifdef FPU
         case -6000: ngaFloatingPointUnit(); break;
+#endif
+#ifdef ARGV
+        case -6100: stack_push(sys_argc); break;
+        case -6101: stack_push(string_inject(sys_argv[stack_pop()], stack_pop()));
+                    break;
 #endif
         default:   printf("Invalid instruction!\n");
                    printf("At %d, opcode %d\n", ip, opcode);

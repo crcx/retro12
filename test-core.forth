@@ -26,6 +26,7 @@ Multiple tests can be between the `Testing` and the `passed`.
 This will count the number of successful tests.
 
 ````
+'Total var
 'Flag var
 'Tests var
 :Testing (s-)
@@ -36,7 +37,9 @@ This will count the number of successful tests.
   @Flag [ passed '->_1_test_failed puts nl err:die ] -if ; 
 :try (qq-)
   [ call ] dip call @Flag and !Flag
-  exit-on-fail &Tests v:inc ;
+  exit-on-fail &Tests v:inc &Total v:inc ;
+:summary (-)
+  @Total putn '_tests_passed puts nl ;
 ````
 
 And now the tests begin. These should follow the order of the
@@ -46,6 +49,9 @@ Glossary to make maintenance and checking of completion easier.
 
 ````
 '- Testing
+  [ #2 #1 -        ] [ #1 eq? ] try
+  [ #2 #4 #3 - -   ] [ #1 eq? ] try
+  [ #1 #2 #1 #9 -  ] [ #-8 eq? swap #2 eq? and swap #1 eq? and ] try
 passed
 ````
 
@@ -53,6 +59,11 @@ passed
 
 ````
 ', Testing
+  [ here #0 , here swap - ] [  #1 eq? ] try
+  [ here #12 , fetch      ] [ #12 eq? ] try
+  here #1 , #2 , #3 ,
+  [ fetch-next swap fetch-next swap fetch ]
+  [ #3 eq? swap #2 eq? and swap #1 eq? and ] try
 passed
 ````
 
@@ -102,6 +113,10 @@ passed
 
 ````
 '* Testing
+  [  #1  #2 *       ] [ #2 eq?   ] try
+  [  #2  #3 *       ] [ #6 eq?   ] try
+  [ #-1 #10 *       ] [ #-10 eq? ] try
+  [ #-1  #2 * #-1 * ] [ #2 eq?   ] try
 passed
 ````
 
@@ -1876,3 +1891,8 @@ passed
 passed
 ````
 
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+````
+summary
+````

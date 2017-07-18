@@ -23,8 +23,6 @@ void float_from_string() {
 }
 
 void float_to_string() {
-//    int decimal, sign;
-//    char *s = fcvt(float_pop(), 5, &decimal, &sign);
     snprintf(string_data, 8192, "%f", float_pop());
     string_inject(string_data, stack_pop());
 }

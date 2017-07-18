@@ -240,6 +240,7 @@ void update_rx() {
    It also handles the additional I/O instructions. */
 
 void execute(int cell) {
+  CELL a, b;
   CELL opcode;
   rp = 1;
   ip = cell;
@@ -270,7 +271,9 @@ void execute(int cell) {
 #endif
 #ifdef ARGV
         case -6100: stack_push(sys_argc); break;
-        case -6101: stack_push(string_inject(sys_argv[stack_pop()], stack_pop()));
+        case -6101: a = stack_pop();
+                    b = stack_pop();
+                    stack_push(string_inject(sys_argv[a], b));
                     break;
 #endif
         default:   printf("Invalid instruction!\n");

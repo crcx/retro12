@@ -1298,6 +1298,9 @@ passed
 
 ````
 'n:-zero? Testing
+  [ #1 n:-zero? ] [ #-1 eq? ] try
+  [ #0 n:-zero? ] [ #0 eq? ] try
+  [ #-1 n:-zero? ] [ #-1 eq? ] try
 passed
 ````
 
@@ -1305,6 +1308,9 @@ passed
 
 ````
 'n:zero? Testing
+  [ #1 n:zero? ] [ #0 eq? ] try
+  [ #0 n:zero? ] [ #-1 eq? ] try
+  [ #-1 n:zero? ] [ #0 eq? ] try
 passed
 ````
 
@@ -1319,6 +1325,8 @@ passed
 
 ````
 'over Testing
+  [ #1 #2 over ] [ #1 match #2 match #1 match ] try
+  [ #1 #2 #3 over ] [ #2 match #3 match #2 match #1 match ] try
 passed
 ````
 

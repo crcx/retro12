@@ -30,6 +30,7 @@ This will count the number of successful tests.
 'WordsTested var
 'Flag var
 'Tests var
+'InTestState var
 :Testing (s-)
   'Test:__ puts puts nl #-1 !Flag #0 !Tests  &WordsTested v:inc reset ;
 :passed (-)
@@ -37,8 +38,13 @@ This will count the number of successful tests.
   '----------------------------------- puts nl ;
 :exit-on-fail (-)
   @Flag [ passed '->_1_test_failed puts nl err:die ] -if ; 
+:match (n-)
+  eq? @InTestState and !InTestState ;
 :try (qq-)
-  [ call ] dip call @Flag and !Flag
+  #-1 !InTestState
+  [ call ] dip call
+  depth n:-zero? [ @Flag and !Flag ] if
+  @Flag @InTestState and !Flag
   exit-on-fail &Tests v:inc &Total v:inc ;
 
 :summary (-)
@@ -55,7 +61,7 @@ Glossary to make maintenance and checking of completion easier.
 '- Testing
   [ #2 #1 -        ] [ #1 eq? ] try
   [ #2 #4 #3 - -   ] [ #1 eq? ] try
-  [ #1 #2 #1 #9 -  ] [ #-8 eq? swap #2 eq? and swap #1 eq? and ] try
+  [ #1 #2 #1 #9 -  ] [ #-8 match #2 match #1 match ] try
 passed
 ````
 
@@ -545,13 +551,66 @@ passed
 
 ````
 'c:-consonant? Testing
+  [ $a ] [ c:-consonant? ] try 
+  [ $b ] [ c:-consonant? not ] try 
+  [ $c ] [ c:-consonant? not ] try 
+  [ $d ] [ c:-consonant? not ] try 
+  [ $e ] [ c:-consonant? ] try 
+  [ $f ] [ c:-consonant? not ] try 
+  [ $g ] [ c:-consonant? not ] try 
+  [ $h ] [ c:-consonant? not ] try 
+  [ $i ] [ c:-consonant? ] try 
+  [ $j ] [ c:-consonant? not ] try 
+  [ $k ] [ c:-consonant? not ] try 
+  [ $l ] [ c:-consonant? not ] try 
+  [ $m ] [ c:-consonant? not ] try 
+  [ $n ] [ c:-consonant? not ] try 
+  [ $o ] [ c:-consonant? ] try 
+  [ $p ] [ c:-consonant? not ] try 
+  [ $q ] [ c:-consonant? not ] try 
+  [ $r ] [ c:-consonant? not ] try 
+  [ $s ] [ c:-consonant? not ] try 
+  [ $t ] [ c:-consonant? not ] try 
+  [ $u ] [ c:-consonant? ] try 
+  [ $v ] [ c:-consonant? not ] try 
+  [ $w ] [ c:-consonant? not ] try 
+  [ $x ] [ c:-consonant? not ] try 
+  [ $y ] [ c:-consonant? not ] try 
+  [ $z ] [ c:-consonant? not ] try 
 passed
 ````
+
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
 ````
 'c:consonant? Testing
+  [ $a ] [ c:consonant? not ] try 
+  [ $b ] [ c:consonant? ] try 
+  [ $c ] [ c:consonant? ] try 
+  [ $d ] [ c:consonant? ] try 
+  [ $e ] [ c:consonant? not ] try 
+  [ $f ] [ c:consonant? ] try 
+  [ $g ] [ c:consonant? ] try 
+  [ $h ] [ c:consonant? ] try 
+  [ $i ] [ c:consonant? not ] try 
+  [ $j ] [ c:consonant? ] try 
+  [ $k ] [ c:consonant? ] try 
+  [ $l ] [ c:consonant? ] try 
+  [ $m ] [ c:consonant? ] try 
+  [ $n ] [ c:consonant? ] try 
+  [ $o ] [ c:consonant? not ] try 
+  [ $p ] [ c:consonant? ] try 
+  [ $q ] [ c:consonant? ] try 
+  [ $r ] [ c:consonant? ] try 
+  [ $s ] [ c:consonant? ] try 
+  [ $t ] [ c:consonant? ] try 
+  [ $u ] [ c:consonant? not ] try 
+  [ $v ] [ c:consonant? ] try 
+  [ $w ] [ c:consonant? ] try 
+  [ $x ] [ c:consonant? ] try 
+  [ $y ] [ c:consonant? ] try 
+  [ $z ] [ c:consonant? ] try 
 passed
 ````
 
@@ -811,6 +870,9 @@ passed
 
 ````
 'depth Testing
+  [ depth       ] [ #0 eq? ] try
+  [ #1 depth    ] [ #1 eq? reset ] try
+  [ #1 #2 depth ] [ #2 eq? reset ] try
 passed
 ````
 
@@ -832,6 +894,8 @@ passed
 
 ````
 'dip Testing
+  [ #1 #2 [ #3 + ] dip ] [ #2 match #4 match ] try
+  [ #0 #1 #2 [ [ #3 + ] dip ] dip ] [ #2 match #1 match #3 match ] try
 passed
 ````
 
@@ -1745,6 +1809,7 @@ passed
 
 ````
 'swap Testing
+  [ #1 #2 #3 swap ] [ #2 match #3 match #1 match ] try
 passed
 ````
 

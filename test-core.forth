@@ -27,18 +27,22 @@ This will count the number of successful tests.
 
 ````
 'Total var
+'WordsTested var
 'Flag var
 'Tests var
 :Testing (s-)
-  'Test:__ puts puts nl #-1 !Flag #0 !Tests ;
+  'Test:__ puts puts nl #-1 !Flag #0 !Tests  &WordsTested v:inc reset ;
 :passed (-)
-  '->_ puts @Tests putn '_tests_passed puts nl ;
+  '->_ puts @Tests putn '_tests_passed puts nl
+  '----------------------------------- puts nl ;
 :exit-on-fail (-)
   @Flag [ passed '->_1_test_failed puts nl err:die ] -if ; 
 :try (qq-)
   [ call ] dip call @Flag and !Flag
   exit-on-fail &Tests v:inc &Total v:inc ;
+
 :summary (-)
+  @WordsTested putn '_words_tested puts nl
   @Total putn '_tests_passed puts nl ;
 ````
 
@@ -124,6 +128,9 @@ passed
 
 ````
 '+ Testing
+  [ #1 #2 +  ] [ #3 eq? ] try
+  [ #4 #-2 + ] [ #2 eq? ] try
+  [ #0 #1 +  ] [ #1 eq? ] try
 passed
 ````
 
@@ -145,6 +152,8 @@ passed
 
 ````
 'allot Testing
+  [ here #10 allot here swap -  ] [ #10 eq? ] try
+  [ here #-10 allot here - ]      [ #10 eq? ] try
 passed
 ````
 
@@ -173,6 +182,7 @@ passed
 
 ````
 'ASCII:ACK Testing
+  [ ASCII:ACK ] [ #6 eq? ] try
 passed
 ````
 
@@ -180,6 +190,7 @@ passed
 
 ````
 'ASCII:BEL Testing
+  [ ASCII:BEL ] [ #7 eq? ] try
 passed
 ````
 
@@ -187,6 +198,7 @@ passed
 
 ````
 'ASCII:BS Testing
+  [ ASCII:BS ] [ #8 eq? ] try
 passed
 ````
 
@@ -194,6 +206,7 @@ passed
 
 ````
 'ASCII:CAN Testing
+  [ ASCII:CAN ] [ #24 eq? ] try
 passed
 ````
 
@@ -201,6 +214,7 @@ passed
 
 ````
 'ASCII:CR Testing
+  [ ASCII:CR ] [ #13 eq? ] try
 passed
 ````
 
@@ -208,6 +222,7 @@ passed
 
 ````
 'ASCII:DC1 Testing
+  [ ASCII:DC1 ] [ #17 eq? ] try
 passed
 ````
 
@@ -215,6 +230,7 @@ passed
 
 ````
 'ASCII:DC2 Testing
+  [ ASCII:DC2 ] [ #18 eq? ] try
 passed
 ````
 
@@ -222,6 +238,7 @@ passed
 
 ````
 'ASCII:DC3 Testing
+  [ ASCII:DC3 ] [ #19 eq? ] try
 passed
 ````
 
@@ -229,6 +246,7 @@ passed
 
 ````
 'ASCII:DC4 Testing
+  [ ASCII:DC4 ] [ #20 eq? ] try
 passed
 ````
 
@@ -236,6 +254,7 @@ passed
 
 ````
 'ASCII:DEL Testing
+  [ ASCII:DEL ] [ #127 eq? ] try
 passed
 ````
 
@@ -243,6 +262,7 @@ passed
 
 ````
 'ASCII:DLE Testing
+  [ ASCII:DLE ] [ #16 eq? ] try
 passed
 ````
 
@@ -250,6 +270,7 @@ passed
 
 ````
 'ASCII:EM Testing
+  [ ASCII:EM ] [ #25 eq? ] try
 passed
 ````
 
@@ -257,6 +278,7 @@ passed
 
 ````
 'ASCII:ENQ Testing
+  [ ASCII:ENQ ] [ #5 eq? ] try
 passed
 ````
 
@@ -264,6 +286,7 @@ passed
 
 ````
 'ASCII:EOT Testing
+  [ ASCII:EOT ] [ #4 eq? ] try
 passed
 ````
 
@@ -271,6 +294,7 @@ passed
 
 ````
 'ASCII:ESC Testing
+  [ ASCII:ESC ] [ #27 eq? ] try
 passed
 ````
 
@@ -278,6 +302,7 @@ passed
 
 ````
 'ASCII:ETB Testing
+  [ ASCII:ETB ] [ #23 eq? ] try
 passed
 ````
 
@@ -285,6 +310,7 @@ passed
 
 ````
 'ASCII:ETX Testing
+  [ ASCII:ETX ] [ #3 eq? ] try
 passed
 ````
 
@@ -292,6 +318,7 @@ passed
 
 ````
 'ASCII:FF Testing
+  [ ASCII:FF ] [ #12 eq? ] try
 passed
 ````
 
@@ -299,6 +326,7 @@ passed
 
 ````
 'ASCII:FS Testing
+  [ ASCII:FS ] [ #28 eq? ] try
 passed
 ````
 
@@ -306,6 +334,7 @@ passed
 
 ````
 'ASCII:GS Testing
+  [ ASCII:GS ] [ #29 eq? ] try
 passed
 ````
 
@@ -313,6 +342,7 @@ passed
 
 ````
 'ASCII:HT Testing
+  [ ASCII:HT ] [ #9 eq? ] try
 passed
 ````
 
@@ -320,6 +350,7 @@ passed
 
 ````
 'ASCII:LF Testing
+  [ ASCII:LF ] [ #10 eq? ] try
 passed
 ````
 
@@ -327,6 +358,7 @@ passed
 
 ````
 'ASCII:NAK Testing
+  [ ASCII:NAK ] [ #21 eq? ] try
 passed
 ````
 
@@ -334,6 +366,7 @@ passed
 
 ````
 'ASCII:NUL Testing
+  [ ASCII:NUL ] [ #0 eq? ] try
 passed
 ````
 
@@ -341,6 +374,7 @@ passed
 
 ````
 'ASCII:RS Testing
+  [ ASCII:RS ] [ #30 eq? ] try
 passed
 ````
 
@@ -348,6 +382,7 @@ passed
 
 ````
 'ASCII:SI Testing
+  [ ASCII:SI ] [ #15 eq? ] try
 passed
 ````
 
@@ -355,6 +390,7 @@ passed
 
 ````
 'ASCII:SO Testing
+  [ ASCII:SO ] [ #14 eq? ] try
 passed
 ````
 
@@ -362,6 +398,7 @@ passed
 
 ````
 'ASCII:SOH Testing
+  [ ASCII:SOH ] [ #1 eq? ] try
 passed
 ````
 
@@ -369,6 +406,7 @@ passed
 
 ````
 'ASCII:SPACE Testing
+  [ ASCII:SPACE ] [ #32 eq? ] try
 passed
 ````
 
@@ -376,6 +414,7 @@ passed
 
 ````
 'ASCII:STX Testing
+  [ ASCII:STX ] [ #2 eq? ] try
 passed
 ````
 
@@ -383,6 +422,7 @@ passed
 
 ````
 'ASCII:SUB Testing
+  [ ASCII:SUB ] [ #26 eq? ] try
 passed
 ````
 
@@ -390,6 +430,7 @@ passed
 
 ````
 'ASCII:SYN Testing
+  [ ASCII:SYN ] [ #22 eq? ] try
 passed
 ````
 
@@ -397,6 +438,7 @@ passed
 
 ````
 'ASCII:US Testing
+  [ ASCII:US ] [ #31 eq? ] try
 passed
 ````
 
@@ -404,6 +446,7 @@ passed
 
 ````
 'ASCII:VT Testing
+  [ ASCII:VT ] [ #11 eq? ] try
 passed
 ````
 
@@ -859,6 +902,9 @@ passed
 
 ````
 'drop-pair Testing
+  [ #1 #2 #3 drop-pair ] [ #1 eq? ] try
+  [ #1 #2 drop-pair ] [ depth n:zero? ] try
+  [ #1 #2 #3 drop-pair ] [ depth n:-zero? ] try
 passed
 ````
 
@@ -1832,6 +1878,11 @@ passed
 
 ````
 'v:inc-by Testing
+  'TestA var
+  [ #10 &TestA v:inc-by ] [ @TestA #10 eq? ] try
+  [ #10 &TestA v:inc-by ] [ @TestA #20 eq? ] try
+  [ #10 &TestA v:inc-by ] [ @TestA #30 eq? ] try
+  [ #-20 &TestA v:inc-by ] [ @TestA #10 eq? ] try
 passed
 ````
 

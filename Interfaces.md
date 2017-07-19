@@ -28,9 +28,12 @@ Sources are in Markdown format, with Retro code in fenced blocks. E.g.,
 
     This adds a `s:dup` word.
 
-    ````
+    ```
     :s:dup (s-ss) dup s:temp ;
-    ````
+    ```
+
+The fenced blocks can start or end with three or more instances of
+either backtick (`) or tilde (~).
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 

@@ -42,6 +42,16 @@ void dump_stack() {
 }
 
 
+int fenced(char *s)
+{
+  int a = strcmp(s, "```");
+  int b = strcmp(s, "~~~");
+  if (a == 0) return 1;
+  if (b == 0) return 1;
+              return 0;
+}
+
+
 void include_file(char *fname) {
   int inBlock = 0;
   char source[64000];
@@ -55,7 +65,7 @@ void include_file(char *fname) {
     read_token(fp, source, 0);
     strncpy(fence, source, 3);
     fence[3] = '\0';
-    if (!strcmp(fence, "```")) {
+    if (fenced(fence)) {
       if (inBlock == 0)
         inBlock = 1;
       else

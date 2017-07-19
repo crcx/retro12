@@ -57,6 +57,15 @@ char source[16 KiB];
 ````
 
 ````
+int fenced(char *s)
+{
+  int a = strcmp(s, "```");
+  int b = strcmp(s, "~~~");
+  if (a == 0) return 1;
+  if (b == 0) return 1;
+              return 0;
+}
+
 void extract(char *fname) {
   char *buffer = (char *)source;
   char fence[4];
@@ -70,7 +79,7 @@ void extract(char *fname) {
     read_line(fp, buffer);
     strncpy(fence, buffer, 3);
     fence[3] = '\0';
-    if (!strcmp(fence, "```")) {
+    if (fenced(fence)) {
       if (inBlock == 0)
         inBlock = 1;
       else

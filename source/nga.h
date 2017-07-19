@@ -1,5 +1,8 @@
 #ifndef _NGA_H
 #define _NGA_H
+
+#include <stdint.h>
+
 #define CELL         int32_t
 #define IMAGE_SIZE   524288 * 16
 #define ADDRESSES    2048

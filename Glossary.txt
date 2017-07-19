@@ -2296,7 +2296,7 @@ Formatting:
   \\   Backslash
   \%   Percent sign
   %c   Insert character (from stack)
-  %d   Insert number (from stack)
+  %n   Insert number (from stack)
   %s   Insert string (from stack)
 
 All others will be inserted unchanged into
@@ -2304,7 +2304,7 @@ the new string.
 
 Example:
 
-  #3 #2 #1 '%d_+_%d_=_%d s:with-format
+  #3 #2 #1 '%n_+_%n_=_%n s:with-format
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 

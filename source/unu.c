@@ -21,6 +21,7 @@ void read_line(FILE *file, char *line_buffer) {
 char source[16 KiB];
 void extract(char *fname) {
   char *buffer = (char *)source;
+  char fence[4];
   FILE *fp;
   int inBlock;
   inBlock = 0;
@@ -29,7 +30,9 @@ void extract(char *fname) {
     return;
   while (!feof(fp)) {
     read_line(fp, buffer);
-    if (!strcmp(buffer, "````")) {
+    strncpy(fence, buffer, 3);
+    fence[3] = '\0';
+    if (!strcmp(fence, "```")) {
       if (inBlock == 0)
         inBlock = 1;
       else

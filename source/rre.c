@@ -45,6 +45,7 @@ void dump_stack() {
 void include_file(char *fname) {
   int inBlock = 0;
   char source[64000];
+  char fence[4];
   FILE *fp;
   fp = fopen(fname, "r");
   if (fp == NULL)
@@ -52,7 +53,9 @@ void include_file(char *fname) {
   while (!feof(fp))
   {
     read_token(fp, source, 0);
-    if (strcmp(source, "````") == 0) {
+    strncpy(fence, source, 3);
+    fence[3] = '\0';
+    if (!strcmp(fence, "```")) {
       if (inBlock == 0)
         inBlock = 1;
       else

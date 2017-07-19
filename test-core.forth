@@ -1970,6 +1970,10 @@ passed
 
 ````
 'v:off Testing
+  'A var
+  [        &A v:off ] [ @A n:zero? ] try
+  [ #1  !A &A v:off ] [ @A n:zero? ] try
+  [ #-1 !A &A v:off ] [ @A n:zero? ] try
 passed
 ````
 
@@ -1977,6 +1981,10 @@ passed
 
 ````
 'v:on Testing
+  'A var
+  [        &A v:on ] [ @A #-1 eq? ] try
+  [ #0  !A &A v:on ] [ @A #-1 eq? ] try
+  [ #-2 !A &A v:on ] [ @A #-1 eq? ] try
 passed
 ````
 

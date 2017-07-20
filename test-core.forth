@@ -976,6 +976,8 @@ passed
 
 ````
 'dup Testing
+  [ #1 dup ] [ #1 match #1 match ] try
+  [ #4 #3 dup ] [ #3 match #3 match #4 match ] try
 passed
 ````
 
@@ -1179,6 +1181,8 @@ passed
 
 ````
 'nip Testing
+  [ #2 #3 nip ] [ #3 eq? ] try
+  [ #2 #3 #4 nip ] [ #4 match #2 match ] try
 passed
 ````
 

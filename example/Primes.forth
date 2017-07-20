@@ -17,6 +17,8 @@ This is a quick and dirty way to find prime numbers in a set.
 And a test:
 
 ````
-  [ #2 #500 [ dup n:inc ] times ] set:from-results
+  here
+  #7500 ,
+  #2 #7502 [ dup , n:inc ] times drop
   get-primes [ putn sp ] set:for-each
 ````

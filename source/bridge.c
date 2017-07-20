@@ -270,10 +270,10 @@ void execute(int cell) {
         case -6000: ngaFloatingPointUnit(); break;
 #endif
 #ifdef ARGV
-        case -6100: stack_push(sys_argc); break;
+        case -6100: stack_push(sys_argc - 2); break;
         case -6101: a = stack_pop();
                     b = stack_pop();
-                    stack_push(string_inject(sys_argv[a], b));
+                    stack_push(string_inject(sys_argv[a + 2], b));
                     break;
 #endif
         default:   printf("Invalid instruction!\n");

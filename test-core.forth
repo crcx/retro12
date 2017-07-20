@@ -959,6 +959,9 @@ passed
 
 ````
 'drop Testing
+  [ #1 #2 drop ] [ #1 eq? ] try
+  [ #1 #2 #3 drop ] [ #2 match #1 match ] try
+  [ #1 #2 drop drop ] [ #1 eq? ] try
 passed
 ````
 
@@ -985,6 +988,8 @@ passed
 
 ````
 '?dup Testing
+  [ #1 ?dup ] [ depth #2 match #1 match #1 match ] try
+  [ #0 ?dup ] [ depth #1 match #0 match ] try
 passed
 ````
 

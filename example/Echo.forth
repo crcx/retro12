@@ -2,16 +2,8 @@
 
 This is a simple `echo` style example.
 
-Being run as a shell script, the first two arguments will be the
-name of the runtime (`rre`) and the script name (`Echo.md`). So
-actual data to display starts as the third argument. (This is
-#2, since indexing is zero based).
-
-We begin by specifying the initial argument and getting the
-number of arguments after this.
-
 ~~~
-#2 sys:argc #2 -
+#0 sys:argc
 ~~~
 
 Then a simple loop:

@@ -23,6 +23,8 @@
 #include "nga.h"
 #include "bridge.h"
 
+#include "io/posix_files.c"
+
 /* Compile image.c and link against the image.o */
 extern CELL ngaImageCells;
 extern CELL ngaImage[];
@@ -79,6 +81,15 @@ void include_file(char *fname) {
 }
 
 
+void evaluate_string(char *s) {
+  char source[64000];
+  char *x = s;
+  while (x < strlen(s) + s) {
+    x = read_token_str(x, (char *)source, 0);
+    evaluate(source);
+  }
+}
+
 int main(int argc, char **argv) {
   int i;
   ngaPrepare();
@@ -91,6 +102,8 @@ int main(int argc, char **argv) {
   sys_argv = argv;
 #endif
 
+  evaluate_string(posix_files);
+
   include_file(argv[1]);
 
   if (sp >= 1)
@@ -98,3 +111,4 @@ int main(int argc, char **argv) {
 
   exit(0);
 }
+

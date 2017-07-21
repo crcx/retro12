@@ -294,3 +294,64 @@ void evaluate(char *s) {
   stack_push(TIB);
   execute(interpret);
 }
+
+
+/* `read_token` reads a token from the specified file.
+   It will stop on a whitespace or newline. It also
+   tries to handle backspaces, though the success of this
+   depends on how your terminal is configured. */
+
+int not_eol(int ch) {
+  return (ch != (char)10) && (ch != (char)13) && (ch != (char)32) && (ch != EOF) && (ch != 0);
+}
+
+void read_token(FILE *file, char *token_buffer, int echo) {
+  int ch = getc(file);
+  if (echo != 0)
+    putchar(ch);
+  int count = 0;
+  while (not_eol(ch))
+  {
+    if ((ch == 8 || ch == 127) && count > 0) {
+      count--;
+      if (echo != 0) {
+        putchar(8);
+        putchar(32);
+        putchar(8);
+      }
+    } else {
+      token_buffer[count++] = ch;
+    }
+    ch = getc(file);
+    if (echo != 0)
+      putchar(ch);
+  }
+  token_buffer[count] = '\0';
+}
+
+
+char *read_token_str(char *s, char *token_buffer, int echo) {
+  int ch = (char)*s++;
+  if (echo != 0)
+    putchar(ch);
+  int count = 0;
+  while (not_eol(ch))
+  {
+    if ((ch == 8 || ch == 127) && count > 0) {
+      count--;
+      if (echo != 0) {
+        putchar(8);
+        putchar(32);
+        putchar(8);
+      }
+    } else {
+      token_buffer[count++] = ch;
+    }
+    ch = (char)*s++;
+    if (echo != 0)
+      putchar(ch);
+  }
+  token_buffer[count] = '\0';
+  return s;
+}
+

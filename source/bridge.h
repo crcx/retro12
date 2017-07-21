@@ -60,4 +60,6 @@ void execute(int cell);
 void evaluate(char *s);
 int not_eol(int ch);
 void read_token(FILE *file, char *token_buffer, int echo);
+char *read_token_str(char *s, char *token_buffer, int echo);
+
 #endif

@@ -984,7 +984,7 @@ With this I can easily define `set:dup` to make a copy of a set.
 Next is `set:filter`, which is extracts matching values from a set. This
 is used like:
 
-    [ #1 #2 #3 #4 #5 #6 #7 #8 ] set
+    [ #1 #2 #3 #4 #5 #6 #7 #8 ] set:from-results
     [ n:even? ] set:filter
 
 It returns a new set with the values that the quote returned a `TRUE`
@@ -1020,7 +1020,7 @@ construct a new set from the returned values.
 
 Example:
 
-    [ #1 #2 #3 ] set
+    [ #1 #2 #3 ] set:from-results
     [ #10 * ] set:map
 
 ````

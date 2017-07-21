@@ -9,7 +9,7 @@ LD = clang
 LDFLAGS = -lm
 CFLAGS = -Wall -O3 -DFPU -DARGV
 
-all: clean sources tools compile link image rre repl kanga finish test
+all: clean sources tools io compile link image rre repl kanga finish test
 
 clean:
 	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/muri bin/kanga bin/repl
@@ -24,6 +24,7 @@ tools:
 	cd source && $(CC) $(CFLAGS) unu.c -o ../bin/unu
 	cd source && $(CC) $(CFLAGS) nga.c -DSTANDALONE -o ../bin/nga
 	cd source && $(CC) $(CFLAGS) muri.c -o ../bin/muri
+	cd source && $(CC) $(CFLAGS) tanu.c -o ../bin/tanu
 
 compile:
 	cd source && $(CC) $(CFLAGS) -c nga.c -o nga.o
@@ -51,11 +52,11 @@ image:
 	./bin/extend literate/RetroForth.md
 	./bin/extend literate/FloatingPoint.md
 
+io:
+	./bin/tanu source/io/posix-files.forth posix_files >source/io/posix_files.c
+
 rre:
-	cp ngaImage clean
-	./bin/extend source/rre.forth.md
 	./bin/embedimage >source/image.c
-	mv clean ngaImage
 	cd source && $(CC) $(CFLAGS) -c image.c -o ../bin/image.o
 	cd bin && $(CC) $(CFLAGS) $(LDFLAGS) rre.o nga.o image.o bridge.o -o rre
 

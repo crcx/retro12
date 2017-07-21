@@ -13,8 +13,10 @@
 */
 
 #include "nga.h"
+#include "config.h"
 #ifndef _BRIDGE_H
 #define _BRIDGE_H
+
 
 /* This assumes some knowledge of the ngaImage format for the
    Retro language. If things change there, these will need to

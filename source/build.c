@@ -25,7 +25,7 @@
 #include <time.h>
 #include <ctype.h>
 
-#define GCC_COMPILE "gcc -c %s %s"
+#define GCC_COMPILE "clang -c %s %s"
 
 void    err(char *s, char *s2);
 void    add(char *dst, char *src);

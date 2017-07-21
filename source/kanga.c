@@ -11,12 +11,17 @@
     Copyright (c) 2016, 2017 Charles Childers
 */
 
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdint.h>
 #include <ncurses.h>
+
+//LIBS m curses
+//USES nga cursed-bridge image
+
 
 WINDOW *output, *input, *stack, *back;
 

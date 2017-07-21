@@ -14,6 +14,11 @@
     Copyright (c) 2016, 2017 Charles Childers
 */
 
+//LIBS m
+//USES nga bridge image
+
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

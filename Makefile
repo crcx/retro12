@@ -25,6 +25,7 @@ tools:
 	cd source && $(CC) $(CFLAGS) nga.c -DSTANDALONE -o ../bin/nga
 	cd source && $(CC) $(CFLAGS) muri.c -o ../bin/muri
 	cd source && $(CC) $(CFLAGS) tanu.c -o ../bin/tanu
+	cd source && $(CC) $(CFLAGS) build.c -o ../bin/build
 
 compile:
 	cd source && $(CC) $(CFLAGS) -c nga.c -o nga.o
@@ -45,7 +46,8 @@ repl:
 	cd bin && $(CC) $(CFLAGS) $(LDFLAGS) repl.o nga.o bridge.o -o repl
 
 kanga:
-	cd bin && $(CC) $(CFLAGS) $(LDFLAGS) kanga.o nga.o cursed-bridge.o -lcurses -o kanga
+	cd source && ../bin/build kanga
+	mv source/kanga bin/
 
 image:
 	./bin/muri literate/Rx.md
@@ -59,8 +61,8 @@ io:
 
 rre:
 	./bin/embedimage >source/image.c
-	cd source && $(CC) $(CFLAGS) -c image.c -o ../bin/image.o
-	cd bin && $(CC) $(CFLAGS) $(LDFLAGS) rre.o nga.o image.o bridge.o -o rre
+	cd source && ../bin/build rre
+	mv source/rre bin/
 
 finish:
 	rm -f bin/*.o

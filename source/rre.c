@@ -26,6 +26,10 @@
 #include "io/posix_files.c"
 #include "io/getc.c"
 
+#ifdef FPU
+#include "io/fpu.c"
+#endif
+
 #ifdef ARGV
 #include "io/posix_args.c"
 #endif
@@ -110,6 +114,10 @@ int main(int argc, char **argv) {
 
   evaluate_string(posix_files);
   evaluate_string(posix_getc);
+
+#ifdef FPU
+  evaluate_string(fpu);
+#endif
 
   include_file(argv[1]);
 

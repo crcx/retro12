@@ -50,12 +50,12 @@ kanga:
 image:
 	./bin/muri literate/Rx.md
 	./bin/extend literate/RetroForth.md
-	./bin/extend literate/FloatingPoint.md
 
 io:
 	./bin/tanu source/io/posix-files.forth posix_files >source/io/posix_files.c
 	./bin/tanu source/io/posix-args.forth posix_args >source/io/posix_args.c
 	./bin/tanu source/io/getc.forth posix_getc >source/io/getc.c
+	./bin/tanu source/io/FloatingPoint.forth fpu >source/io/fpu.c
 
 rre:
 	./bin/embedimage >source/image.c

@@ -4,9 +4,9 @@
 #include <stdint.h>
 
 #define CELL         int32_t
-#define IMAGE_SIZE   524288 * 16
-#define ADDRESSES    2048
-#define STACK_DEPTH  512
+#define IMAGE_SIZE   (1024 * 1024) * 48
+#define ADDRESSES    1024 * 1024
+#define STACK_DEPTH  4096
 typedef void (*Handler)(void);
 extern CELL address[ADDRESSES];
 extern CELL data[STACK_DEPTH];

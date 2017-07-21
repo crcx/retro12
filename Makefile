@@ -54,6 +54,8 @@ image:
 
 io:
 	./bin/tanu source/io/posix-files.forth posix_files >source/io/posix_files.c
+	./bin/tanu source/io/posix-args.forth posix_args >source/io/posix_args.c
+	./bin/tanu source/io/getc.forth posix_getc >source/io/getc.c
 
 rre:
 	./bin/embedimage >source/image.c

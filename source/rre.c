@@ -24,6 +24,11 @@
 #include "bridge.h"
 
 #include "io/posix_files.c"
+#include "io/getc.c"
+
+#ifdef ARGV
+#include "io/posix_args.c"
+#endif
 
 /* Compile image.c and link against the image.o */
 extern CELL ngaImageCells;
@@ -100,9 +105,11 @@ int main(int argc, char **argv) {
 #ifdef ARGV
   sys_argc = argc;
   sys_argv = argv;
+  evaluate_string(posix_args);
 #endif
 
   evaluate_string(posix_files);
+  evaluate_string(posix_getc);
 
   include_file(argv[1]);
 

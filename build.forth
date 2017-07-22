@@ -59,14 +59,19 @@ first, calling a combinator after reading each line.
   'Action var
   'Buffer var
   :-eof? (-f) @FID file:tell @FSize lt? ;
+  :preserve (q-)
+    @FID @FSize @Action @Buffer push push push push
+    call
+    pop pop pop pop !Buffer !Action !FSize !FID ;
 ---reveal---
   :file:read-line (f-s)
-    !FID
-    [ s:empty dup !Buffer buffer:set
-      [ @FID file:read dup buffer:add
-        [ ASCII:CR eq? ] [ ASCII:LF eq? ] [ ASCII:NUL eq? ] tri or or ] until
-        buffer:get drop ] buffer:preserve
-    @Buffer ;
+    [ !FID
+      [ s:empty dup !Buffer buffer:set
+        [ @FID file:read dup buffer:add
+          [ ASCII:CR eq? ] [ ASCII:LF eq? ] [ ASCII:NUL eq? ] tri or or ] until
+          buffer:get drop ] buffer:preserve
+      @Buffer
+    ] preserve ;
 
   :file:for-each-line (sq-)
     !Action
@@ -91,28 +96,60 @@ against the commands we know how to deal with.
 
 ~~~
 :split (s-ss)
-  [ #6 + ] [ #0 #6 s:substr ] bi ;
+  [ #7 + ] [ #0 #6 s:substr ] bi ;
 ~~~
 
 ~~~
-:build:uses (s-) ;
-:build:libs (s-) ;
-:build:flag (s-) ;
+:set:append (na-)
+  dup v:inc dup fetch + store ;
 ~~~
 
 ~~~
-'build.forth
-[ split
-  '//USES [ 'Uses! puts puts nl ] s:case
-  '//LIBS [ 'Lib!  puts puts nl ] s:case
-  '//FLAG [ 'Flag! puts puts nl ] s:case
-  drop-pair
-] file:for-each-line
+:build:uses (s-)
+  dup &Uses set:contains-string?
+  [ drop ]
+  [ dup 'SRC:_ puts puts nl s:keep &Uses set:append ] choose ;
 
+:build:libs (s-)
+  dup &Libs set:contains-string?
+  [ drop ]
+  [ dup 'LIB:_ puts puts nl s:keep &Libs set:append ] choose ;
+
+:build:flag (s-)
+  dup &Flag set:contains-string?
+  [ drop ]
+  [ dup 'FLG:_ puts puts nl s:keep &Flag set:append ] choose ;
+~~~
+
+~~~
+:scan (s-)
+  [ split
+    '//USES [ build:uses ] s:case
+    '//LIBS [ build:libs ] s:case
+    '//FLAG [ build:flag ] s:case
+    drop-pair
+  ] file:for-each-line ;
 ~~~
 
 
-//USES nga bridge image
-//LIBS m curses
+//USES nga
+//USES bridge
+//USES nga
+//USES image
+//USES nga
+//LIBS m
+//LIBS curses
 //FLAG -Wall
 
+~~~
+:libraries
+  &Libs [ '-l puts puts sp ] set:for-each ;
+:flags
+  &Flag [ puts sp ] set:for-each ;
+~~~
+
+~~~
+'build.forth scan
+&Uses [ [ 'clang_-c_ puts puts '.c_ puts flags libraries sp ]
+        [ '-o_ puts puts '.o puts                           ] bi nl ] set:for-each
+~~~

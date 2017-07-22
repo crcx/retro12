@@ -148,7 +148,9 @@ against the commands we know how to deal with.
 ~~~
 
 ~~~
-#0 sys:argv '.c s:append scan
-&Uses [ [ 'clang_-c_ puts puts '.c_ puts flags libraries sp ]
-        [ '-o_ puts puts '.o puts                           ] bi nl ] set:for-each
+#0 sys:argv dup build:uses '.c s:append scan
+#0 sys:argv puts ': puts nl
+&Uses [ tab [ 'clang_-c_ puts puts '.c_ puts flags sp ]
+            [ '-o_ puts puts '.o puts                           ] bi nl ] set:for-each
+tab 'clang_ puts libraries &Uses [ puts '.o_ puts ] set:for-each sp '-o_ puts #0 sys:argv puts nl
 ~~~

@@ -6,6 +6,7 @@ in this process.
 
 Currently this aims to support:
 
+  //HEAD
   //FLAG
   //USES
   //LIBS
@@ -59,11 +60,11 @@ first, calling a combinator after reading each line.
   'Action var
   'Buffer var
   :-eof? (-f) @FID file:tell @FSize lt? ;
-  :preserve (q-) call ;
+  :preserve (q-) &FID [ &FSize [ call ] v:preserve ] v:preserve ;
 ---reveal---
   :file:read-line (f-s)
     !FID
-    [ s:empty dup !Buffer buffer:set
+    [ here dup !Buffer buffer:set
       [ @FID file:read dup buffer:add
         [ ASCII:CR eq? ] [ ASCII:LF eq? ] [ ASCII:NUL eq? ] tri or or ] until
         buffer:get drop ] buffer:preserve
@@ -121,7 +122,8 @@ against the commands we know how to deal with.
 ~~~
 :scan (s-)
   [ split
-    '//USES [ build:uses ] s:case
+    '//USES [ dup build:uses '.c s:append scan ] s:case
+    '//HEAD [ '.h s:append scan ] s:case
     '//LIBS [ build:libs ] s:case
     '//FLAG [ build:flag ] s:case
     drop-pair

@@ -15,8 +15,10 @@
 */
 
 //LIBS m
-//USES nga bridge image
-
+//USES nga
+//USES bridge
+//USES image
+//HEAD config
 #include "config.h"
 
 #include <stdio.h>

@@ -130,27 +130,22 @@ against the commands we know how to deal with.
   ] file:for-each-line ;
 ~~~
 
-
-//USES nga
-//USES bridge
-//USES nga
-//USES image
-//USES nga
-//LIBS m
-//LIBS curses
-//FLAG -Wall
-
 ~~~
+:target (-s) #0 sys:argv s:to-upper ;
 :libraries
-  &Libs [ '-l puts puts sp ] set:for-each ;
+  target puts 'LIBS_=_ puts
+  &Libs [ '-l puts puts sp ] set:for-each nl ;
 :flags
-  &Flag [ puts sp ] set:for-each ;
+  target puts 'FLAGS_=_ puts
+  &Flag [ puts sp ] set:for-each nl ;
 ~~~
 
 ~~~
 #0 sys:argv dup build:uses '.c s:append scan
+libraries
+flags
 #0 sys:argv puts ': puts nl
-&Uses [ tab [ 'clang_-c_ puts puts '.c_ puts flags sp ]
+&Uses [ tab [ 'clang_-c_ puts puts '.c_$( puts target puts 'FLAGS)_ puts ]
             [ '-o_ puts puts '.o puts                           ] bi nl ] set:for-each
-tab 'clang_ puts libraries &Uses [ puts '.o_ puts ] set:for-each sp '-o_ puts #0 sys:argv puts nl
+tab 'clang_$( puts target puts 'LIBS)_ puts &Uses [ puts '.o_ puts ] set:for-each sp '-o_ puts #0 sys:argv puts nl
 ~~~

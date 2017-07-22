@@ -1,6 +1,7 @@
 #/bin/sh
 stty cbreak
 cat >~/.listener.r12 << 'EOF'
+~~~
 {{
   :banner (-)
     'RETRO_12_(rx- puts @Version #100 /mod putn $. putc putn $) putc nl
@@ -21,6 +22,7 @@ cat >~/.listener.r12 << 'EOF'
 }}
 
 listen
+~~~
 EOF
 ./bin/rre ~/.listener.r12
 rm -f ~/.listener.r12

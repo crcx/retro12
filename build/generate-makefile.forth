@@ -149,29 +149,49 @@ Next up is the scanner. This is currently as simple as possible:
 ~~~
 
 Getting near the end, the remaining words are needed to create the
-Makefile.
+Makefile. These are short, and each is intended to handle a simple
+role.
 
 ~~~
 :target (-s) #0 sys:argv s:to-upper ;
+
 :libraries
   target puts 'LIBS_=_ puts
   &Libs [ '-l puts puts sp ] set:for-each nl ;
+
 :flags
   target puts 'FLAGS_=_ puts
   &Flag [ puts sp ] set:for-each nl ;
+
+:build-target (-)
+  #0 sys:argv puts $: putc nl ;
+
+:compile-dependency (s-)
+  target over '\tclang_-c_%s.c_$(%sFLAGS)_-o_%s.o\n s:with-format puts ;
+
+:dependencies (-)
+  &Uses [ compile-dependency ] set:for-each ;
+
+:object-files (-)
+  target '\tclang_$(%sLIBS)_ s:with-format puts
+  &Uses [ puts '.o_ puts ] set:for-each
+  #0 sys:argv '_-o_%s\n s:with-format puts ;
+
+:binary (-)
+ tab 'mv_ puts #0 sys:argv puts '_../bin puts nl ;
 ~~~
 
+The top level "display-Makefile" is simple: all it has to do is list the
+items we want in the proper order.
+
 ~~~
-:compile-dependency (s-)
-  tab [ 'clang_-c_ puts puts '.c_$( puts target puts 'FLAGS)_ puts ]
-      [ '-o_ puts puts '.o puts                                    ] bi nl ;
 :display-Makefile (-)
-  libraries
-  flags
-  #0 sys:argv puts $: putc nl
-  &Uses [ compile-dependency ] set:for-each
-  tab 'clang_$( puts target puts 'LIBS)_ puts &Uses [ puts '.o_ puts ] set:for-each sp '-o_ puts #0 sys:argv puts nl
-  tab 'mv_ puts #0 sys:argv puts '_../bin puts nl
+  (declare libraries
+  (declare flags
+  (specify build-target
+  (list    dependencies
+  (link    object-files
+  (move    binary
 ;
 ~~~
 

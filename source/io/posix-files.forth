@@ -1,3 +1,4 @@
+~~~
 #0 'file:R const
 #1 'file:W const
 #2 'file:A const
@@ -14,3 +15,4 @@
   file:R file:open dup n:-zero?
   [ file:close TRUE ]
   [ drop FALSE ] choose ;
+~~~

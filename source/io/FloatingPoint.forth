@@ -1,3 +1,4 @@
+~~~
 :n:to-float  (n-_f:-n)   #0 `-6000 ;
 :s:to-float  (s-_f:-n)   #1 `-6000 ;
 :f:to-string (f:n-__-s) s:empty dup #2 `-6000 ;
@@ -26,3 +27,5 @@
 :prefix:. (s-__f:-f)
   compiling? [ s:keep ] [ s:temp ] choose &s:to-float class:word ; immediate
 :putf (f:-) f:to-string puts ;
+~~~
+

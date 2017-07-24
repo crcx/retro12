@@ -26,10 +26,10 @@ update_sources:
 	./bin/unu literate/Unu.md >source/unu.c
 	./bin/unu literate/Nga.md >source/nga.c
 	./bin/unu literate/Muri.md >source/muri.c
-	./bin/tanu source/io/posix-files.forth posix_files >source/io/posix_files.c
-	./bin/tanu source/io/posix-args.forth posix_args >source/io/posix_args.c
-	./bin/tanu source/io/getc.forth posix_getc >source/io/getc.c
-	./bin/tanu source/io/FloatingPoint.forth fpu >source/io/fpu.c
+	./bin/unu source/io/posix-files.forth   | ./bin/tanu posix_files >source/io/posix_files.c
+	./bin/unu source/io/posix-args.forth    | ./bin/tanu posix_args >source/io/posix_args.c
+	./bin/unu source/io/getc.forth          | ./bin/tanu posix_getc >source/io/getc.c
+	./bin/unu source/io/FloatingPoint.forth | ./bin/tanu fpu >source/io/fpu.c
 	./bin/embedimage >source/image.c
 
 image:

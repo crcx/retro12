@@ -29,7 +29,7 @@ void include_file(char *fname) {
 
 
 int main(int argc, char **argv) {
-  printf("char %s[] = {", argv[2]);
-  include_file(argv[1]);
+  printf("char %s[] = {", argv[1]);
+  include_file("/dev/stdin");
   printf("0 };\n");
 }

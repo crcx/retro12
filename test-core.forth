@@ -997,6 +997,9 @@ passed
 
 ````
 'dup-pair Testing
+  [ #2 #3 dup-pair ] [ depth #4 match #3 match #2 match #3 match #2 match ] try
+  [ #1 #-1 dup-pair ] [ depth #4 match #-1 match #1 match #-1 match #1 match ] try
+  [ #12 #2 #3 dup-pair ] [ depth #5 match #3 match #2 match #3 match #2 match #12 match ] try
 passed
 ````
 
@@ -1018,6 +1021,10 @@ passed
 
 ````
 '-eq? Testing
+  [ #1 #2 -eq? ] [ TRUE match ] try
+  [ #1 #1 -eq? ] [ FALSE match ] try
+  [ #2 #2 -eq? ] [ FALSE match ] try
+  [ #2 #1 -eq? ] [ TRUE match ] try
 passed
 ````
 
@@ -1025,6 +1032,10 @@ passed
 
 ````
 'eq? Testing
+  [ #1 #2 eq? ] [ FALSE match ] try
+  [ #1 #1 eq? ] [ TRUE match ] try
+  [ #2 #2 eq? ] [ TRUE match ] try
+  [ #2 #1 eq? ] [ FALSE match ] try
 passed
 ````
 
@@ -1039,6 +1050,7 @@ passed
 
 ````
 'FALSE Testing
+  [ FALSE ] [ #0 match ] try
 passed
 ````
 
@@ -1151,6 +1163,9 @@ passed
 
 ````
 'n:abs Testing
+  [ #1 n:abs ] [ #1 match ] try
+  [ #-1 n:abs ] [ #1 match ] try
+  [ #0 n:abs ] [ #0 match ] try
 passed
 ````
 

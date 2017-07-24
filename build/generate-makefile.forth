@@ -97,10 +97,19 @@ against the commands we know how to deal with.
   [ #7 + ] [ #0 #6 s:substr ] bi ;
 ~~~
 
+This is an addition to the `set:` namespace. Sets made using
+`set:from-results` and similar are fixed size with no padding. The
+sets here are 1024 cells each, so new items can be appended. This
+word makes it easy to do so.
+
 ~~~
 :set:append (na-)
   dup v:inc dup fetch + store ;
 ~~~
+
+And now for code to append unique items to each set.
+
+TODO: refactor this - there's a lot of duplication.
 
 ~~~
 :build:uses (s-)
@@ -119,6 +128,15 @@ against the commands we know how to deal with.
   [ dup '#FLG:_ puts puts nl s:keep &Flag set:append ] choose ;
 ~~~
 
+Next up is the scanner. This is currently as simple as possible:
+
+- split the line
+- see if it starts with a directive
+
+  - yes? process the directive
+  - no? discard the line
+- repeat until done
+
 ~~~
 :scan (s-)
   [ split
@@ -129,6 +147,9 @@ against the commands we know how to deal with.
     drop-pair
   ] file:for-each-line ;
 ~~~
+
+Getting near the end, the remaining words are needed to create the
+Makefile.
 
 ~~~
 :target (-s) #0 sys:argv s:to-upper ;
@@ -141,11 +162,20 @@ against the commands we know how to deal with.
 ~~~
 
 ~~~
+:compile-dependency (s-)
+  tab [ 'clang_-c_ puts puts '.c_$( puts target puts 'FLAGS)_ puts ]
+      [ '-o_ puts puts '.o puts                                    ] bi nl ;
+:display-Makefile (-)
+  libraries
+  flags
+  #0 sys:argv puts $: putc nl
+  &Uses [ compile-dependency ] set:for-each
+  tab 'clang_$( puts target puts 'LIBS)_ puts &Uses [ puts '.o_ puts ] set:for-each sp '-o_ puts #0 sys:argv puts nl
+  tab 'mv_ puts #0 sys:argv puts '_../bin puts nl
+;
+~~~
+
+~~~
 #0 sys:argv dup build:uses '.c s:append scan
-libraries
-flags
-#0 sys:argv puts ': puts nl
-&Uses [ tab [ 'clang_-c_ puts puts '.c_$( puts target puts 'FLAGS)_ puts ]
-            [ '-o_ puts puts '.o puts                           ] bi nl ] set:for-each
-tab 'clang_$( puts target puts 'LIBS)_ puts &Uses [ puts '.o_ puts ] set:for-each sp '-o_ puts #0 sys:argv puts nl
+display-Makefile
 ~~~

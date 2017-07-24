@@ -19,9 +19,11 @@
 #include <stdint.h>
 #include <ncurses.h>
 
-//LIBS m curses
-//USES nga cursed-bridge image
-
+//LIBS m
+//LIBS curses
+//USES nga
+//USES cursed-bridge
+//HEAD config
 
 WINDOW *output, *input, *stack, *back;
 

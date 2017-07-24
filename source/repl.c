@@ -19,6 +19,9 @@
 #include "nga.h"
 #include "bridge.h"
 
+//USES nga
+//USES bridge
+
 int main(int argc, char **argv) {
   ngaPrepare();
   ngaLoadImage("ngaImage");

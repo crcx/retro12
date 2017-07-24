@@ -20,6 +20,9 @@
 #include "nga.h"
 #include "bridge.h"
 
+//USES nga
+//USES bridge
+
 int include_file(char *fname) {
   FILE *fp;
   char source[64000];

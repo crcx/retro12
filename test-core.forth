@@ -1897,6 +1897,7 @@ passed
 
 ````
 'tri Testing
+  [ #30 [ #1 + ] [ #2 * ] [ #30 - ] tri ] [ #0 match #60 match #31 match ] try
 passed
 ````
 
@@ -1904,6 +1905,7 @@ passed
 
 ````
 'tri@ Testing
+  [ #1 #2 [ #30 * ] tri@ ] [ #60 match #30 match ] try
 passed
 ````
 
@@ -1911,6 +1913,7 @@ passed
 
 ````
 'tri* Testing
+  [ #1 #2 #3 [ #1 - ] [ #2 - ] [ #3 - ] tri* ] [ #0 match #0 match #0 match ] try
 passed
 ````
 

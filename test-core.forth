@@ -1977,6 +1977,9 @@ passed
 
 ````
 'v:inc Testing
+  'A var
+  [ #0 &A store
+    &A v:inc    &A v:inc    &A v:inc ] [ &A fetch #3 eq? ] try
 passed
 ````
 
@@ -2025,6 +2028,8 @@ passed
 
 ````
 'v:preserve Testing
+  'A var
+  [ #100 &A store &A [ #40 &A store ] v:preserve ] [ &A fetch #100 eq? ] try
 passed
 ````
 

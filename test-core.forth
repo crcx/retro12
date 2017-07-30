@@ -460,6 +460,8 @@ passed
 
 ````
 'bi Testing
+  [ #1 [ #3 * ] [ #4 + ] bi ] [ #5 match #3 match ] try
+  [ #2 [ #3 - ] [ #2 / ] bi ] [ #1 match #-1 match ] try
 passed
 ````
 
@@ -467,6 +469,9 @@ passed
 
 ````
 'bi@ Testing
+  [ #1 #2 [ #3 *    ] bi@ ] [ #6 match #3 match ] try
+  [ #1 #2 [ #3 +    ] bi@ ] [ #5 match #4 match ] try
+  [ #1 #2 [ drop #3 ] bi@ ] [ #3 match #3 match ] try
 passed
 ````
 
@@ -474,6 +479,7 @@ passed
 
 ````
 'bi* Testing
+  [ #1 #2 [ #3 + ] [ #3 * ] bi* ] [ #6 match #4 match ] try
 passed
 ````
 

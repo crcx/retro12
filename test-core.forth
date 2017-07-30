@@ -550,6 +550,15 @@ passed
 
 ````
 'case Testing
+:foo (n-)
+  #1 [ #33 ] case
+  #2 [ #66 ] case
+  drop #44 ;
+
+  [ #0 foo ] [ #44 eq? ] try
+  [ #1 foo ] [ #33 eq? ] try
+  [ #2 foo ] [ #66 eq? ] try
+  [ #3 foo ] [ #44 eq? ] try
 passed
 ````
 
@@ -1532,6 +1541,15 @@ passed
 
 ````
 's:case Testing
+:foo (n-)
+  'cat [ #33 ] s:case
+  'egg [ #66 ] s:case
+  drop #44 ;
+
+  [ 'boo foo ] [ #44 eq? ] try
+  [ 'cat foo ] [ #33 eq? ] try
+  [ 'egg foo ] [ #66 eq? ] try
+  [ 'forth foo ] [ #44 eq? ] try
 passed
 ````
 

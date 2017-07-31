@@ -1960,6 +1960,13 @@ passed
 
 ````
 'var Testing
+  'A var
+  'B var
+  [ #10 &A store ] [ &A fetch #10 eq? ] try
+  [ #20 &B store ] [ &B fetch #20 eq? ] try
+  [ #30 &A store ] [ &A fetch #30 eq? ] try
+  [ #50 &B store ] [ &B fetch #50 eq? ] try
+  [ #100 A store ] [ A fetch #100 eq? ] try
 passed
 ````
 
@@ -1967,6 +1974,15 @@ passed
 
 ````
 'var<n> Testing
+  #30 'A var<n>
+  #40 'B var<n>
+  [ ] [ &A fetch #30 eq? ] try
+  [ ] [ &B fetch #40 eq? ] try
+  [ #10 &A store ] [ &A fetch #10 eq? ] try
+  [ #20 &B store ] [ &B fetch #20 eq? ] try
+  [ #30 &A store ] [ &A fetch #30 eq? ] try
+  [ #50 &B store ] [ &B fetch #50 eq? ] try
+  [ #100 A store ] [ A fetch #100 eq? ] try
 passed
 ````
 

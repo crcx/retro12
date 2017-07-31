@@ -745,6 +745,12 @@ passed
 
 ````
 'const Testing
+  $e 'A const
+  [ A ] [ $e eq? ] try
+  [ A ] [ $f -eq? ] try
+  #100 'B const
+  [ B ] [ #100 eq? ] try
+  [ B ] [ #-100 -eq? ] try
 passed
 ````
 
@@ -1195,6 +1201,10 @@ passed
 
 ````
 'n:dec Testing
+  [ #1 n:dec ] [ #0 eq? ] try
+  [ #10 n:dec ] [ #9 eq? ] try
+  [ #100 n:dec ] [ #99 eq? ] try
+  [ #-50 n:dec ] [ #-51 eq? ] try
 passed
 ````
 
@@ -1209,6 +1219,10 @@ passed
 
 ````
 'n:inc Testing
+  [ #1 n:inc ] [ #2 eq? ] try
+  [ #10 n:inc ] [ #11 eq? ] try
+  [ #100 n:inc ] [ #101 eq? ] try
+  [ #-50 n:inc ] [ #-49 eq? ] try
 passed
 ````
 

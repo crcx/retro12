@@ -1149,6 +1149,9 @@ passed
 
 ````
 'gt? Testing
+  [ #1 #2 gt? ] [ FALSE match ] try
+  [ #3 #2 gt? ] [ TRUE match ] try
+  [ #2 #2 gt? ] [ FALSE match ] try
 passed
 ````
 
@@ -1156,6 +1159,9 @@ passed
 
 ````
 'gteq? Testing
+  [ #1 #2 gteq? ] [ FALSE match ] try
+  [ #3 #2 gteq? ] [ TRUE match ] try
+  [ #2 #2 gteq? ] [ TRUE match ] try
 passed
 ````
 
@@ -1212,6 +1218,9 @@ passed
 
 ````
 'lt? Testing
+  [ #1 #2 lt? ] [ TRUE match ] try
+  [ #3 #2 lt? ] [ FALSE match ] try
+  [ #2 #2 lt? ] [ FALSE match ] try
 passed
 ````
 
@@ -1219,6 +1228,9 @@ passed
 
 ````
 'lteq? Testing
+  [ #1 #2 lteq? ] [ TRUE match ] try
+  [ #3 #2 lteq? ] [ FALSE match ] try
+  [ #2 #2 lteq? ] [ TRUE match ] try
 passed
 ````
 

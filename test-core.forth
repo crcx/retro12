@@ -828,6 +828,32 @@ passed
 
 ````
 'c:-vowel? Testing
+  [ $a c:-vowel? ] [ FALSE match ] try
+  [ $e c:-vowel? ] [ FALSE match ] try
+  [ $i c:-vowel? ] [ FALSE match ] try
+  [ $o c:-vowel? ] [ FALSE match ] try
+  [ $u c:-vowel? ] [ FALSE match ] try
+  [ $b c:-vowel? ] [ TRUE match ] try
+  [ $c c:-vowel? ] [ TRUE match ] try
+  [ $d c:-vowel? ] [ TRUE match ] try
+  [ $f c:-vowel? ] [ TRUE match ] try
+  [ $g c:-vowel? ] [ TRUE match ] try
+  [ $h c:-vowel? ] [ TRUE match ] try
+  [ $j c:-vowel? ] [ TRUE match ] try
+  [ $k c:-vowel? ] [ TRUE match ] try
+  [ $l c:-vowel? ] [ TRUE match ] try
+  [ $m c:-vowel? ] [ TRUE match ] try
+  [ $n c:-vowel? ] [ TRUE match ] try
+  [ $p c:-vowel? ] [ TRUE match ] try
+  [ $q c:-vowel? ] [ TRUE match ] try
+  [ $r c:-vowel? ] [ TRUE match ] try
+  [ $s c:-vowel? ] [ TRUE match ] try
+  [ $t c:-vowel? ] [ TRUE match ] try
+  [ $v c:-vowel? ] [ TRUE match ] try
+  [ $w c:-vowel? ] [ TRUE match ] try
+  [ $x c:-vowel? ] [ TRUE match ] try
+  [ $y c:-vowel? ] [ TRUE match ] try
+  [ $z c:-vowel? ] [ TRUE match ] try
 passed
 ````
 
@@ -835,6 +861,32 @@ passed
 
 ````
 'c:vowel? Testing
+  [ $a c:vowel? ] [ TRUE match ] try
+  [ $e c:vowel? ] [ TRUE match ] try
+  [ $i c:vowel? ] [ TRUE match ] try
+  [ $o c:vowel? ] [ TRUE match ] try
+  [ $u c:vowel? ] [ TRUE match ] try
+  [ $b c:vowel? ] [ FALSE match ] try
+  [ $c c:vowel? ] [ FALSE match ] try
+  [ $d c:vowel? ] [ FALSE match ] try
+  [ $f c:vowel? ] [ FALSE match ] try
+  [ $g c:vowel? ] [ FALSE match ] try
+  [ $h c:vowel? ] [ FALSE match ] try
+  [ $j c:vowel? ] [ FALSE match ] try
+  [ $k c:vowel? ] [ FALSE match ] try
+  [ $l c:vowel? ] [ FALSE match ] try
+  [ $m c:vowel? ] [ FALSE match ] try
+  [ $n c:vowel? ] [ FALSE match ] try
+  [ $p c:vowel? ] [ FALSE match ] try
+  [ $q c:vowel? ] [ FALSE match ] try
+  [ $r c:vowel? ] [ FALSE match ] try
+  [ $s c:vowel? ] [ FALSE match ] try
+  [ $t c:vowel? ] [ FALSE match ] try
+  [ $v c:vowel? ] [ FALSE match ] try
+  [ $w c:vowel? ] [ FALSE match ] try
+  [ $x c:vowel? ] [ FALSE match ] try
+  [ $y c:vowel? ] [ FALSE match ] try
+  [ $z c:vowel? ] [ FALSE match ] try
 passed
 ````
 

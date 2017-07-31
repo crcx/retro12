@@ -1974,6 +1974,10 @@ passed
 
 ````
 'v:dec Testing
+  #199 'A var<n>
+  [ &A v:dec ] [ &A fetch #198 eq? ] try
+  [ &A v:dec ] [ &A fetch #197 eq? ] try
+  [ &A v:dec ] [ &A fetch #196 eq? ] try
 passed
 ````
 
@@ -1981,6 +1985,10 @@ passed
 
 ````
 'v:dec-by Testing
+  #199 'A var<n>
+  [ #2 &A v:dec-by ] [ &A fetch #197 eq? ] try
+  [ #3 &A v:dec-by ] [ &A fetch #194 eq? ] try
+  [ #5 &A v:dec-by ] [ &A fetch #189 eq? ] try
 passed
 ````
 

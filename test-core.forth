@@ -1079,6 +1079,10 @@ passed
 
 ````
 'fetch Testing
+  'A var
+  [ #100 &A store ] [ &A fetch #100 eq? ] try
+  [ #200 &A store ] [ &A fetch #200 eq? ] try
+  [ #300 &A store ] [ &A fetch #300 eq? ] try
 passed
 ````
 
@@ -1830,6 +1834,10 @@ passed
 
 ````
 'store Testing
+  'A var
+  [ #100 &A store ] [ &A fetch #100 eq? ] try
+  [ #200 &A store ] [ &A fetch #200 eq? ] try
+  [ #300 &A store ] [ &A fetch #300 eq? ] try
 passed
 ````
 

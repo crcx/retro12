@@ -1328,6 +1328,9 @@ passed
 
 ````
 'n:max Testing
+  [ #-6 #3 n:max ] [ #3 match ] try
+  [ #6 #-2 n:max ] [ #6 match ] try
+  [ #-1 #-6 n:max ] [ #-1 match ] try
 passed
 ````
 
@@ -1342,6 +1345,9 @@ passed
 
 ````
 'n:min Testing
+  [ #-6 #3 n:min ] [ #-6 match ] try
+  [ #6 #-2 n:min ] [ #-2 match ] try
+  [ #-1 #-6 n:min ] [ #-6 match ] try
 passed
 ````
 
@@ -1356,6 +1362,9 @@ passed
 
 ````
 'n:negate Testing
+  [ #-1 n:negate ] [ #1 match ] try
+  [ #0  n:negate ] [ #0 match ] try
+  [ #1  n:negate ] [ #-1 match ] try
 passed
 ````
 

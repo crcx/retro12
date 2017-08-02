@@ -1265,6 +1265,10 @@ passed
 
 ````
 'n:between? Testing
+  [ #1  #0 #2 n:between? ] [ TRUE match ] try
+  [ #-1 #0 #2 n:between? ] [ FALSE match ] try
+  [ #1  #10 #20 n:between? ] [ FALSE match ] try
+  [ #6  #1 #2000 n:between? ] [ TRUE match ] try
 passed
 ````
 
@@ -1283,6 +1287,12 @@ passed
 
 ````
 'n:even? Testing
+  [ #2 n:even? ] [ TRUE match ] try
+  [ #3 n:even? ] [ FALSE match ] try
+  [ #4 n:even? ] [ TRUE match ] try
+  [ #5 n:even? ] [ FALSE match ] try
+  [ #6 n:even? ] [ TRUE match ] try
+  [ #7 n:even? ] [ FALSE match ] try
 passed
 ````
 
@@ -1379,6 +1389,12 @@ passed
 
 ````
 'n:odd? Testing
+  [ #2 n:odd? ] [ FALSE match ] try
+  [ #3 n:odd? ] [ TRUE match ] try
+  [ #4 n:odd? ] [ FALSE match ] try
+  [ #5 n:odd? ] [ TRUE match ] try
+  [ #6 n:odd? ] [ FALSE match ] try
+  [ #7 n:odd? ] [ TRUE match ] try
 passed
 ````
 
@@ -2003,6 +2019,8 @@ passed
 
 ````
 'times Testing
+  [ #5 [ #1 ] times ] [ #1 match #1 match #1 match #1 match #1 match ] try
+  [ #3 [ #1 ] times ] [ #1 match #1 match #1 match ] try
 passed
 ````
 

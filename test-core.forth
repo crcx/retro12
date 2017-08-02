@@ -1142,6 +1142,9 @@ passed
 
 ````
 'fetch-next Testing
+  'A d:create #1 , #2 , #3 ,
+  [ &A fetch-next ] [ #1 match &A #1 + match ] try
+  [ &A fetch-next drop fetch-next ] [ #2 match &A #2 + match ] try
 passed
 ````
 
@@ -1314,6 +1317,10 @@ passed
 
 ````
 'n:limit Testing
+  [ #10 #5  #20  n:limit ] [ #10 match ] try
+  [ #10 #50 #200 n:limit ] [ #50 match ] try
+  [ #10 #12 #20  n:limit ] [ #12 match ] try
+  [ #10 #5  #8   n:limit ] [ #8  match ] try
 passed
 ````
 
@@ -2032,6 +2039,8 @@ passed
 
 ````
 'tuck Testing
+  [ #1 #2 tuck ] [ #2 match #1 match #2 match ] try
+  [ #3 #1 #2 tuck ] [ #2 match #1 match #2 match #3 match ] try
 passed
 ````
 
@@ -2127,6 +2136,10 @@ passed
 
 ````
 'v:limit Testing
+  'A var
+  [ #100 !A &A #-10 #10 v:limit ] [ @A #10 eq? ] try
+  [ #-100 !A &A #-10 #10 v:limit ] [ @A #-10 eq? ] try
+  [ #6 !A &A #-10 #10 v:limit ] [ @A #6 eq? ] try
 passed
 ````
 

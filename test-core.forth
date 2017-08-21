@@ -647,6 +647,8 @@ passed
 
 ````
 'choose Testing
+  [ TRUE [ #1 ] [ #0 ] choose ] [ #1 match ] try
+  [ FALSE [ #1 ] [ #0 ] choose ] [ #0 match ] try
 passed
 ````
 
@@ -1382,6 +1384,9 @@ passed
 
 ````
 'n:negative? Testing
+  [ #1  n:negative? ] [ FALSE match ] try
+  [ #0  n:negative? ] [ FALSE match ] try
+  [ #-1 n:negative? ] [ TRUE  match ] try
 passed
 ````
 

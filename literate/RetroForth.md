@@ -655,6 +655,15 @@ Hash (using DJB2)
 :s:hash (s-n) #5381 swap [ swap #33 * + ] s:for-each ;
 ````
 
+````
+:s:DIGITS          (-s)  '0123456789 ;
+:s:ASCII-LOWERCASE (-s)  'abcdefghijklmnopqrstuvwxyz ;
+:s:ASCII-UPPERCASE (-s)  'ABCDEFGHIJKLMNOPQRSTUVWXYZ ;
+:s:ASCII-LETTERS   (-s)  'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ;
+:s:PUNCTUATION     (-s)  '_!"#$%&'()*+,-./:;<=>?@[\]^`{|}~ $_ over store ;
+'s:WHITESPACE d:create  #32, #9 , #10 , #13 , #0 ,
+````
+
 Not all characters can be obtained via the $ prefix. ASCII has many
 characters that aren't really intended to be printable. Retro has an
 `ASCII` namespace providing symbolic names for these.

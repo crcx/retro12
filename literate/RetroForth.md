@@ -1062,6 +1062,15 @@ address for use with `fetch` and `store`.
   + n:inc ;
 ````
 
+`set:reduce` takes a set, a starting value, and a quote. It executes
+the quote once for each item in the set, passing the item and the value
+to the quote. The quote should consume both and return a new value.
+
+````
+:set:reduce (pnp-n)
+  [ swap ] dip set:for-each ;
+````
+
 ## Muri: an assembler
 
 Muri is my minimalist assembler for Nga. This is an attempt to

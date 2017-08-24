@@ -1986,6 +1986,22 @@ return a new set.
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
+set:reduce
+
+  pnq-n
+
+Takes a set, a starting value, and a quote.
+This will apply the quote to each item in the
+set; the quote should consume two values and
+return one.
+
+Example:
+
+    [ #1 #2 #3 ] set:from-results
+    #0 [ + ] set:reduce
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
 s:eq?
 
   ss-f

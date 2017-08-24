@@ -2032,6 +2032,71 @@ the DJB2 algo.
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
+s:copy
+
+  sa-
+
+Copy a string (s) to a destination (a). This
+will include the terminator character when
+copying.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+s:DIGITS
+
+  -s
+
+Return a string containing all valid decimal
+digits.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+s:ASCII-LOWERCASE
+
+  -s
+
+Return a string containing all valid ASCII
+lowercase letters.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+s:ASCII-UPPERCASE
+
+  -s
+
+Return a string containing all valid ASCII
+uppercase letters.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+s:ASCII-LETTERS
+
+  -s
+
+Return a string containing all valid ASCII
+letters.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+s:PUNCTUATION
+
+  -s
+
+Return a string containing all valid ASCII
+punctuation characters. This includes things
+like +, *, \, etc.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+s:WHITESPACE
+
+  -s
+
+Return a string containing all valid ASCII
+characters considered to be whitespace.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
 shift
 
   nm-o

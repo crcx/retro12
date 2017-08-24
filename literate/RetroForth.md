@@ -655,6 +655,12 @@ Hash (using DJB2)
 :s:hash (s-n) #5381 swap [ swap #33 * + ] s:for-each ;
 ````
 
+Copy a string, including the terminator.
+
+````
+:s:copy (ss-) over s:length n:inc copy ;
+````
+
 ````
 :s:DIGITS          (-s)  '0123456789 ;
 :s:ASCII-LOWERCASE (-s)  'abcdefghijklmnopqrstuvwxyz ;

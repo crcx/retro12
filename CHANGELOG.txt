@@ -1,6 +1,43 @@
 
+2017-08-24  Charles Childers  <crc@forthworks.com>
+
+	* add set:reduce
+	* next release will be 2017.9
+	* add s:copy, document additions to s: namespace
+
+2017-08-21  Charles Childers  <crc@forthworks.com>
+
+	* some new constants in s: namespace
+	* bump image to 2017.8
+	* some tests for choose, n:negative?
+
+2017-08-02  Charles Childers  <crc@forthworks.com>
+
+	* tests for n:even?, n:odd?, times, n:between?
+	* tests for n:min, n:max, n:negate
+	* tests for n:limit, v:limit, tuck, fetch-next
+
+2017-07-31  Charles Childers  <crc@forthworks.com>
+
+	* add tests for gt?, lt?, gteq?, lteq?
+	* add tests for c:vowel?, c:-vowel?
+	* add tests for store, fetch
+	* add tests for n:inc, n:dec, const
+	* add tests for var, var<n>
+	* add tests for v:dec, v:dec-by
+
+2017-07-30  Charles Childers  <crc@forthworks.com>
+
+	* add test for case, s:case
+	* initial test for v:inc, v:preserve
+	* add initial tests for tri, tri@, tri*
+	* add tests for bi, bi@, bi*
+
 2017-07-24  Charles Childers  <crc@forthworks.com>
 
+	* add more tests
+	* posix files: more commentary, add file:read-line, file:for-each-line
+	* update CHANGELOG
 	* tanu is now a filter; closes #12
 	* more readability improvements to the Makefile generator
 	* use the new build tool to generate a Makefile for the interfaces, extend, and embedimage

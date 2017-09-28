@@ -16,6 +16,7 @@ First up, constants for the file modes.
 #0 'file:R const
 #1 'file:W const
 #2 'file:A const
+#3 'file:R+ const
 ~~~
 
 For opening a file, provide the file name and mode. This will return a

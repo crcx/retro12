@@ -8,6 +8,15 @@ Constant for opening a file in READ mode.
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
+file:R+
+
+  -n
+
+Constant for opening a file in READ & WRITE
+mode.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
 file:W
 
   -n

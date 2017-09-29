@@ -41,6 +41,10 @@
 #include "io/posix_args.c"
 #endif
 
+#ifdef GOPHER
+#include "io/gopher.c"
+#endif
+
 /* Compile image.c and link against the image.o */
 extern CELL ngaImageCells;
 extern CELL ngaImage[];
@@ -124,6 +128,10 @@ int main(int argc, char **argv) {
 
 #ifdef FPU
   evaluate_string(fpu);
+#endif
+
+#ifdef GOPHER
+  evaluate_string(gopher);
 #endif
 
   include_file(argv[1]);

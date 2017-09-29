@@ -87,6 +87,10 @@ char *string_extract(int at) {
 #include "fpu.c"
 #endif
 
+#ifdef GOPHER
+#include "gopher.c"
+#endif
+
 /* Then accessor functions for dictionary fields. */
 
 int d_link(CELL dt) {
@@ -275,6 +279,9 @@ void execute(int cell) {
                     b = stack_pop();
                     stack_push(string_inject(sys_argv[a + 2], b));
                     break;
+#endif
+#ifdef GOPHER
+        case -6200: ngaGopherUnit(); break;
 #endif
         default:   printf("Invalid instruction!\n");
                    printf("At %d, opcode %d\n", ip, opcode);

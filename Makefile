@@ -9,7 +9,8 @@ LD = clang
 LDFLAGS = -lm
 CFLAGS = -Wall -O3
 
-all: clean tools update_sources image interfaces finally test
+all: clean tools update_sources image interfaces finally
+#test
 
 clean:
 	rm -f bin/rre bin/nga bin/embedimage bin/extend bin/unu bin/muri bin/kanga bin/repl bin/tanu
@@ -30,6 +31,8 @@ update_sources:
 	./bin/unu source/io/posix-args.forth    | ./bin/tanu posix_args >source/io/posix_args.c
 	./bin/unu source/io/getc.forth          | ./bin/tanu posix_getc >source/io/getc.c
 	./bin/unu source/io/FloatingPoint.forth | ./bin/tanu fpu >source/io/fpu.c
+	./bin/unu source/io/gopher.forth        | ./bin/tanu gopher >source/io/gopher.c
+
 	./bin/embedimage >source/image.c
 
 image:

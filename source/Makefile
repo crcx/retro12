@@ -27,8 +27,9 @@ embedimage:
 #FLG:  -DPOSIX_FILES
 #FLG:  -DPOSIX_ARGS
 #FLG:  -DARGV
+#FLG:  -DGOPHER
 RRELIBS = -lm 
-RREFLAGS =  -Wall  -O3  -DFPU  -DPOSIX_FILES  -DPOSIX_ARGS  -DARGV 
+RREFLAGS =  -Wall  -O3  -DFPU  -DPOSIX_FILES  -DPOSIX_ARGS  -DARGV  -DGOPHER 
 rre:
 	clang -c rre.c $(RREFLAGS) -o rre.o
 	clang -c nga.c $(RREFLAGS) -o nga.o
@@ -58,8 +59,9 @@ repl:
 #FLG:  -DPOSIX_FILES
 #FLG:  -DPOSIX_ARGS
 #FLG:  -DARGV
+#FLG:  -DGOPHER
 KANGALIBS = -lm -lcurses 
-KANGAFLAGS =  -Wall  -O3  -DFPU  -DPOSIX_FILES  -DPOSIX_ARGS  -DARGV 
+KANGAFLAGS =  -Wall  -O3  -DFPU  -DPOSIX_FILES  -DPOSIX_ARGS  -DARGV  -DGOPHER 
 kanga:
 	clang -c kanga.c $(KANGAFLAGS) -o kanga.o
 	clang -c nga.c $(KANGAFLAGS) -o nga.o

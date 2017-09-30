@@ -41,11 +41,9 @@ void gopher_fetch(char *host, CELL port, char *selector, CELL dest) {
      error("ERROR writing to socket");
   n = 1;
   while (n > 0) {
-          printf("_");
     bzero(buffer,1025);
     n = read(sockfd,buffer,1024);
     strcat(data, buffer);
-    printf("%s", data);
   }
   close(sockfd);
   string_inject(data, dest);

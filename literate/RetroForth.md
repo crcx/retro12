@@ -1181,6 +1181,72 @@ This finishes by sealing off the private words.
 }}
 ````
 
+## Evaluating Source
+
+The standard interfaces have their own approaches to getting and
+dealing with user input. Sometimes though it'd be nicer to have a
+way of evaluating code from within RETRO itself. This provides an
+`evaluate` word.
+
+````
+{{
+````
+
+First, create a buffer for the string to be evaluated. This is sized
+to allow for a standard FORTH block to fit, or to easily fit a RETRO
+style 512 character block. It's also long enough for most source lines
+I expect to encounter when working with files.
+
+````
+  'Current-Line d:create
+    #1025 allot
+````
+
+To make use of this, we need to know how many tokens are in the input
+string. The `count-tokens` word will do this, by filtering out anything
+other than spaces and getting the size of the remaining string.
+
+````
+  :count-tokens (s-n)
+    [ ASCII:SPACE eq? ] s:filter s:length ;
+````
+
+The `next-token` word splits the remainimg string on SPACE and returns
+both parts.
+
+````
+  :next-token (s-ss)
+    ASCII:SPACE s:split ;
+````
+
+And then the `process-tokens` uses `next-token` and `interpret` to go
+through the string, processing each token in turn. Using the standard
+`interpret` word allows for proper handling of the prefixes and classes
+so everything works just as if entered directly.
+
+````
+  :process-tokens (sn-)
+    [ next-token swap [ interpret ] dip n:inc ] times interpret ;
+````
+
+````
+---reveal---
+````
+
+And finally, tie it all together into the single exposed word
+`evaluate`.
+
+````
+  :s:evaluate (s-...)
+    &Current-Line s:copy
+    &Current-Line dup count-tokens process-tokens ;
+````
+
+````
+}}
+````
+
+
 ## I/O
 
 Retro really only provides one I/O function in the standard interface:

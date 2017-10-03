@@ -2389,6 +2389,15 @@ Example:
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
+s:evaluate
+
+  s-?
+
+Evaluate string `s` as if it was passed in to
+`interpret` token by token.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
 tab
 
   -

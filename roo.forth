@@ -1,3 +1,6 @@
+#/bin/sh
+stty cbreak
+cat >/tmp/_roo.forth << 'EOF'
 # Roo: A Block Editor UI for RETRO
 
 This is an interface layer for RETRO built around a block editor. This
@@ -54,10 +57,14 @@ With that done, it's now time for a word to load a block from the server.
 'Cursor-Row var
 'Cursor-Col var
 
-:cursor-left   (-)  &Cursor-Col v:dec ;
-:cursor-right  (-)  &Cursor-Col v:inc ;
-:cursor-up     (-)  &Cursor-Row v:dec ;
-:cursor-down   (-)  &Cursor-Row v:inc ;
+:constrain (-)
+  &Cursor-Row #0 #16 v:limit
+  &Cursor-Col #0 #64 v:limit ;
+
+:cursor-left   (-)  &Cursor-Col v:dec constrain ;
+:cursor-right  (-)  &Cursor-Col v:inc constrain ;
+:cursor-up     (-)  &Cursor-Row v:dec constrain ;
+:cursor-down   (-)  &Cursor-Row v:inc constrain ;
 ~~~
 
 ........................................................................
@@ -162,3 +169,8 @@ My default keymap will be (subject to change!):
 
 go
 ~~~
+EOF
+rre /tmp/_roo.forth
+rm -f /tmp/_roo.forth
+stty -cbreak
+

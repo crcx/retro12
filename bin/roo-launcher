@@ -1,0 +1,4 @@
+#/bin/sh
+stty cbreak
+rre roo.forth
+stty -cbreak

@@ -44,11 +44,27 @@ With that done, it's now time for a word to load a block from the server.
 ........................................................................
 
 ~~~
+'Cursor-Row var
+'Cursor-Col var
+
+:cursor-left   (-)  &Cursor-Col v:dec ;
+:cursor-right  (-)  &Cursor-Col v:inc ;
+:cursor-up     (-)  &Cursor-Row v:dec ;
+:cursor-down   (-)  &Cursor-Row v:inc ;
+~~~
+
+........................................................................
+
+~~~
+:display-cursor (-)
+  ASCII:ESC putc @Cursor-Col @Cursor-Row '[%n;%nH s:with-format puts ;
+
 :display-block (-)
   ASCII:ESC putc '[2J puts
   ASCII:ESC putc '[H puts
   &Block #16 [ #64 [ fetch-next putc ] times $| putc nl ] times drop
-  #64 [ $- putc ] times $+ putc sp @Current-Block putn nl ;
+  #64 [ $- putc ] times $+ putc sp @Current-Block putn nl
+  display-cursor ;
 ~~~
 
 ~~~
@@ -57,6 +73,10 @@ With that done, it's now time for a word to load a block from the server.
 :keys
     $n [ &Current-Block v:inc load-block ] case
     $p [ &Current-Block v:dec load-block ] case
+    $i [ cursor-up    ] case
+    $j [ cursor-left  ] case
+    $k [ cursor-down  ] case
+    $l [ cursor-right ] case
     $q [ `26 ] case
     drop ;
 

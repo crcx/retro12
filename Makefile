@@ -43,6 +43,7 @@ interfaces:
 	cd source && make rre
 	cd source && make repl
 	cd source && make kanga
+	cd source && make roo
 
 finally:
 	rm source/*.o

@@ -44,7 +44,27 @@ With that done, it's now time for a word to load a block from the server.
 ........................................................................
 
 ~~~
-#0 !Current-Block
-load-block
-&Block puts
+:display-block (-)
+  ASCII:ESC putc '[2J puts
+  ASCII:ESC putc '[H puts
+  &Block #16 [ #64 [ fetch-next putc ] times $| putc nl ] times drop
+  #64 [ $- putc ] times $+ putc sp @Current-Block putn nl ;
+~~~
+
+~~~
+#0 !Current-Block load-block
+
+:keys
+    $n [ &Current-Block v:inc load-block ] case
+    $p [ &Current-Block v:dec load-block ] case
+    $q [ `26 ] case
+    drop ;
+
+:go
+  repeat
+    display-block
+    getc keys
+  again ;
+
+go
 ~~~

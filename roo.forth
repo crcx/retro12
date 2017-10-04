@@ -70,15 +70,18 @@ With that done, it's now time for a word to load a block from the server.
 ~~~
 #0 !Current-Block load-block
 
+:handler-for (s-a) 'roo:_ [ #4 + store ] sip d:lookup ;
+
+:roo:n &Current-Block v:inc load-block ;
+:roo:d &Current-Block v:dec load-block ;
+:roo:i cursor-up ;
+:roo:j cursor-left ;
+:roo:k cursor-down ;
+:roo:l cursor-right ;
+:roo:q `26 ;
+
 :keys
-    $n [ &Current-Block v:inc load-block ] case
-    $p [ &Current-Block v:dec load-block ] case
-    $i [ cursor-up    ] case
-    $j [ cursor-left  ] case
-    $k [ cursor-down  ] case
-    $l [ cursor-right ] case
-    $q [ `26 ] case
-    drop ;
+  handler-for 0; d:xt fetch call ;
 
 :go
   repeat

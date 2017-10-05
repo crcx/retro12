@@ -44,7 +44,8 @@ the currently loaded block.
 'Current-Block var
 ~~~
 
-With that done, it's now time for a word to load a block from the server.
+With that done, it's now time for a word to load a block from the
+server.
 
 ~~~
 :selector<get>  (-s)  @Current-Block '/r/%n s:with-format ;
@@ -56,6 +57,13 @@ With that done, it's now time for a word to load a block from the server.
 The `Mode` variable will be used to track the current mode. I have
 chosen to implement two modes: command ($C) and insert ($I).
 
+Command mode will be used for all non-entry related options, including
+(but not limited to) cursor movement, block navigation, and code
+evaluation.
+
+So with two modes I only need one variable to track which mode is
+active, and a single word to switch back and forth between them.
+
 ~~~
 $C 'Mode var<n>
 :toggle-mode (-)  @Mode $C eq? [ $I ] [ $C ] choose !Mode ;
@@ -63,18 +71,42 @@ $C 'Mode var<n>
 
 ........................................................................
 
+I need a way to keep track of where in the block the user currently is.
+So two variables: one for the row and one for the column:
+
 ~~~
 'Cursor-Row var
 'Cursor-Col var
+~~~
 
+To ensure that the cursor stays within the block, I am implementing a
+`constrain` word to limit the range of the cursor. Thanks to `v:limit`
+this is really easy.
+
+~~~
 :constrain (-)
-  &Cursor-Row #0 #16 v:limit
-  &Cursor-Col #0 #64 v:limit ;
+  &Cursor-Row #0 #15 v:limit
+  &Cursor-Col #0 #63 v:limit ;
+~~~
 
+And then the words to adjust the cursor positioning:
+
+~~~
 :cursor-left   (-)  &Cursor-Col v:dec constrain ;
 :cursor-right  (-)  &Cursor-Col v:inc constrain ;
 :cursor-up     (-)  &Cursor-Row v:dec constrain ;
 :cursor-down   (-)  &Cursor-Row v:inc constrain ;
+~~~
+
+The other bit related to the cursor is a word to decide the offset into
+the block. This will be used to aid in entering text.
+
+~~~
+:cursor-position  (-n)  @Cursor-Row #64 * @Cursor-Col + ;
+~~~
+
+~~~
+:insert-character (c-) cursor-position &Block + store cursor-right ;
 ~~~
 
 ........................................................................
@@ -109,7 +141,7 @@ The cursor display will be platform specific.
 
 ~~~
 :position-cursor (-)
-  @Cursor-Col @Cursor-Row ASCII:ESC '%c[%n;%nH s:with-format puts ;
+  @Cursor-Col @Cursor-Row [ n:inc ] bi@ ASCII:ESC '%c[%n;%nH s:with-format puts ;
 
 :clear-display (-)
   ASCII:ESC putc '[2J puts
@@ -119,7 +151,8 @@ The cursor display will be platform specific.
   clear-display
   &Block #16 [ #64 [ fetch-next putc ] times $| putc nl ] times drop
   #64 [ $- putc ] times $+ putc sp @Current-Block putn @Mode putc nl
-  dump-stack
+  dump-stack nl
+  @Cursor-Row putn $, putc @Cursor-Col putn $: putc sp cursor-position putn
   position-cursor ;
 ~~~
 
@@ -176,8 +209,13 @@ My default keymap will be (subject to change!):
 
 :roo:c:e &Block s:evaluate ;
 
-:keys
-  handler-for 0; d:xt fetch call ;
+:call<dt>  (d-)  d:xt fetch call ;
+
+:keys (c-)
+  dup handler-for
+  @Mode $I -eq? [ nip 0; call<dt> ]
+                [ dup n:zero? [ drop insert-character ]
+                              [ nip call<dt>          ] choose ] choose ;
 
 :go
   [ display-block getc keys @Completed ] until ;
@@ -186,12 +224,6 @@ go
 ~~~
 
 ........................................................................
-
-TODO:
-
-- implement insert mode
-- sync changes to server
-- 
 
 
 EOF

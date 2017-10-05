@@ -1,6 +1,8 @@
 #/bin/sh
 stty cbreak
 cat >/tmp/_roo.forth << 'EOF'
+
+
 # Roo: A Block Editor UI for RETRO
 
 This is an interface layer for RETRO built around a block editor. This
@@ -13,8 +15,6 @@ has some interesting features:
 Limitations:
 
 - requires a terminal supporting ANSI escape sequences
-- requires a wrapper script (bin/roo-launcher) to setup/restore
-  terminal i/o modes
 - requires an active internet connection
 
 So getting started, some configuration settings for the server side:
@@ -145,7 +145,7 @@ My default keymap will be (subject to change!):
     e    Evaluate block
 
 ~~~
-#0 !Current-Block load-block
+#139 !Current-Block load-block
 
 :handler-for (s-a) 'roo:c:_ [ #6 + store ] sip d:lookup ;
 
@@ -155,20 +155,30 @@ My default keymap will be (subject to change!):
 :roo:c:j cursor-down ;
 :roo:c:k cursor-up ;
 :roo:c:l cursor-right ;
+
+'Completed var
+:roo:c:q &Completed v:on ;
+
 :roo:c:e &Block s:evaluate ;
-:roo:c:q `26 ;
 
 :keys
   handler-for 0; d:xt fetch call ;
 
 :go
-  repeat
-    display-block
-    getc keys
-  again ;
+  [ display-block getc keys @Completed ] until ;
 
 go
 ~~~
+
+........................................................................
+
+TODO:
+
+- implement insert mode
+- sync changes to server
+- 
+
+
 EOF
 rre /tmp/_roo.forth
 rm -f /tmp/_roo.forth

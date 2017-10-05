@@ -1,4 +1,44 @@
 
+2017-10-05  Charles Childers  <crc@forthworks.com>
+
+	* Merge branch 'roo-interface'
+	* roo finished
+	* saving blocks works now
+	* s:evaluate no longer generates an error on empty tokens
+	* implement insert mode
+	* first part of support for modes finished
+	* allow for exiting cleanly
+
+2017-10-04  Charles Childers  <crc@forthworks.com>
+
+	* remove old files; revert Makefile changes
+	* limit cursor to stay in block; roo.forth now runnable directly
+	* more commentary, refine initial keys a little
+	* use words instead of a case construct for key handlers
+	* cursor movement
+	* start some work on block display code
+	* begin working on roo (block editor ui)
+
+2017-10-03  Charles Childers  <crc@forthworks.com>
+
+	* add s:evaluate
+
+2017-09-30  Charles Childers  <crc@forthworks.com>
+
+	* remove some debug code from gopher.c
+
+2017-09-29  Charles Childers  <crc@forthworks.com>
+
+	* add gopher:get
+
+2017-09-28  Charles Childers  <crc@forthworks.com>
+
+	* expose files:R+ mode
+
+2017-08-31  Charles Childers  <crc@forthworks.com>
+
+	* update changelog
+
 2017-08-24  Charles Childers  <crc@forthworks.com>
 
 	* add set:reduce

@@ -53,6 +53,16 @@ With that done, it's now time for a word to load a block from the server.
 
 ........................................................................
 
+The `Mode` variable will be used to track the current mode. I have
+chosen to implement two modes: command ($C) and insert ($I).
+
+~~~
+$C 'Mode var<n>
+:toggle-mode (-)  @Mode $C eq? [ $I ] [ $C ] choose !Mode ;
+~~~
+
+........................................................................
+
 ~~~
 'Cursor-Row var
 'Cursor-Col var
@@ -72,7 +82,8 @@ With that done, it's now time for a word to load a block from the server.
 The block display is kept minimalistic. Each line is bounded by a single
 vertical bar (|) on the right edge, and there is a separatator line at
 the bottom to indicate the base of the block. To the left of this is a
-single number, indicating the current block number.
+single number, indicating the current block number. This is followed by
+the mode indicator.
 
 So it looks like:
 
@@ -92,13 +103,13 @@ So it looks like:
                                                                     |
                                                                     |
                                                                     |
-    ----------------------------------------------------------------+ 29
+    ----------------------------------------------------------------+ 29C
 
 The cursor display will be platform specific.
 
 ~~~
 :position-cursor (-)
-  ASCII:ESC putc @Cursor-Col @Cursor-Row '[%n;%nH s:with-format puts ;
+  @Cursor-Col @Cursor-Row ASCII:ESC '%c[%n;%nH s:with-format puts ;
 
 :clear-display (-)
   ASCII:ESC putc '[2J puts
@@ -107,7 +118,7 @@ The cursor display will be platform specific.
 :display-block (-)
   clear-display
   &Block #16 [ #64 [ fetch-next putc ] times $| putc nl ] times drop
-  #64 [ $- putc ] times $+ putc sp @Current-Block putn nl
+  #64 [ $- putc ] times $+ putc sp @Current-Block putn @Mode putc nl
   dump-stack
   position-cursor ;
 ~~~
@@ -147,7 +158,9 @@ My default keymap will be (subject to change!):
 ~~~
 #139 !Current-Block load-block
 
-:handler-for (s-a) 'roo:c:_ [ #6 + store ] sip d:lookup ;
+:handler-for (s-a)
+  @Mode $C eq? [ 'roo:c:_ ]
+               [ 'roo:i:_ ] choose [ #6 + store ] sip d:lookup ;
 
 :roo:c:H &Current-Block v:dec load-block ;
 :roo:c:L &Current-Block v:inc load-block ;
@@ -155,6 +168,8 @@ My default keymap will be (subject to change!):
 :roo:c:j cursor-down ;
 :roo:c:k cursor-up ;
 :roo:c:l cursor-right ;
+:roo:c:` toggle-mode ;
+:roo:i:` toggle-mode ;
 
 'Completed var
 :roo:c:q &Completed v:on ;

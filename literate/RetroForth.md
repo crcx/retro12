@@ -1226,7 +1226,9 @@ so everything works just as if entered directly.
 
 ````
   :process-tokens (sn-)
-    [ next-token swap [ interpret ] dip n:inc ] times interpret ;
+    [ next-token swap
+      [ dup s:length n:-zero? [ interpret ] [ drop ] choose ] dip n:inc
+    ] times interpret ;
 ````
 
 ````

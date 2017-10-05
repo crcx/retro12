@@ -52,6 +52,13 @@ server.
 :load-block     (-)   &Block SERVER selector<get> gopher:get drop ;
 ~~~
 
+Then the other side, saving a block to the server.
+
+~~~
+:selector<set>  (-s)  &Block @Current-Block '/s/%n/%s s:with-format ;
+:save-block     (-)   here SERVER selector<set> gopher:get drop ;
+~~~
+
 ........................................................................
 
 The `Mode` variable will be used to track the current mode. I have
@@ -202,7 +209,7 @@ My default keymap will be (subject to change!):
 :roo:c:k cursor-up ;
 :roo:c:l cursor-right ;
 :roo:c:` toggle-mode ;
-:roo:i:` toggle-mode ;
+:roo:i:` toggle-mode save-block ;
 
 'Completed var
 :roo:c:q &Completed v:on ;

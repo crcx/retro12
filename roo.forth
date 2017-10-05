@@ -3,19 +3,25 @@ stty cbreak
 cat >/tmp/_roo.forth << 'EOF'
 
 
-# Roo: A Block Editor UI for RETRO
+# Roo: A Block Editor for RETRO
 
-This is an interface layer for RETRO built around a block editor. This
-has some interesting features:
+This implements a block editor for RETRO. It provides a visual interface,
+inspired by VIBE and REM and allows for extending the environment by
+simply writing new words that handle specific keys. It also requires a
+network connection and the *Tuporo* Gopher server which provides the
+actual block store.
 
-- gopher backed block storage (with server written in RETRO)
-- modal editing (ala *vi*)
-- editor commands are just words in the dictionary
+Some architectural notes:
 
-Limitations:
+- the blocks are stored on a server, not locally
+- editing is modal (ala *vi*)
+- editor commands are just normal words in the dictionary
+- this uses ANSI escape sequences and so requires a traditional terminal
+  or terminal emulator
 
-- requires a terminal supporting ANSI escape sequences
-- requires an active internet connection
+
+
+## Configuration
 
 So getting started, some configuration settings for the server side:
 
@@ -44,22 +50,44 @@ the currently loaded block.
 'Current-Block var
 ~~~
 
+
+
+## Server Communication
+
 With that done, it's now time for a word to load a block from the
 server.
 
+Roo requires an associated gopher server (tuporo). This is a special
+server that provides access to Forth blocks across a network. The
+selectors we are interested in are:
+
+    /r/<block#>
+
+Which returns a raw block (1024 bytes), and:
+
+    /s/<block#>/text
+
+Which copies the text into the specified block.
+
+So first, define words to construct the selectors:
+
 ~~~
 :selector<get>  (-s)  @Current-Block '/r/%n s:with-format ;
-:load-block     (-)   &Block SERVER selector<get> gopher:get drop ;
-~~~
-
-Then the other side, saving a block to the server.
-
-~~~
 :selector<set>  (-s)  &Block @Current-Block '/s/%n/%s s:with-format ;
+~~~
+
+And then words to actually talk to the server:
+
+~~~
+:load-block     (-)   &Block SERVER selector<get> gopher:get drop ;
 :save-block     (-)   here SERVER selector<set> gopher:get drop ;
 ~~~
 
-........................................................................
+All done :)
+
+
+
+## Modes
 
 The `Mode` variable will be used to track the current mode. I have
 chosen to implement two modes: command ($C) and insert ($I).
@@ -76,7 +104,9 @@ $C 'Mode var<n>
 :toggle-mode (-)  @Mode $C eq? [ $I ] [ $C ] choose !Mode ;
 ~~~
 
-........................................................................
+
+
+## Cursor & Positioning
 
 I need a way to keep track of where in the block the user currently is.
 So two variables: one for the row and one for the column:
@@ -112,58 +142,16 @@ the block. This will be used to aid in entering text.
 :cursor-position  (-n)  @Cursor-Row #64 * @Cursor-Col + ;
 ~~~
 
+The last bit here is `insert-character` which inserts a character to
+`cursor-position` in the `Block` and moves the cursor to the right.
+
 ~~~
 :insert-character (c-) cursor-position &Block + store cursor-right ;
 ~~~
 
-........................................................................
 
-The block display is kept minimalistic. Each line is bounded by a single
-vertical bar (|) on the right edge, and there is a separatator line at
-the bottom to indicate the base of the block. To the left of this is a
-single number, indicating the current block number. This is followed by
-the mode indicator.
 
-So it looks like:
-
-    (blank)                                                         |
-                                                                    |
-                                                                    |
-                                                                    |
-                                                                    |
-                                                                    |
-                                                                    |
-                                                                    |
-                                                                    |
-                                                                    |
-                                                                    |
-                                                                    |
-                                                                    |
-                                                                    |
-                                                                    |
-                                                                    |
-    ----------------------------------------------------------------+ 29C
-
-The cursor display will be platform specific.
-
-~~~
-:position-cursor (-)
-  @Cursor-Col @Cursor-Row [ n:inc ] bi@ ASCII:ESC '%c[%n;%nH s:with-format puts ;
-
-:clear-display (-)
-  ASCII:ESC putc '[2J puts
-  ASCII:ESC putc '[H puts ;
-
-:display-block (-)
-  clear-display
-  &Block #16 [ #64 [ fetch-next putc ] times $| putc nl ] times drop
-  #64 [ $- putc ] times $+ putc sp @Current-Block putn @Mode putc nl
-  dump-stack nl
-  @Cursor-Row putn $, putc @Cursor-Col putn $: putc sp cursor-position putn
-  position-cursor ;
-~~~
-
-........................................................................
+## Keyboard Handling
 
 Handling of keys is essential to using Roo. I chose to use a method that
 I borrowed from Sam Falvo II's VIBE editor and leverage the dictionary
@@ -186,7 +174,7 @@ current position.
 
 My default keymap will be (subject to change!):
 
-    TAB  Switch modes
+    `    Switch modes
     h    Cursor left
     j    Cursor down
     k    Cursor up
@@ -194,43 +182,139 @@ My default keymap will be (subject to change!):
     H    Previous block
     L    Next block
     e    Evaluate block
+    q    Quit
+
+Getting started, I define a word to take a character and pack it into a
+string. It then tries to find this in the dictionary.
 
 ~~~
-#139 !Current-Block load-block
-
-:handler-for (s-a)
+:handler-for (c-d)
   @Mode $C eq? [ 'roo:c:_ ]
                [ 'roo:i:_ ] choose [ #6 + store ] sip d:lookup ;
+~~~
 
+With that, I can implement another helper: `call<dt>`, which will take
+the dictionary token returned by `handler-for` and call the xt for the
+word.
+
+~~~
+:call<dt>  (d-)  d:xt fetch call ;
+~~~
+
+The final piece is the top level key handler. This has the following
+jobs:
+
+- try to find a handler for the key
+  - if mode is $C and the handler is valid, call the handler
+  - if mode is $I and the handler is invalid, insert the key into the
+    block
+  - if mode is $I and the handler is valid, call the handler
+
+~~~
+:handle-key (c-)
+  dup handler-for
+  @Mode $I -eq? [ nip 0; call<dt> ]
+                [ dup n:zero? [ drop insert-character ]
+                              [ nip call<dt>          ] choose ] choose ;
+~~~
+
+Having finished this, it's trivial to define the majority of the basic
+commands:
+
+~~~
 :roo:c:H &Current-Block v:dec load-block ;
 :roo:c:L &Current-Block v:inc load-block ;
 :roo:c:h cursor-left ;
 :roo:c:j cursor-down ;
 :roo:c:k cursor-up ;
 :roo:c:l cursor-right ;
-:roo:c:` toggle-mode ;
-:roo:i:` toggle-mode save-block ;
-
-'Completed var
-:roo:c:q &Completed v:on ;
-
 :roo:c:e &Block s:evaluate ;
-
-:call<dt>  (d-)  d:xt fetch call ;
-
-:keys (c-)
-  dup handler-for
-  @Mode $I -eq? [ nip 0; call<dt> ]
-                [ dup n:zero? [ drop insert-character ]
-                              [ nip call<dt>          ] choose ] choose ;
-
-:go
-  [ display-block getc keys @Completed ] until ;
-
-go
+:roo:c:` toggle-mode ;
 ~~~
 
-........................................................................
+I only define one command in input mode, to switch back to command mode:
+
+~~~
+:roo:i:` toggle-mode save-block ;
+~~~
+
+Note that this calls `save-block` to update the remote block storage.
+This is the only place I call `save-block`.
+
+One last word is a handler to allow the editor to be closed cleanly.
+This also has a variable, `Completed`, which will be used to decide
+if editing is finished.
+
+~~~
+'Completed var
+:roo:c:q &Completed v:on ;
+~~~
+
+
+
+## Display
+
+The block display is kept minimalistic. Each line is bounded by a single
+vertical bar (|) on the right edge, and there is a separatator line at
+the bottom to indicate the base of the block. To the left of this is a
+single number, indicating the current block number. This is followed by
+the mode indicator.
+
+I also display the current stack contents below the block.
+
+The display looks like:
+
+    (blank)                                                         |
+    :roo:c:+ (nn-m) + ;                                             |
+    :roo:c:1 (-n)  #1 ;    :roo:c:2 (-n)  #2 ;                      |
+    :roo:c:4 (-n)  #4 ;    :roo:c:3 (-n)  #3 ;                      |
+                                                                    |
+                                                                    |
+                                                                    |
+                                                                    |
+                                                                    |
+                                                                    |
+                                                                    |
+                                                                    |
+                                                                    |
+                                                                    |
+                                                                    |
+                                                                    |
+    ----------------------------------------------------------------+ 29C
+    1 2 <3>
+
+The cursor display will be platform specific.
+
+~~~
+:position-cursor (-)
+  @Cursor-Col @Cursor-Row [ n:inc ] bi@
+  ASCII:ESC '%c[%n;%nH s:with-format puts ;
+
+:clear-display (-)
+  ASCII:ESC putc '[2J puts
+  ASCII:ESC putc '[H puts ;
+
+:display-block (-)
+  clear-display
+  &Block #16 [ #64 [ fetch-next putc ] times $| putc nl ] times drop
+  #64 [ $- putc ] times $+ putc sp @Current-Block putn @Mode putc nl
+  dump-stack position-cursor ;
+~~~
+
+
+
+## The Final Piece
+
+All that's left is a single top level loop to tie it all together.
+
+~~~
+:edit
+  &Completed v:off
+  #0 !Current-Block load-block
+  [ display-block getc handle-key @Completed ] until ;
+
+edit
+~~~
 
 
 EOF

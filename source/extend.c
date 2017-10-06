@@ -23,6 +23,20 @@
 //USES nga
 //USES bridge
 
+void dump_stack() {
+  CELL i;
+  if (sp == 0)
+    return;
+  printf("\nStack: ");
+  for (i = 1; i <= sp; i++) {
+    if (i == sp)
+      printf("[ TOS: %d ]", data[i]);
+    else
+      printf("%d ", data[i]);
+  }
+  printf("\n");
+}
+
 int include_file(char *fname) {
   FILE *fp;
   char source[64000];
@@ -40,8 +54,10 @@ int include_file(char *fname) {
       else
         inBlock = 0;
     } else {
-      if (inBlock == 1)
+      if (inBlock == 1) {
         evaluate(source);
+//        printf("%s ", source);
+      }
     }
     tokens++;
   }
@@ -61,6 +77,7 @@ int main(int argc, char **argv) {
   printf("+ load image\n");
   ngaLoadImage("ngaImage");
   stats();
+  dump_stack();
   printf("+ load %s\n", argv[1]);
   int tokens = include_file(argv[1]);
   printf("  processed %d tokens\n", tokens);

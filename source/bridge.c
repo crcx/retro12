@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include "nga.h"
 #include "bridge.h"
@@ -208,10 +210,17 @@ CELL nguraSetFilePosition() {
 CELL nguraGetFileSize() {
   CELL slot, current, r, size;
   slot = data[sp]; sp--;
-  current = ftell(nguraFileHandles[slot]);
-  r = fseek(nguraFileHandles[slot], 0, SEEK_END);
-  size = ftell(nguraFileHandles[slot]);
-  fseek(nguraFileHandles[slot], current, SEEK_SET);
+  struct stat buffer;
+  int    status;
+  status = fstat(fileno(nguraFileHandles[slot]), &buffer);
+  if (!S_ISDIR(buffer.st_mode)) {
+    current = ftell(nguraFileHandles[slot]);
+    r = fseek(nguraFileHandles[slot], 0, SEEK_END);
+    size = ftell(nguraFileHandles[slot]);
+    fseek(nguraFileHandles[slot], current, SEEK_SET);
+  } else {
+    r = -1;
+  }
   return (r == 0) ? size : 0;
 }
 

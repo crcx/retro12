@@ -120,3 +120,20 @@ once for each line in a file. This makes some things trivial. E.g., a simple
     ] preserve ;
 }}
 ~~~
+
+`file:slurp` reads a file into a buffer.
+
+~~~
+{{
+  'FID var
+  'Size var
+---reveal---
+  :file:slurp (as-)
+    [ file:R file:open !FID
+      buffer:set
+      @FID file:size !Size
+      @Size [ @FID file:read buffer:add ] times
+      @FID file:close
+    ] buffer:preserve ;
+}}
+~~~

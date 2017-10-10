@@ -119,3 +119,13 @@ Given a file name, return `TRUE` if it exists
 or `FALSE` if it does not.
 
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+file:slurp
+
+  as-
+
+Given an address and a filename, read the
+file contents into the buffer starting at
+the address.
+
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-

@@ -1,7 +1,7 @@
     ____  _   _
     || \\ \\ //
     ||_//  )x(
-    || \\ // \\ 2017.11
+    || \\ // \\ 2017.12
     a minimalist forth for nga
 
 *Rx* (*retro experimental*) is a minimal Forth implementation for the
@@ -55,7 +55,7 @@ r 9999
 d 1536
 
 : Version
-d 201711
+d 201712
 ~~~
 
 Both of these are pointers. `Dictionary` points to the most recent
@@ -175,7 +175,13 @@ space savings.
 : _packedcall
 d 2049
 i re......
+~~~
 
+Likewise, I define a packed jump for use with quotations. This saves
+several hundred cells (and thus fetch/decode cycles) when loading the
+standard library.
+
+~~~
 : _packedjump
 d 1793
 i re......
@@ -184,17 +190,18 @@ i re......
 ## Stack Shufflers
 
 These add additional operations on the stack elements that'll keep
-later code much more readable.
+later code much more readable. The `dup-pair` is the same as `over
+over`, but I inline the machine code as it's smaller and faster in
+this case.
 
 ~~~
 : over
 i puduposw
 i re......
+
 : dup-pair
-i lica....
-r over
-i lica....
-r over
+i puduposw
+i puduposw
 i re......
 ~~~
 
@@ -249,6 +256,7 @@ r fetch-next
 i zr......
 i drliju..
 r count
+
 : s:length
 i dulica..
 r count
@@ -262,11 +270,13 @@ String comparisons are harder.
 ~~~
 : get-set
 i feswfere
+
 : next-set
 i liadswli
 d 1
 d 1
 i adre....
+
 : compare
 i pupulica
 r dup-pair
@@ -280,10 +290,12 @@ d 1
 i zr......
 i liju....
 r compare
+
 : s:compare:mismatched
 i drdrlidu
 d 0
 i re......
+
 : s:eq
 i lica....
 r dup-pair
@@ -388,6 +400,7 @@ i lica....
 r comma
 i liju....
 r ($)
+
 : comma:string
 i lica....
 r ($)
@@ -453,12 +466,14 @@ r comma
 ~~~
 : class:word:interpret
 i ju......
+
 : class:word:compile
 i lilica..
 r _packedcall
 r comma:opcode
 i liju....
 r comma
+
 : class:word
 i lifelili
 r Compiler
@@ -558,12 +573,15 @@ the number of places where field offsets are hard coded.
 ~~~
 : d:link
 i re......
+
 : d:xt
 i liadre..
 d 1
+
 : d:class
 i liadre..
 d 2
+
 : d:name
 i liadre..
 d 3
@@ -601,18 +619,22 @@ stack.
 ~~~
 : Which
 d 0
+
 : Needle
 d 0
+
 : found
 i listlire
 r Which
 r _nop
+
 : find
 i lilistli
 d 0
 r Which
 r Dictionary
 i fe......
+
 : find_next
 i zr......
 i dulica..
@@ -624,6 +646,7 @@ i licc....
 r found
 i feliju..
 r find_next
+
 : d:lookup
 i listlica
 r Needle

@@ -149,7 +149,7 @@ Math
 Addition
 ========
 
-   #100 #200 +
+    #100 #200 +
 
 
 Subtraction

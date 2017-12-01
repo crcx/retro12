@@ -86,6 +86,7 @@ void evaluate(char *s);
 int not_eol(int ch);
 void read_token(FILE *file, char *token_buffer, int echo);
 char *read_token_str(char *s, char *token_buffer, int echo);
+void include_file(char *fname);
 void ngaGopherUnit();
 void ngaFloatingPointUnit();
 CELL ngaLoadImage(char *imageFile);
@@ -320,6 +321,11 @@ void update_rx() {
 #define UNIX_KILL   -8009
 #define UNIX_POPEN  -8010
 #define UNIX_PCLOSE -8011
+#define UNIX_WRITE  -8012
+#define UNIX_CHDIR  -8013
+#define UNIX_GETENV -8014
+#define UNIX_PUTENV -8015
+#define UNIX_SLEEP  -8016
 
 CELL unixOpenPipe() {
   CELL slot, mode, name;
@@ -349,7 +355,7 @@ CELL unixClosePipe() {
 
 
 void execute(int cell) {
-  CELL a, b;
+  CELL a, b, c;
   CELL opcode;
   char path[1024];
   char arg0[1024], arg1[1024], arg2[1024];
@@ -369,6 +375,7 @@ void execute(int cell) {
       switch (opcode) {
         case IO_TTY_PUTC:  putc(stack_pop(), stdout); fflush(stdout); break;
         case IO_TTY_GETC:  stack_push(getc(stdin));                   break;
+        case -9999:        include_file(string_extract(stack_pop())); break;
         case IO_FS_OPEN:   ioOpenFile();                              break;
         case IO_FS_CLOSE:  ioCloseFile();                             break;
         case IO_FS_READ:   stack_push(ioReadFile());                  break;
@@ -413,6 +420,21 @@ void execute(int cell) {
                           break;
         case UNIX_POPEN:  unixOpenPipe(); break;
         case UNIX_PCLOSE: unixClosePipe(); break;
+        case UNIX_WRITE:  c = stack_pop();
+                          b = stack_pop();
+                          a = stack_pop();
+                          write(fileno(ioFileHandles[c]), string_extract(a), b);
+                          break;
+        case UNIX_CHDIR:  chdir(string_extract(stack_pop()));
+                          break;
+        case UNIX_GETENV: a = stack_pop();
+                          b = stack_pop();
+                          string_inject(getenv(string_extract(b)), a);
+                          break;
+        case UNIX_PUTENV: putenv(string_extract(stack_pop()));
+                          break;
+        case UNIX_SLEEP:  sleep(stack_pop());
+                          break;
         default:   printf("Invalid instruction!\n");
                    printf("At %d, opcode %d\n", ip, opcode);
                    exit(1);
@@ -516,8 +538,7 @@ void float_from_number() {
 }
 
 void float_from_string() {
-    double a = atof(string_extract(stack_pop()));
-    float_push(a);
+    float_push(atof(string_extract(stack_pop())));
 }
 
 void float_to_string() {
@@ -550,8 +571,7 @@ void float_div() {
 }
 
 void float_floor() {
-    double a = float_pop();
-    float_push(floor(a));
+    float_push(floor(float_pop()));
 }
 
 void float_eq() {
@@ -629,51 +649,61 @@ void float_to_number() {
       a = 2147483647;
     if (a < -2147483648)
       a = -2147483648;
-    a = round(a);
-    stack_push((CELL)a);
+    stack_push((CELL)round(a));
+}
+
+void float_sin() {
+  float_push(sin(float_pop()));
+}
+
+void float_cos() {
+  float_push(cos(float_pop()));
+}
+
+void float_tan() {
+  float_push(tan(float_pop()));
+}
+
+void float_asin() {
+  float_push(asin(float_pop()));
+}
+
+void float_acos() {
+  float_push(acos(float_pop()));
+}
+
+void float_atan() {
+  float_push(atan(float_pop()));
 }
 
 void ngaFloatingPointUnit() {
     switch (stack_pop()) {
-        case 0: float_from_number();
-            break;
-        case 1: float_from_string();
-            break;
-        case 2: float_to_string();
-            break;
-        case 3: float_add();
-            break;
-        case 4: float_sub();
-            break;
-        case 5: float_mul();
-            break;
-        case 6: float_div();
-            break;
-        case 7: float_floor();
-            break;
-        case 8: float_eq();
-            break;
-        case 9: float_neq();
-            break;
-        case 10: float_lt();
-            break;
-        case 11: float_gt();
-            break;
-        case 12: float_depth();
-            break;
-        case 13: float_dup();
-            break;
-        case 14: float_drop();
-            break;
-        case 15: float_swap();
-            break;
-        case 16: float_log();
-            break;
-        case 17: float_pow();
-            break;
-        case 18: float_to_number();
-            break;
-        default: ;
+        case 0: float_from_number();  break;
+        case 1: float_from_string();  break;
+        case 2: float_to_string();    break;
+        case 3: float_add();          break;
+        case 4: float_sub();          break;
+        case 5: float_mul();          break;
+        case 6: float_div();          break;
+        case 7: float_floor();        break;
+        case 8: float_eq();           break;
+        case 9: float_neq();          break;
+        case 10: float_lt();          break;
+        case 11: float_gt();          break;
+        case 12: float_depth();       break;
+        case 13: float_dup();         break;
+        case 14: float_drop();        break;
+        case 15: float_swap();        break;
+        case 16: float_log();         break;
+        case 17: float_pow();         break;
+        case 18: float_to_number();   break;
+        case 19: float_sin();         break;
+        case 20: float_cos();         break;
+        case 21: float_tan();         break;
+        case 22: float_asin();        break;
+        case 23: float_acos();        break;
+        case 24: float_atan();        break;
+        default:                      break;
     }
 }
 
@@ -792,16 +822,55 @@ void include_file(char *fname) {
 
 
 int main(int argc, char **argv) {
-  int i;
+  int i, interactive;
   ngaPrepare();
   for (i = 0; i < ngaImageCells; i++)
     memory[i] = ngaImage[i];
   update_rx();
 
+  interactive = 0;
+
   sys_argc = argc;
   sys_argv = argv;
 
-  include_file(argv[1]);
+  if (argc > 1) {
+    if (strcmp(argv[1], "-i") == 0) {
+      interactive = 1;
+      if (argc >= 4 && strcmp(argv[2], "-f") == 0) {
+        include_file(argv[3]);
+      }
+    } else if (strcmp(argv[1], "-c") == 0) {
+      interactive = 2;
+      if (argc >= 4 && strcmp(argv[2], "-f") == 0) {
+        include_file(argv[3]);
+      }
+    } else if (strcmp(argv[1], "-h") == 0) {
+      printf("Scripting Usage: rre filename\n\n");
+      printf("Interactive Usage: rre args\n\n");
+      printf("Valid Arguments:\n\n");
+      printf("  -h\n");
+      printf("  Display this help text\n\n");
+      printf("  -i\n");
+      printf("  Launches in interactive mode (line buffered)\n\n");
+      printf("  -c\n");
+      printf("  Launches in interactive mode (character buffered)\n\n");
+      printf("  -i -f filename\n");
+      printf("  Launches in interactive mode (line buffered) and load the contents of the\n  specified file\n\n");
+      printf("  -c -f filename\n");
+      printf("  Launches in interactive mode (character buffered) and load the contents\n  of the specified file\n\n");
+    } else {
+      include_file(argv[1]);
+    }
+  }
+
+  if (interactive == 1) {
+    execute(d_xt_for("banner", Dictionary));
+    while (1) execute(d_xt_for("listen", Dictionary));
+  }
+  if (interactive == 2) {
+    execute(d_xt_for("banner", Dictionary));
+    while (1) execute(d_xt_for("listen-cbreak", Dictionary));
+  }
 
   if (sp >= 1)
     dump_stack();
@@ -944,9 +1013,13 @@ void inst_fetch() {
 }
 
 void inst_store() {
-  memory[TOS] = NOS;
-  inst_drop();
-  inst_drop();
+  if (TOS <= IMAGE_SIZE && TOS >= 0) {
+    memory[TOS] = NOS;
+    inst_drop();
+    inst_drop();
+  } else {
+     ip = IMAGE_SIZE;
+  }
 }
 
 void inst_add() {

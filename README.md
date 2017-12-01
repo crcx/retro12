@@ -1,7 +1,5 @@
 ## RETRO
 
-[![Build Status](https://travis-ci.org/crcx/retro12.svg?branch=master)](https://travis-ci.org/crcx/retro12)
-
 RETRO is a modern, pragmatic Forth drawing influences from many sources.
 
 Features:
@@ -20,7 +18,7 @@ adapt to various uses.
 
 For FreeBSD, macOS, Linux:
 
-    make
+    ./build
 
 Binaries will be found in the `bin` directory. The ones of interest
 are:
@@ -46,4 +44,3 @@ working directory to operate.
 Wrapping a shell script, some RETRO code, and using the `rre` interface,
 this is a slightly nicer alternative to the basic `repl` for interactive
 use.
-

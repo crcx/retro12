@@ -606,7 +606,7 @@ Trimming removes leading (`s:trim-left`) or trailing (`s:trim-right`)
 spaces from a string. `s:trim` removes both leading and trailing spaces.
 
 ~~~
-:s:trim-left (s-s) s:temp [ fetch-next [ #32 eq? ] [ n:zero? ] bi and ] while n:dec ;
+:s:trim-left (s-s) s:temp [ fetch-next [ #32 eq? ] [ n:-zero? ] bi and ] while n:dec ;
 :s:trim-right (s-s) s:temp s:reverse s:trim-left s:reverse ;
 :s:trim (s-s) s:trim-right s:trim-left ;
 ~~~
@@ -714,23 +714,23 @@ characters that aren't really intended to be printable. Retro has an
 Note that `ASCII:HT` is the horizontal tab character.
 
 ~~~
-:ASCII:NUL     (-c)  #0 ;    :ASCII:SOH     (-c)  #1 ;
-:ASCII:STX     (-c)  #2 ;    :ASCII:ETX     (-c)  #3 ;
-:ASCII:EOT     (-c)  #4 ;    :ASCII:ENQ     (-c)  #5 ;
-:ASCII:ACK     (-c)  #6 ;    :ASCII:BEL     (-c)  #7 ;
-:ASCII:BS      (-c)  #8 ;    :ASCII:HT      (-c)  #9 ;
-:ASCII:LF      (-c)  #10 ;   :ASCII:VT      (-c)  #11 ;
-:ASCII:FF      (-c)  #12 ;   :ASCII:CR      (-c)  #13 ;
-:ASCII:SO      (-c)  #14 ;   :ASCII:SI      (-c)  #15 ;
-:ASCII:DLE     (-c)  #16 ;   :ASCII:DC1     (-c)  #17 ;
-:ASCII:DC2     (-c)  #18 ;   :ASCII:DC3     (-c)  #19 ;
-:ASCII:DC4     (-c)  #20 ;   :ASCII:NAK     (-c)  #21 ;
-:ASCII:SYN     (-c)  #22 ;   :ASCII:ETB     (-c)  #23 ;
-:ASCII:CAN     (-c)  #24 ;   :ASCII:EM      (-c)  #25 ;
-:ASCII:SUB     (-c)  #26 ;   :ASCII:ESC     (-c)  #27 ;
-:ASCII:FS      (-c)  #28 ;   :ASCII:GS      (-c)  #29 ;
-:ASCII:RS      (-c)  #30 ;   :ASCII:US      (-c)  #31 ;
-:ASCII:SPACE   (-c)  #32 ;   :ASCII:DEL     (-c)  #127 ;
+#0  'ASCII:NUL const    #1   'ASCII:SOH const
+#2  'ASCII:STX const    #3   'ASCII:ETX const
+#4  'ASCII:EOT const    #5   'ASCII:ENQ const
+#6  'ASCII:ACK const    #7   'ASCII:BEL const
+#8  'ASCII:BS  const    #9   'ASCII:HT  const
+#10 'ASCII:LF  const    #11  'ASCII:VT  const
+#12 'ASCII:FF  const    #13  'ASCII:CR  const
+#14 'ASCII:SO  const    #15  'ASCII:SI  const
+#16 'ASCII:DLE const    #17  'ASCII:DC1 const
+#18 'ASCII:DC2 const    #19  'ASCII:DC3 const
+#20 'ASCII:DC4 const    #21  'ASCII:NAK const
+#22 'ASCII:SYN const    #23  'ASCII:ETB const
+#24 'ASCII:CAN const    #25  'ASCII:EM  const
+#26 'ASCII:SUB const    #27  'ASCII:ESC const
+#28 'ASCII:FS  const    #29  'ASCII:GS  const
+#30 'ASCII:RS  const    #31  'ASCII:US  const
+#32 'ASCII:SPACE const  #127 'ASCII:DEL const
 ~~~
 
 These words operate on character values. Retro currently deals with
@@ -860,6 +860,7 @@ substring is in a string.
   'Pad var
   'I   var
   'F   var
+  'At  var
 
   :terminate (-)
     #0 @Pad @Tar s:length + store ;
@@ -868,7 +869,7 @@ substring is in a string.
     @Src @I + @Pad @Tar s:length copy ;
 
   :compare (-)
-    @Pad @Tar s:eq? @F or !F ;
+    @Pad @Tar s:eq? @F or !F @F [ @I !At ] -if ;
 
   :next (-)
     &I v:inc ;
@@ -878,6 +879,12 @@ substring is in a string.
     @Src s:length
     [ extract terminate compare next ] times
     @F ;
+
+  :s:index-of-string (ss-a)
+    !Tar !Src s:empty !Pad #0 !I #0 !F #-1 !At
+    @Src s:length
+    [ extract terminate compare next ] times
+    @F [ @At ] [ #-1 ] choose ;
 }}
 ~~~
 
@@ -888,7 +895,54 @@ located.
 ~~~
 :s:split (sc-ss)
   dup-pair s:index-of nip dup-pair s:left [ + ] dip ;
+
+:s:split-on-string (ss-ss)
+  dup-pair s:index-of-string n:inc nip dup-pair s:left [ + ] dip ;
+
+{{
+  'L var
+---reveal---
+  :s:replace (sss-s)
+    over s:length !L [ s:split-on-string swap @L + ] dip s:prepend s:append ;
+}}
 ~~~
+
+`s:tokenize` takes a string and a character to use as a separator. It
+splits the string into a set of substrings and returns a set containing
+pointers to each of them.
+
+~~~
+{{
+  'Split-On var
+  :match?    (c-f) @Split-On eq? ;
+  :terminate (s-s) #0 over n:dec store ;
+  :step      (ss-s) [ n:inc ] dip match? [ dup , terminate ] if ;
+---reveal---
+  :s:tokenize (sc-a)
+    !Split-On s:keep
+    here #0 , [ dup , dup [ step ] s:for-each drop ] dip
+    here over - n:dec over store ;
+}}
+~~~
+
+`s:tokenize-on-string` is like `s:tokenize`, but for strings.
+
+~~~
+{{
+  'Tokens var
+  'Needle var
+  :-match? (s-sf) dup @Needle s:contains-string? ;
+  :save-token (s-s) @Needle s:split-on-string s:keep buffer:add n:inc ;
+  :tokens-to-set (-a) here @Tokens buffer:size dup , [ fetch-next ,  ] times drop ;
+---reveal---
+  :s:tokenize-on-string (ss-a)
+    [ s:keep !Needle here #8192 + !Tokens
+      @Tokens buffer:set
+      [ repeat -match? 0; drop save-token again ] call s:keep buffer:add
+      tokens-to-set ] buffer:preserve ;
+}}
+~~~
+
 
 Ok, This is a bit of a hack, but very useful at times.
 
@@ -966,7 +1020,8 @@ The format language is simple:
 
 | \n | Replace with a LF                         |
 | \t | Replace with a TAB                        |
-[ \\ | Replace with a single \                   |
+| \\ | Replace with a single \                   |
+| \  | Replace with an underscore (_)            |
 | %c | Replace with a character on the stack     |
 | %s | Replace with a string on the stack        |
 | %n | Replace with the next number on the stack |
@@ -974,6 +1029,7 @@ The format language is simple:
 ~~~
 {{
   :char (c-)
+    ASCII:SPACE [ $_ buffer:add ] case
     $n [ ASCII:LF buffer:add ] case
     $t [ ASCII:HT buffer:add ] case
     buffer:add ;
